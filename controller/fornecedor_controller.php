@@ -1,64 +1,52 @@
 <?php
 session_start();
-require '../model/conexao.php';
+require '../model/fornecedor_dao.php';
 
 if (isset($_POST['create_fornecedor'])) {
-    $nome = mysqli_real_escape_string($conexao, trim($_POST['nome']));
-    $cnpj = mysqli_real_escape_string($conexao, trim($_POST['cnpj']));
-    $telefone = mysqli_real_escape_string($conexao, trim($_POST['telefone']));
-    $email = mysqli_real_escape_string($conexao, trim($_POST['email']));
-    $endereco = mysqli_real_escape_string($conexao, trim($_POST['endereco']));
+    $nome = $_POST['nome'];
+    $cnpj = $_POST['cnpj'];
+    $telefone = $_POST['telefone'];
+    $email = $_POST['email'];
+    $endereco = $_POST['endereco'];
 
-    $sql = "INSERT INTO fornecedores (nome_fornecedor, telefone, endereco, email, cnpj) VALUES ('$nome', '$telefone', '$endereco', '$email', '$cnpj')";
-
-    mysqli_query($conexao, $sql);
-    if (mysqli_affected_rows($conexao) > 0) {
+    $result = FornecedorDAO::criarFornecedor($nome, $cnpj, $telefone, $email, $endereco);
+    if ($result > 0) {
         $_SESSION['mensagem'] = 'Fornecedor criado com sucesso!';
-        header('Location: ../view/dashboard.php');
-        exit;
     } else {
         $_SESSION['mensagem'] = 'Fornecedor não foi criado';
-        header('Location: ../view/dashboard.php');
-        exit;
     }
+    header('Location: ../view/dashboard.php');
+    exit;
 }
 
 if (isset($_POST['update_fornecedor'])) {
-    $fornecedor_id = mysqli_real_escape_string($conexao, $_POST['fornecedor_id']);
-    $nome = mysqli_real_escape_string($conexao, trim($_POST['nome']));
-    $cnpj = mysqli_real_escape_string($conexao, trim($_POST['cnpj']));
-    $telefone = mysqli_real_escape_string($conexao, trim($_POST['telefone']));
-    $email = mysqli_real_escape_string($conexao, trim($_POST['email']));
-    $endereco = mysqli_real_escape_string($conexao, trim($_POST['endereco']));
+    $id = $_POST['fornecedor_id'];
+    $nome = $_POST['nome'];
+    $cnpj = $_POST['cnpj'];
+    $telefone = $_POST['telefone'];
+    $email = $_POST['email'];
+    $endereco = $_POST['endereco'];
 
-    $sql = "UPDATE fornecedores SET nome_fornecedor = '$nome', telefone = '$telefone', endereco = '$endereco', email = '$email', cnpj = '$cnpj' WHERE id_fornecedor = '$fornecedor_id'";
-
-    mysqli_query($conexao, $sql);
-    if (mysqli_affected_rows($conexao) > 0) {
+    $result = FornecedorDAO::editarFornecedor($id, $nome, $cnpj, $telefone, $email, $endereco);
+    if ($result > 0) {
         $_SESSION['mensagem'] = 'Fornecedor atualizado com sucesso!';
-        header('Location: ../view/dashboard.php');
-        exit;
     } else {
         $_SESSION['mensagem'] = 'Fornecedor não foi atualizado';
-        header('Location: ../view/dashboard.php');
-        exit;
     }
+    header('Location: ../view/dashboard.php');
+    exit;
 }
 
 if (isset($_POST['delete_fornecedor'])) {
-    $fornecedor_id = mysqli_real_escape_string($conexao, $_POST['delete_fornecedor']);
+    $id = $_POST['delete_fornecedor'];
     
-    $sql = "UPDATE fornecedores SET ativo = FALSE WHERE id_fornecedor = '$fornecedor_id'";
-    
-    mysqli_query($conexao, $sql);
-    if (mysqli_affected_rows($conexao) > 0) {
+    $result = FornecedorDAO::deletarFornecedor($id);
+    if ($result > 0) {
         $_SESSION['mensagem'] = 'Fornecedor deletado com sucesso!';
-        header('Location: ../view/dashboard.php');
-        exit;
     } else {
         $_SESSION['mensagem'] = 'Fornecedor não foi marcado como inativo';
-        header('Location: ../view/dashboard.php');
-        exit;
     }
+    header('Location: ../view/dashboard.php');
+    exit;
 }
 ?>
