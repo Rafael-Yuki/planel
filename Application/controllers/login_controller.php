@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-require_once(dirname(__DIR__) . '/model/conexao.php');
+require_once(dirname(__DIR__) . '/models/conexao.php');
 
 if(empty($_POST['login']) || empty($_POST['senha'])) {
-    header('Location: ../view/login.php');
+    header('Location: ../views/login.php');
     exit();
 }
 

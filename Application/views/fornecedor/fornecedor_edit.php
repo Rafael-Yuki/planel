@@ -1,6 +1,6 @@
 <?php
 session_start();
-require(dirname(__DIR__) . '../../model/conexao.php');
+require(dirname(__DIR__) . '../../models/conexao.php');
 ?>
 <!doctype html>
 <html lang="en">

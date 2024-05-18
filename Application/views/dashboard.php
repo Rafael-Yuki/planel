@@ -1,6 +1,6 @@
 <?php
 session_start();
-require(dirname(__DIR__) . '/model/conexao.php');
+require(dirname(__DIR__) . '/models/conexao.php');
 ?>
 <!doctype html>
 <html lang="en">
@@ -21,7 +21,7 @@ require(dirname(__DIR__) . '/model/conexao.php');
     <?php
     } else {
         // Se não estiver logado, redirecionar para a página de login
-        header('Location: ../controller/login_controller.php');
+        header('Location: ../controllers/login_controller.php');
         exit();
     }
     // Fim da verificação de login

@@ -4,14 +4,14 @@ require_once(__DIR__ . '/application/autoload.php');
 
 // Definir rotas
 $routes = [
-    '' => 'Application/view/login.php',
-    'login' => 'Application/controller/login_controller.php',
-    'logout' => 'Application/controller/logout_controller.php',
-    'dashboard' => 'Application/view/dashboard.php',
-    'fornecedor/cadastro' => 'Application/view/fornecedor/fornecedor_create.php',
-    'fornecedor/editar' => 'Application/view/fornecedor/fornecedor_edit.php',
-    'fornecedor/visualizar' => 'Application/view/fornecedor/fornecedor_view.php',
-    'fornecedor/atualizar' => 'Application/controller/fornecedor_controller.php',
+    '' => 'Application/views/login.php',
+    'login' => 'Application/controllers/login_controller.php',
+    'logout' => 'Application/controllers/logout_controller.php',
+    'dashboard' => 'Application/views/dashboard.php',
+    'fornecedor/cadastro' => 'Application/views/fornecedor/fornecedor_create.php',
+    'fornecedor/editar' => 'Application/views/fornecedor/fornecedor_edit.php',
+    'fornecedor/visualizar' => 'Application/views/fornecedor/fornecedor_view.php',
+    'fornecedor/atualizar' => 'Application/controllers/fornecedor_controller.php',
     // Adicione mais rotas conforme necessário
 ];
 
