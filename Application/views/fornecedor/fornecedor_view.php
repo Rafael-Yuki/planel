@@ -29,7 +29,11 @@ require(dirname(__DIR__) . '../../models/conexao.php');
                         <?php
                         if (isset($_GET['id'])) {
                             $fornecedor_id = mysqli_real_escape_string($conexao, $_GET['id']);
-                            $sql = "SELECT * FROM fornecedores WHERE id_fornecedor='$fornecedor_id'";
+                            $sql = "SELECT f.*, c.nome_cidade, e.sigla_estado
+                                    FROM fornecedores f
+                                    INNER JOIN cidades c ON f.id_cidade = c.id_cidade
+                                    INNER JOIN estados e ON c.id_estado = e.id_estado
+                                    WHERE id_fornecedor='$fornecedor_id'";
                             $query = mysqli_query($conexao, $sql);
                             if (mysqli_num_rows($query) > 0) {
                                 $fornecedor = mysqli_fetch_array($query);
@@ -61,7 +65,7 @@ require(dirname(__DIR__) . '../../models/conexao.php');
                                 <div class="mb-3">
                                     <label for="endereco">Endereço</label>
                                     <p class="form-control">
-                                        <?= $fornecedor['endereco']; ?>
+                                    <?=$fornecedor['endereco'].', '.$fornecedor['nome_cidade'].' - '.$fornecedor['sigla_estado']?>
                                     </p>
                                 </div>
                                 <?php

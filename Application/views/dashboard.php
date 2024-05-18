@@ -41,7 +41,10 @@ require(dirname(__DIR__) . '/models/conexao.php');
                     </div>
                     <div class="card-body">
                         <?php
-                        $sql = 'SELECT * FROM fornecedores WHERE ativo = TRUE';
+                        $sql = 'SELECT fornecedores.*, cidades.nome_cidade, estados.sigla_estado FROM fornecedores 
+                                INNER JOIN cidades ON fornecedores.id_cidade = cidades.id_cidade 
+                                INNER JOIN estados ON cidades.id_estado = estados.id_estado
+                                WHERE fornecedores.ativo = TRUE';
                         $fornecedores = mysqli_query($conexao, $sql);
                         if (mysqli_num_rows($fornecedores) > 0) {
                         ?>
@@ -66,7 +69,7 @@ require(dirname(__DIR__) . '/models/conexao.php');
                                         <td><?=$fornecedor['cnpj']?></td>
                                         <td><?=$fornecedor['telefone']?></td>
                                         <td><?=$fornecedor['email']?></td>
-                                        <td><?=$fornecedor['endereco']?></td>
+                                        <td><?=$fornecedor['endereco'].', '.$fornecedor['nome_cidade'].' - '.$fornecedor['sigla_estado']?></td>
                                         <td>
                                             <a href="fornecedor/visualizar?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-secondary btn-sm"><span class="bi-eye-fill"></span>&nbsp;Visualizar</a>
                                             <a href="fornecedor/editar?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-success btn-sm"><span class="bi-pencil-fill"></span>&nbsp;Editar</a>

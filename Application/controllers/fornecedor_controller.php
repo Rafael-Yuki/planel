@@ -8,6 +8,8 @@ if (isset($_POST['create_fornecedor'])) {
     $telefone = mysqli_real_escape_string($conexao, $_POST['telefone']);
     $email = mysqli_real_escape_string($conexao, $_POST['email']);
     $endereco = mysqli_real_escape_string($conexao, $_POST['endereco']);
+    $cidade_id = mysqli_real_escape_string($conexao, $_POST['cidade']);
+    $estado_id = mysqli_real_escape_string($conexao, $_POST['estado']);
 
     if (empty($nome)) {
         $_SESSION['mensagem'] = 'O nome do fornecedor é obrigatório!';
@@ -16,7 +18,7 @@ if (isset($_POST['create_fornecedor'])) {
         exit;
     }
 
-    $result = FornecedorDAO::criarFornecedor($nome, $cnpj, $telefone, $email, $endereco);
+    $result = FornecedorDAO::criarFornecedor($nome, $cnpj, $telefone, $email, $endereco, $cidade_id, $estado_id);
     if ($result > 0) {
         $_SESSION['mensagem'] = 'Fornecedor criado com sucesso!';
         $_SESSION['mensagem_tipo'] = 'success';
@@ -35,6 +37,8 @@ if (isset($_POST['update_fornecedor'])) {
     $telefone = mysqli_real_escape_string($conexao, $_POST['telefone']);
     $email = mysqli_real_escape_string($conexao, $_POST['email']);
     $endereco = mysqli_real_escape_string($conexao, $_POST['endereco']);
+    $cidade_id = mysqli_real_escape_string($conexao, $_POST['cidade']);
+    $estado_id = mysqli_real_escape_string($conexao, $_POST['estado']);
 
     if (empty($nome)) {
         $_SESSION['mensagem'] = 'O nome do fornecedor é obrigatório!';
@@ -43,7 +47,7 @@ if (isset($_POST['update_fornecedor'])) {
         exit;
     }
 
-    $result = FornecedorDAO::editarFornecedor($id, $nome, $cnpj, $telefone, $email, $endereco);
+    $result = FornecedorDAO::editarFornecedor($id, $nome, $cnpj, $telefone, $email, $endereco, $cidade_id, $estado_id);
     if ($result > 0) {
         $_SESSION['mensagem'] = 'Fornecedor atualizado com sucesso!';
         $_SESSION['mensagem_tipo'] = 'success';
