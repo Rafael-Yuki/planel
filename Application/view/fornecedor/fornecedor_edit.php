@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../../model/conexao.php';
+require(dirname(__DIR__) . '../../model/conexao.php');
 ?>
 <!doctype html>
 <html lang="en">
@@ -14,14 +14,14 @@ require '../../model/conexao.php';
 </head>
 
 <body>
-    <?php include('../navbar.php'); ?>
+    <?php include(__DIR__ . '/../navbar.php');?>
     <div class="container mt-5">
         <div class="row">
             <div class="col">
                 <div class="card">
                     <div class="card-header">
                         <h4>Editar Fornecedor
-                            <a href="../dashboard.php" class="btn btn-danger float-end">
+                            <a href="../dashboard" class="btn btn-danger float-end">
                             <span class="bi-arrow-left"></span>&nbsp;Voltar</a>
                         </h4>
                     </div>
@@ -34,8 +34,8 @@ require '../../model/conexao.php';
                             if (mysqli_num_rows($query) > 0) {
                                 $fornecedor = mysqli_fetch_array($query);
                                 ?>
-                                <form action="../../controller/fornecedor_controller.php" method="POST">
-                                    <input type="hidden" name="fornecedor_id" value="<?= $fornecedor['id_fornecedor'] ?>">
+                                <form action="/estagio/fornecedor/atualizar" method="POST">
+                                    <input type="hidden" name="fornecedor_id" required value="<?= $fornecedor['id_fornecedor'] ?>">
                                     <div class="mb-3">
                                         <label for="nome">Nome</label>
                                         <input type="text" name="nome" value="<?= $fornecedor['nome_fornecedor'] ?>"

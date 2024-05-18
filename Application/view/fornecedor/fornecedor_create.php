@@ -10,22 +10,22 @@
 </head>
 
 <body>
-  <?php include('../navbar.php'); ?>
+  <?php include(__DIR__ . '/../navbar.php');?>
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-12">
         <div class="card">
           <div class="card-header">
             <h4>Adicionar Fornecedor
-              <a href="../dashboard.php" class="btn btn-danger float-end">
+              <a href="../dashboard" class="btn btn-danger float-end">
               <span class="bi-arrow-left"></span>&nbsp;Voltar</a>
             </h4>
           </div>
           <div class="card-body">
-            <form action="../../controller/fornecedor_controller.php" method="POST">
+            <form action="/estagio/fornecedor/atualizar" method="POST">
               <div class="mb-3">
                 <label for="nome">Nome</label>
-                <input type="text" id="nome" name="nome" class="form-control">
+                <input type="text" id="nome" name="nome" class="form-control" required>
               </div>
               <div class="mb-3">
                 <label for="cnpj">CNPJ</label>

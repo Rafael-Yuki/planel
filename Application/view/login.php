@@ -36,7 +36,7 @@
                 endif;
                 unset($_SESSION['nao_autenticado']);
                 ?>
-                <form action="../controller/login_controller.php" method="POST">
+                <form action="login" method="POST">
                     <div class="mb-3">
                         <input name="login" class="form-control" placeholder="Login" autofocus="">
                     </div>

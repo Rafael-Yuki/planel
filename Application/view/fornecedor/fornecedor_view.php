@@ -1,5 +1,6 @@
 <?php
-require '../../model/conexao.php';
+session_start();
+require(dirname(__DIR__) . '../../model/conexao.php');
 ?>
 <!doctype html>
 <html lang="en">
@@ -13,14 +14,14 @@ require '../../model/conexao.php';
 </head>
 
 <body>
-    <?php include('../navbar.php'); ?>
+    <?php include(__DIR__ . '/../navbar.php');?>
     <div class="container mt-5">
         <div class="row">
             <div class="col">
                 <div class="card">
                     <div class="card-header">
                         <h4>Visualizar Fornecedor
-                            <a href="../dashboard.php" class="btn btn-danger float-end">
+                            <a href="../dashboard" class="btn btn-danger float-end">
                             <span class="bi-arrow-left"></span>&nbsp;Voltar</a>
                         </h4>
                     </div>

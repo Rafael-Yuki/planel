@@ -1,9 +1,10 @@
 <?php
 session_start();
-include('../model/conexao.php');
+
+require_once(dirname(__DIR__) . '/model/conexao.php');
 
 if(empty($_POST['login']) || empty($_POST['senha'])) {
-    header('Location: ../view/index.php');
+    header('Location: ../view/login.php');
     exit();
 }
 
@@ -18,11 +19,11 @@ $row = mysqli_num_rows($result);
 
 if($row == 1) {
     $_SESSION['login'] = $login;
-    header('Location: ../view/dashboard.php');
+    header('Location: dashboard');
     exit();
 } else {
     $_SESSION['nao_autenticado'] = true;
-    header('Location: ../view/index.php');
+    header('Location: login');
     exit();
 }
 ?>

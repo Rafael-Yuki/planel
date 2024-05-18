@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../model/conexao.php';
+require(dirname(__DIR__) . '/model/conexao.php');
 ?>
 <!doctype html>
 <html lang="en">
@@ -35,7 +35,7 @@ require '../model/conexao.php';
                 <div class="card">
                     <div class="card-header">
                         <h4> Lista de Fornecedores
-                            <a href="fornecedor/fornecedor-create.php" class="btn btn-primary float-end">
+                            <a href="fornecedor/cadastro" class="btn btn-primary float-end">
                             <span class="bi-person-plus-fill"></span>&nbsp;Adicionar Fornecedor</a>
                         </h4>
                     </div>
@@ -68,9 +68,9 @@ require '../model/conexao.php';
                                         <td><?=$fornecedor['email']?></td>
                                         <td><?=$fornecedor['endereco']?></td>
                                         <td>
-                                            <a href="fornecedor/fornecedor-view.php?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-secondary btn-sm"><span class="bi-eye-fill"></span>&nbsp;Visualizar</a>
-                                            <a href="fornecedor/fornecedor-edit.php?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-success btn-sm"><span class="bi-pencil-fill"></span>&nbsp;Editar</a>
-                                            <form action="../controller/fornecedor_controller.php" method="POST" class="d-inline">
+                                            <a href="fornecedor/visualizar?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-secondary btn-sm"><span class="bi-eye-fill"></span>&nbsp;Visualizar</a>
+                                            <a href="fornecedor/editar?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-success btn-sm"><span class="bi-pencil-fill"></span>&nbsp;Editar</a>
+                                            <form action="fornecedor/atualizar" method="POST" class="d-inline">
                                                 <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="delete_fornecedor" value="<?=$fornecedor['id_fornecedor']?>" class="btn btn-danger btn-sm">
                                                     <span class="bi-trash3-fill"></span>&nbsp;Excluir
                                                 </button>
