@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/application/autoload.php');
+require_once(__DIR__ . '/Application/autoload.php');
 
 // Definir rotas
 $routes = [

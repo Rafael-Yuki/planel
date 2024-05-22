@@ -26,7 +26,7 @@ require(dirname(__DIR__) . '../../models/conexao.php');
             </h4>
           </div>
           <div class="card-body">
-            <form action="/estagio/fornecedor/atualizar" method="POST">
+            <form action="/planel/fornecedor/atualizar" method="POST">
               <div class="mb-3">
                 <label for="nome">Nome</label>
                 <input type="text" id="nome" name="nome" class="form-control" required>

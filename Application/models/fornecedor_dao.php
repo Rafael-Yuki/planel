@@ -12,7 +12,7 @@ class FornecedorDAO {
         $cidade_id = (int)$cidade_id;
         $estado_id = (int)$estado_id;
 
-        $sql = "INSERT INTO fornecedores (nome_fornecedor, telefone, endereco, email, cnpj, id_cidade) 
+        $sql = "INSERT INTO fornecedores (nome_fornecedor, telefone, endereco, email, cnpj, fk_cidades_id_cidade) 
         VALUES ('$nome', '$telefone', '$endereco', '$email', '$cnpj', $cidade_id)";
         
         mysqli_query($conexao, $sql);
@@ -30,7 +30,7 @@ class FornecedorDAO {
         $cidade_id = mysqli_real_escape_string($conexao, $cidade_id); 
     
         $sql = "UPDATE fornecedores SET nome_fornecedor = '$nome', telefone = '$telefone', endereco = '$endereco', 
-        email = '$email', cnpj = '$cnpj', id_cidade = '$cidade_id' WHERE id_fornecedor = '$id'";
+        email = '$email', cnpj = '$cnpj', fk_cidades_id_cidade = '$cidade_id' WHERE id_fornecedor = '$id'";
         
         mysqli_query($conexao, $sql);
         return mysqli_affected_rows($conexao);
