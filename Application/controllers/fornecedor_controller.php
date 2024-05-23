@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once(dirname(__DIR__) . '/models/fornecedor_dao.php');
+require_once(dirname(__DIR__) . '/models/conexao.php');
 
 if (isset($_POST['create_fornecedor'])) {
     $nome = mysqli_real_escape_string($conexao, $_POST['nome']);

@@ -11,6 +11,7 @@ $routes = [
     'fornecedor/editar' => 'Application/views/fornecedor/fornecedor_edit.php',
     'fornecedor/visualizar' => 'Application/views/fornecedor/fornecedor_view.php',
     'fornecedor/atualizar' => 'Application/controllers/fornecedor_controller.php',
+    'fornecedor/cidades' => 'Application/controllers/cidades_controller.php',
 ];
 
 // Obter o caminho da URL

@@ -12,8 +12,8 @@ class FornecedorDAO {
         $cidade_id = (int)$cidade_id;
         $estado_id = (int)$estado_id;
 
-        $sql = "INSERT INTO fornecedores (nome_fornecedor, telefone, endereco, email, cnpj, fk_cidades_id_cidade) 
-        VALUES ('$nome', '$telefone', '$endereco', '$email', '$cnpj', $cidade_id)";
+        $sql = "INSERT INTO fornecedores (nome_fornecedor, telefone, endereco, email, cnpj, fk_cidades_id_cidade, fk_estados_id_estado) 
+        VALUES ('$nome', '$telefone', '$endereco', '$email', '$cnpj', $cidade_id, $estado_id)";
         
         mysqli_query($conexao, $sql);
         return mysqli_affected_rows($conexao);

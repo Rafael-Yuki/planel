@@ -3,7 +3,7 @@ session_start();
 require(dirname(__DIR__) . '../../models/conexao.php');
 ?>
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,6 +11,11 @@ require(dirname(__DIR__) . '../../models/conexao.php');
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
   integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
@@ -50,7 +55,7 @@ require(dirname(__DIR__) . '../../models/conexao.php');
               <div class="mb-3">
                 <label for="estado">Estado</label>
                 <select id="estado" name="estado" class="form-control">
-                  <option value="">Selecione um estado</option>
+                  <option value="">Selecione um Estado</option>
                   <?php
                   $query_estados = "SELECT * FROM estados";
                   $result_estados = mysqli_query($conexao, $query_estados);
@@ -60,17 +65,10 @@ require(dirname(__DIR__) . '../../models/conexao.php');
                   ?>
                 </select>
               </div>
-              <div class="mb-3">
+              <div id="cidade-container" class="mb-3 hidden">
                 <label for="cidade">Cidade</label>
-                <select id="cidade" name="cidade" class="form-control">
-                  <option value="">Selecione uma cidade</option>
-                  <?php
-                  $query_cidades = "SELECT * FROM cidades";
-                  $result_cidades = mysqli_query($conexao, $query_cidades);
-                  while($row_cidade = mysqli_fetch_assoc($result_cidades)) {
-                      echo "<option value='".$row_cidade['id_cidade']."'>". utf8_decode($row_cidade['nome_cidade'])."</option>";
-                  }
-                  ?>
+                <select id="cidade" name="cidade" class="form-control" disabled>
+                  <option value="">Selecione um Estado</option>
                 </select>
               </div>
               <div class="mb-3">
@@ -84,6 +82,34 @@ require(dirname(__DIR__) . '../../models/conexao.php');
       </div>
     </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+        $('#estado').change(function() {
+            var estadoId = $(this).val();
+            if (estadoId) {
+                $('#cidade-container').removeClass('hidden');
+                $.ajax({
+                    url: '/planel/fornecedor/cidades',
+                    type: 'POST',
+                    data: {estado_id: estadoId},
+                    success: function(data) {
+                        $('#cidade').prop('disabled', false);
+                        $('#cidade').html(data);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('Erro ao carregar cidades: ' + textStatus + ' - ' + errorThrown);
+                        console.log(jqXHR.responseText);
+                    }
+                });
+            } else {
+                $('#cidade-container').addClass('hidden');
+                $('#cidade').prop('disabled', true);
+                $('#cidade').html('<option value="">Selecione um Estado</option>');
+            }
+        });
+    });
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
   integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
   </script>

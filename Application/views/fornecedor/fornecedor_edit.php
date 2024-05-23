@@ -1,9 +1,10 @@
 <?php
 session_start();
 require(dirname(__DIR__) . '../../models/conexao.php');
+mysqli_set_charset($conexao, "utf8");
 ?>
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,6 +34,8 @@ require(dirname(__DIR__) . '../../models/conexao.php');
                             $query = mysqli_query($conexao, $sql);
                             if (mysqli_num_rows($query) > 0) {
                                 $fornecedor = mysqli_fetch_array($query);
+                                $estado_id = $fornecedor['fk_estados_id_estado'];
+                                $cidade_id = $fornecedor['fk_cidades_id_cidade'];
                                 ?>
                                 <form action="/planel/fornecedor/atualizar" method="POST">
                                     <input type="hidden" name="fornecedor_id" required value="<?= $fornecedor['id_fornecedor'] ?>">
@@ -69,7 +72,8 @@ require(dirname(__DIR__) . '../../models/conexao.php');
                                         $query_estados = "SELECT * FROM estados";
                                         $result_estados = mysqli_query($conexao, $query_estados);
                                         while($row_estado = mysqli_fetch_assoc($result_estados)) {
-                                            echo "<option value='".$row_estado['id_estado']."'>". utf8_decode($row_estado['nome_estado'])."</option>";
+                                            $selected = ($row_estado['id_estado'] == $estado_id) ? 'selected' : '';
+                                            echo "<option value='".$row_estado['id_estado']."' $selected>". utf8_decode($row_estado['nome_estado'])."</option>";
                                         }
                                         ?>
                                         </select>
@@ -79,10 +83,11 @@ require(dirname(__DIR__) . '../../models/conexao.php');
                                         <select id="cidade" name="cidade" class="form-control">
                                         <option value="">Selecione uma cidade</option>
                                         <?php
-                                        $query_cidades = "SELECT * FROM cidades";
+                                        $query_cidades = "SELECT * FROM cidades WHERE id_estado = '$estado_id'";
                                         $result_cidades = mysqli_query($conexao, $query_cidades);
                                         while($row_cidade = mysqli_fetch_assoc($result_cidades)) {
-                                            echo "<option value='".$row_cidade['id_cidade']."'>". utf8_decode($row_cidade['nome_cidade'])."</option>";
+                                            $selected = ($row_cidade['id_cidade'] == $cidade_id) ? 'selected' : '';
+                                            echo "<option value='".$row_cidade['id_cidade']."' $selected>". utf8_decode($row_cidade['nome_cidade'])."</option>";
                                         }
                                         ?>
                                         </select>
@@ -93,6 +98,31 @@ require(dirname(__DIR__) . '../../models/conexao.php');
                                         </button>
                                     </div>
                                 </form>
+                                <script>
+                                    $(document).ready(function() {
+                                        $('#estado').change(function() {
+                                            var estadoId = $(this).val();
+                                            if (estadoId) {
+                                                $.ajax({
+                                                    url: '/planel/fornecedor/cidades',
+                                                    type: 'POST',
+                                                    data: {estado_id: estadoId},
+                                                    success: function(data) {
+                                                        $('#cidade').prop('disabled', false);
+                                                        $('#cidade').html(data);
+                                                    },
+                                                    error: function(jqXHR, textStatus, errorThrown) {
+                                                        alert('Erro ao carregar cidades: ' + textStatus + ' - ' + errorThrown);
+                                                        console.log(jqXHR.responseText);
+                                                    }
+                                                });
+                                            } else {
+                                                $('#cidade').prop('disabled', true);
+                                                $('#cidade').html('<option value="">Selecione um Estado</option>');
+                                            }
+                                        });
+                                    });
+                                </script>
                                 <?php
                             } else {
                                 echo "<h5>Fornecedor não encontrado</h5>";
@@ -104,6 +134,7 @@ require(dirname(__DIR__) . '../../models/conexao.php');
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous">
