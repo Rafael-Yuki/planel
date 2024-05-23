@@ -34,7 +34,7 @@ require(dirname(__DIR__) . '../../models/conexao.php');
                             if (mysqli_num_rows($query) > 0) {
                                 $fornecedor = mysqli_fetch_array($query);
                                 ?>
-                                <form action="/estagio/fornecedor/atualizar" method="POST">
+                                <form action="/planel/fornecedor/atualizar" method="POST">
                                     <input type="hidden" name="fornecedor_id" required value="<?= $fornecedor['id_fornecedor'] ?>">
                                     <div class="mb-3">
                                         <label for="nome">Nome</label>

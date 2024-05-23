@@ -14,7 +14,7 @@ if (isset($_POST['create_fornecedor'])) {
     if (empty($nome)) {
         $_SESSION['mensagem'] = 'O nome do fornecedor é obrigatório!';
         $_SESSION['mensagem_tipo'] = 'error';
-        header('Location: /estagio/dashboard');
+        header('Location: /planel/dashboard');
         exit;
     }
 
@@ -26,7 +26,7 @@ if (isset($_POST['create_fornecedor'])) {
         $_SESSION['mensagem'] = 'Fornecedor não foi criado';
         $_SESSION['mensagem_tipo'] = 'error';
     }
-    header('Location: /estagio/dashboard');
+    header('Location: /planel/dashboard');
     exit;
 }
 
@@ -43,7 +43,7 @@ if (isset($_POST['update_fornecedor'])) {
     if (empty($nome)) {
         $_SESSION['mensagem'] = 'O nome do fornecedor é obrigatório!';
         $_SESSION['mensagem_tipo'] = 'error';
-        header('Location: /estagio/dashboard');
+        header('Location: /planel/dashboard');
         exit;
     }
 
@@ -55,7 +55,7 @@ if (isset($_POST['update_fornecedor'])) {
         $_SESSION['mensagem'] = 'Fornecedor não foi atualizado';
         $_SESSION['mensagem_tipo'] = 'warning';
     }
-    header('Location: /estagio/dashboard');
+    header('Location: /planel/dashboard');
     exit;
 }
 
@@ -70,7 +70,7 @@ if (isset($_POST['delete_fornecedor'])) {
         $_SESSION['mensagem'] = 'Fornecedor não foi deletado';
         $_SESSION['mensagem_tipo'] = 'error';
     }
-    header('Location: /estagio/dashboard');
+    header('Location: /planel/dashboard');
     exit;
 }
 ?>

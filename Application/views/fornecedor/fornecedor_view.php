@@ -29,11 +29,10 @@ require(dirname(__DIR__) . '../../models/conexao.php');
                         <?php
                         if (isset($_GET['id'])) {
                             $fornecedor_id = mysqli_real_escape_string($conexao, $_GET['id']);
-                            $sql = "SELECT f.*, c.nome_cidade, e.sigla_estado
-                                    FROM fornecedores f
-                                    INNER JOIN cidades c ON f.id_cidade = c.id_cidade
-                                    INNER JOIN estados e ON c.id_estado = e.id_estado
-                                    WHERE id_fornecedor='$fornecedor_id'";
+                            $sql = 'SELECT fornecedores.*, cidades.nome_cidade, estados.sigla_estado FROM fornecedores 
+                                    INNER JOIN cidades ON fornecedores.fk_cidades_id_cidade = cidades.id_cidade
+                                    INNER JOIN estados ON cidades.id_estado = estados.id_estado
+                                    WHERE fornecedores.ativo = TRUE';
                             $query = mysqli_query($conexao, $sql);
                             if (mysqli_num_rows($query) > 0) {
                                 $fornecedor = mysqli_fetch_array($query);

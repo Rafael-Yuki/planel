@@ -42,7 +42,7 @@ require(dirname(__DIR__) . '/models/conexao.php');
                     <div class="card-body">
                         <?php
                         $sql = 'SELECT fornecedores.*, cidades.nome_cidade, estados.sigla_estado FROM fornecedores 
-                                INNER JOIN cidades ON fornecedores.id_cidade = cidades.id_cidade 
+                                INNER JOIN cidades ON fornecedores.fk_cidades_id_cidade = cidades.id_cidade
                                 INNER JOIN estados ON cidades.id_estado = estados.id_estado
                                 WHERE fornecedores.ativo = TRUE';
                         $fornecedores = mysqli_query($conexao, $sql);
