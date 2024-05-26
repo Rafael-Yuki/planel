@@ -1,6 +1,6 @@
 <?php
 session_start();
-require(dirname(__DIR__) . '/models/conexao.php');
+require(dirname(__DIR__) . '/models/fornecedor_dao.php');
 ?>
 <!doctype html>
 <html lang="en">
@@ -41,52 +41,49 @@ require(dirname(__DIR__) . '/models/conexao.php');
                     </div>
                     <div class="card-body">
                         <?php
-                        $sql = 'SELECT fornecedores.*, cidades.nome_cidade, estados.sigla_estado FROM fornecedores 
-                                INNER JOIN cidades ON fornecedores.fk_cidades_id_cidade = cidades.id_cidade
-                                INNER JOIN estados ON cidades.id_estado = estados.id_estado
-                                WHERE fornecedores.ativo = TRUE';
-                        $fornecedores = mysqli_query($conexao, $sql);
+                        $fornecedor_dao = new FornecedorDAO;
+                        $fornecedores = $fornecedor_dao->listar();
                         if (mysqli_num_rows($fornecedores) > 0) {
-                        ?>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>CNPJ</th>
-                                    <th>Telefone</th>
-                                    <th>E-mail</th>
-                                    <th>Endereço</th>
-                                    <th>Ações</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php
-                                foreach($fornecedores as $fornecedor) {
-                                    ?>
+                            ?>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
                                     <tr>
-                                        <td><?=$fornecedor['nome_fornecedor']?></td>
-                                        <td><?=$fornecedor['cnpj']?></td>
-                                        <td><?=$fornecedor['telefone']?></td>
-                                        <td><?=$fornecedor['email']?></td>
-                                        <td><?=$fornecedor['endereco'].', '.$fornecedor['nome_cidade'].' - '.$fornecedor['sigla_estado']?></td>
-                                        <td>
-                                            <a href="fornecedor/visualizar?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-secondary btn-sm"><span class="bi-eye-fill"></span>&nbsp;Visualizar</a>
-                                            <a href="fornecedor/editar?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-success btn-sm"><span class="bi-pencil-fill"></span>&nbsp;Editar</a>
-                                            <form action="fornecedor/atualizar" method="POST" class="d-inline">
-                                                <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="delete_fornecedor" value="<?=$fornecedor['id_fornecedor']?>" class="btn btn-danger btn-sm">
-                                                    <span class="bi-trash3-fill"></span>&nbsp;Excluir
-                                                </button>
-                                            </form>
-                                        </td>
+                                        <th>Nome</th>
+                                        <th>CNPJ</th>
+                                        <th>Telefone</th>
+                                        <th>E-mail</th>
+                                        <th>Endereço</th>
+                                        <th>Ações</th>
                                     </tr>
+                                    </thead>
+                                    <tbody>
                                     <?php
-                                }
-                                ?>
-                                </tbody>
-                            </table>
-                        </div>
-                        <?php
+                                    foreach($fornecedores as $fornecedor) {
+                                        ?>
+                                        <tr>
+                                            <td><?=$fornecedor['nome_fornecedor']?></td>
+                                            <td><?=$fornecedor['cnpj']?></td>
+                                            <td><?=$fornecedor['telefone']?></td>
+                                            <td><?=$fornecedor['email']?></td>
+                                            <td><?=$fornecedor['endereco'].', '.$fornecedor['nome_cidade'].' - '.$fornecedor['sigla_estado']?></td>
+                                            <td>
+                                                <a href="fornecedor/visualizar?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-secondary btn-sm"><span class="bi-eye-fill"></span>&nbsp;Visualizar</a>
+                                                <a href="fornecedor/editar?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-success btn-sm"><span class="bi-pencil-fill"></span>&nbsp;Editar</a>
+                                                <form action="fornecedor/atualizar" method="POST" class="d-inline">
+                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="delete_fornecedor" value="<?=$fornecedor['id_fornecedor']?>" class="btn btn-danger btn-sm">
+                                                        <span class="bi-trash3-fill"></span>&nbsp;Excluir
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    }
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <?php
                         } else {
                             echo '<h5>Nenhum fornecedor cadastrado</h5>';
                         }

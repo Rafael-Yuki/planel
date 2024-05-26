@@ -45,5 +45,15 @@ class FornecedorDAO {
         mysqli_query($conexao, $sql);
         return mysqli_affected_rows($conexao);
     }
+
+    public static function listar(){
+        global $conexao;
+        $sql = 'SELECT fornecedores.*, cidades.nome_cidade, estados.sigla_estado FROM fornecedores 
+                                INNER JOIN cidades ON fornecedores.fk_cidades_id_cidade = cidades.id_cidade
+                                INNER JOIN estados ON cidades.id_estado = estados.id_estado
+                                WHERE fornecedores.ativo = TRUE';
+        $fornecedores = mysqli_query($conexao, $sql);
+        return $fornecedores;
+    }
 }
 ?>
