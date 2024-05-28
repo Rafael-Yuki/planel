@@ -66,7 +66,7 @@ require(dirname(__DIR__) . '/models/fornecedor_dao.php');
                                             <td><?=$fornecedor['cnpj']?></td>
                                             <td><?=$fornecedor['telefone']?></td>
                                             <td><?=$fornecedor['email']?></td>
-                                            <td><?=$fornecedor['endereco'].', '.$fornecedor['nome_cidade'].' - '.$fornecedor['sigla_estado']?></td>
+                                            <td><?=$fornecedor['endereco'].', '.utf8_decode($fornecedor['nome_cidade']).' - '.$fornecedor['sigla_estado']?></td>
                                             <td>
                                                 <a href="fornecedor/visualizar?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-secondary btn-sm"><span class="bi-eye-fill"></span>&nbsp;Visualizar</a>
                                                 <a href="fornecedor/editar?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-success btn-sm"><span class="bi-pencil-fill"></span>&nbsp;Editar</a>
