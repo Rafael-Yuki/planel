@@ -15,6 +15,18 @@ mysqli_set_charset($conexao, "utf8");
 </head>
 
 <body>
+    <?php
+    // Início da verificação de login
+    if(isset($_SESSION['login'])) {
+    ?>
+    <?php
+    } else {
+        // Se não estiver logado, redirecionar para a página de login
+        header('Location: /planel/');
+        exit();
+    }
+    // Fim da verificação de login
+    ?>
     <?php include(__DIR__ . '/../navbar.php');?>
     <div class="container mt-5">
         <div class="row">

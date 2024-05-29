@@ -21,7 +21,7 @@ require(dirname(__DIR__) . '/models/fornecedor_dao.php');
     <?php
     } else {
         // Se não estiver logado, redirecionar para a página de login
-        header('Location: ../controllers/login_controller.php');
+        header('Location: /planel/');
         exit();
     }
     // Fim da verificação de login

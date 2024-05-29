@@ -49,13 +49,13 @@ if (isset($_POST['update_fornecedor'])) {
     }
 
     $result = FornecedorDAO::editarFornecedor($id, $nome, $cnpj, $telefone, $email, $endereco, $cidade_id, $estado_id);
-    if ($result > 0) {
+    if ($result >= 0) {
         $_SESSION['mensagem'] = 'Fornecedor atualizado com sucesso!';
         $_SESSION['mensagem_tipo'] = 'success';
     } else {
         $_SESSION['mensagem'] = 'Fornecedor não foi atualizado';
         $_SESSION['mensagem_tipo'] = 'warning';
-    }
+    }   
     header('Location: /planel/dashboard');
     exit;
 }
