@@ -42,7 +42,7 @@ require(dirname(__DIR__) . '/models/fornecedor_dao.php');
                     <div class="card-body">
                         <?php
                         $fornecedor_dao = new FornecedorDAO;
-                        $fornecedores = $fornecedor_dao->listar();
+                        $fornecedores = $fornecedor_dao -> listarFornecedores();
                         if (mysqli_num_rows($fornecedores) > 0) {
                             ?>
                             <div class="table-responsive">
@@ -71,7 +71,7 @@ require(dirname(__DIR__) . '/models/fornecedor_dao.php');
                                                 <a href="fornecedor/visualizar?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-secondary btn-sm"><span class="bi-eye-fill"></span>&nbsp;Visualizar</a>
                                                 <a href="fornecedor/editar?id=<?=$fornecedor['id_fornecedor']?>" class="btn btn-success btn-sm"><span class="bi-pencil-fill"></span>&nbsp;Editar</a>
                                                 <form action="fornecedor/atualizar" method="POST" class="d-inline">
-                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="delete_fornecedor" value="<?=$fornecedor['id_fornecedor']?>" class="btn btn-danger btn-sm">
+                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_fornecedor" value="<?=$fornecedor['id_fornecedor']?>" class="btn btn-danger btn-sm">
                                                         <span class="bi-trash3-fill"></span>&nbsp;Excluir
                                                     </button>
                                                 </form>

@@ -36,7 +36,7 @@ class FornecedorDAO {
         return mysqli_affected_rows($conexao);
     }    
 
-    public static function deletarFornecedor($id) {
+    public static function excluirFornecedor($id) {
         global $conexao;
         $id = mysqli_real_escape_string($conexao, $id);
 
@@ -46,7 +46,7 @@ class FornecedorDAO {
         return mysqli_affected_rows($conexao);
     }
 
-    public static function listar(){
+    public static function listarFornecedores(){
         global $conexao;
         $sql = 'SELECT fornecedores.*, cidades.nome_cidade, estados.sigla_estado FROM fornecedores 
                 INNER JOIN cidades ON fornecedores.fk_cidades_id_cidade = cidades.id_cidade

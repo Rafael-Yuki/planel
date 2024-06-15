@@ -84,7 +84,7 @@ require(dirname(__DIR__) . '../../models/conexao.php');
                 </select>
               </div>
               <div class="mb-3">
-                <button type="submit" name="create_fornecedor" class="btn btn-primary">
+                <button type="submit" name="criar_fornecedor" class="btn btn-primary">
                   <span class="bi-save"></span>&nbsp;Salvar
                 </button>
               </div>

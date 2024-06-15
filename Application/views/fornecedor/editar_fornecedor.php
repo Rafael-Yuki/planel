@@ -105,7 +105,7 @@ mysqli_set_charset($conexao, "utf8");
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <button type="submit" name="update_fornecedor" class="btn btn-primary">
+                                        <button type="submit" name="editar_fornecedor" class="btn btn-primary">
                                             <span class="bi-save"></span>&nbsp;Salvar
                                         </button>
                                     </div>

@@ -3,7 +3,7 @@ session_start();
 require_once(dirname(__DIR__) . '/models/fornecedor_dao.php');
 require_once(dirname(__DIR__) . '/models/conexao.php');
 
-if (isset($_POST['create_fornecedor'])) {
+if (isset($_POST['criar_fornecedor'])) {
     $nome = mysqli_real_escape_string($conexao, $_POST['nome']);
     $cnpj = mysqli_real_escape_string($conexao, $_POST['cnpj']);
     $telefone = mysqli_real_escape_string($conexao, $_POST['telefone']);
@@ -31,7 +31,7 @@ if (isset($_POST['create_fornecedor'])) {
     exit;
 }
 
-if (isset($_POST['update_fornecedor'])) {
+if (isset($_POST['editar_fornecedor'])) {
     $id = mysqli_real_escape_string($conexao, $_POST['fornecedor_id']);
     $nome = mysqli_real_escape_string($conexao, $_POST['nome']);
     $cnpj = mysqli_real_escape_string($conexao, $_POST['cnpj']);
@@ -60,10 +60,10 @@ if (isset($_POST['update_fornecedor'])) {
     exit;
 }
 
-if (isset($_POST['delete_fornecedor'])) {
-    $id = mysqli_real_escape_string($conexao, $_POST['delete_fornecedor']);
+if (isset($_POST['excluir_fornecedor'])) {
+    $id = mysqli_real_escape_string($conexao, $_POST['excluir_fornecedor']);
     
-    $result = FornecedorDAO::deletarFornecedor($id);
+    $result = FornecedorDAO::excluirFornecedor($id);
     if ($result > 0) {
         $_SESSION['mensagem'] = 'Fornecedor deletado com sucesso!';
         $_SESSION['mensagem_tipo'] = 'success';

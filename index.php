@@ -7,9 +7,9 @@ $routes = [
     'login' => 'Application/controllers/login_controller.php',
     'logout' => 'Application/controllers/logout_controller.php',
     'dashboard' => 'Application/views/dashboard.php',
-    'fornecedor/cadastro' => 'Application/views/fornecedor/fornecedor_create.php',
-    'fornecedor/editar' => 'Application/views/fornecedor/fornecedor_edit.php',
-    'fornecedor/visualizar' => 'Application/views/fornecedor/fornecedor_view.php',
+    'fornecedor/cadastro' => 'Application/views/fornecedor/criar_fornecedor.php',
+    'fornecedor/editar' => 'Application/views/fornecedor/editar_fornecedor.php',
+    'fornecedor/visualizar' => 'Application/views/fornecedor/ver_fornecedor.php',
     'fornecedor/atualizar' => 'Application/controllers/fornecedor_controller.php',
     'fornecedor/cidades' => 'Application/controllers/cidades_controller.php',
 ];
