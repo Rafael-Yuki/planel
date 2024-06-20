@@ -65,7 +65,7 @@ require(dirname(__DIR__) . '../../models/conexao.php');
                                 <div class="mb-3">
                                     <label for="endereco">Endereço</label>
                                     <p class="form-control">
-                                    <?=$fornecedor['endereco'].', '.$fornecedor['nome_cidade'].' - '.$fornecedor['sigla_estado']?>
+                                    <?=$fornecedor['endereco'].', '.  utf8_decode($fornecedor['nome_cidade']).' - '. utf8_decode($fornecedor['sigla_estado'])?>
                                     </p>
                                 </div>
                                 <?php

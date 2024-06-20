@@ -31,22 +31,25 @@ require(dirname(__DIR__) . '../../models/conexao.php');
             </h4>
           </div>
           <div class="card-body">
-            <form action="/planel/fornecedor/atualizar" method="POST">
+            <form id="formFornecedor" action="/planel/fornecedor/atualizar" method="POST">
               <div class="mb-3">
                 <label for="nome">Nome</label>
                 <input type="text" id="nome" name="nome" class="form-control" required>
+                <div id="nomeError" class="invalid-feedback">Nome inválido. Use apenas letras e espaços.</div>
               </div>
               <div class="mb-3">
                 <label for="cnpj">CNPJ</label>
-                <input type="text" id="cnpj" name="cnpj" class="form-control">
+                <input type="text" id="cnpj" name="cnpj" class="form-control cnpj-mask" required>
+                <div id="cnpjError" class="invalid-feedback">CNPJ inválido</div>
               </div>
               <div class="mb-3">
                 <label for="telefone">Telefone</label>
-                <input type="tel" id="telefone" name="telefone" class="form-control">
+                <input type="tel" id="telefone" name="telefone" class="form-control phone-mask">
               </div>
               <div class="mb-3">
                 <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" class="form-control">
+                <input type="email" id="email" name="email" class="form-control" required>
+                <div id="emailError" class="invalid-feedback">E-mail inválido</div>
               </div>
               <div class="mb-3">
                 <label for="endereco">Endereço</label>
@@ -83,8 +86,83 @@ require(dirname(__DIR__) . '../../models/conexao.php');
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
   <script>
+    function validarCNPJ(cnpj) {
+      cnpj = cnpj.replace(/[^\d]+/g, '');
+
+      if (cnpj.length !== 14)
+        return false;
+
+      // Elimina CNPJs inválidos conhecidos
+      if (cnpj === "00000000000000" || 
+          cnpj === "11111111111111" || 
+          cnpj === "22222222222222" || 
+          cnpj === "33333333333333" || 
+          cnpj === "44444444444444" || 
+          cnpj === "55555555555555" || 
+          cnpj === "66666666666666" || 
+          cnpj === "77777777777777" || 
+          cnpj === "88888888888888" || 
+          cnpj === "99999999999999")
+        return false;
+
+      // Valida DVs
+      let tamanho = cnpj.length - 2;
+      let numeros = cnpj.substring(0,tamanho);
+      let digitos = cnpj.substring(tamanho);
+      let soma = 0;
+      let pos = tamanho - 7;
+      for (let i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2)
+              pos = 9;
+      }
+      let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+      if (resultado != digitos.charAt(0))
+        return false;
+
+      tamanho = tamanho + 1;
+      numeros = cnpj.substring(0,tamanho);
+      soma = 0;
+      pos = tamanho - 7;
+      for (let i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2)
+              pos = 9;
+      }
+      resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+      if (resultado != digitos.charAt(1))
+            return false;
+      
+      return true;
+    }
+
+    function validarNome(nome) {
+      var regex = /^[A-Za-zÀ-ÿ\s]+$/;
+      return regex.test(nome);
+    }
+
+    function validarEmail(email) {
+      var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(email);
+    }
+
     $(document).ready(function() {
+        // Máscara de telefone/celular
+        var behavior = function (val) {
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+        },
+        options = {
+            onKeyPress: function(val, e, field, options) {
+                field.mask(behavior.apply({}, arguments), options);
+            }
+        };
+        $('.phone-mask').mask(behavior, options);
+
+        // Máscara de CNPJ
+        $('.cnpj-mask').mask('00.000.000/0000-00');
+        
         $('#estado').change(function() {
             var estadoId = $(this).val();
             if (estadoId) {
@@ -106,6 +184,38 @@ require(dirname(__DIR__) . '../../models/conexao.php');
                 $('#cidade-container').addClass('hidden');
                 $('#cidade').prop('disabled', true);
                 $('#cidade').html('<option value="">Selecione um Estado</option>');
+            }
+        });
+
+        $('#formFornecedor').submit(function(event) {
+            var cnpj = $('#cnpj').val();
+            var nome = $('#nome').val();
+            var email = $('#email').val();
+            var valid = true;
+
+            if (!validarCNPJ(cnpj)) {
+                $('#cnpj').addClass('is-invalid');
+                valid = false;
+            } else {
+                $('#cnpj').removeClass('is-invalid');
+            }
+
+            if (!validarNome(nome)) {
+                $('#nome').addClass('is-invalid');
+                valid = false;
+            } else {
+                $('#nome').removeClass('is-invalid');
+            }
+
+            if (!validarEmail(email)) {
+                $('#email').addClass('is-invalid');
+                valid = false;
+            } else {
+                $('#email').removeClass('is-invalid');
+            }
+
+            if (!valid) {
+                event.preventDefault();
             }
         });
     });
