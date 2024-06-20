@@ -14,18 +14,6 @@ require(dirname(__DIR__) . '/models/fornecedor_dao.php');
 </head>
 
 <body>
-    <?php
-    // Início da verificação de login
-    if(isset($_SESSION['login'])) {
-    ?>
-    <?php
-    } else {
-        // Se não estiver logado, redirecionar para a página de login
-        header('Location: /planel/');
-        exit();
-    }
-    // Fim da verificação de login
-    ?>
     <?php include('navbar.php'); ?>
 
     <div class="container mt-4">
