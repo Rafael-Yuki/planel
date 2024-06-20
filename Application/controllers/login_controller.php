@@ -4,7 +4,7 @@ session_start();
 require_once(dirname(__DIR__) . '/models/conexao.php');
 
 if(empty($_POST['login']) || empty($_POST['senha'])) {
-    header('Location: ../views/login.php');
+    header('Location: /planel/');
     exit();
 }
 
@@ -23,7 +23,7 @@ if($row == 1) {
     exit();
 } else {
     $_SESSION['nao_autenticado'] = true;
-    header('Location: login');
+    header('Location: /planel/');
     exit();
 }
 ?>
