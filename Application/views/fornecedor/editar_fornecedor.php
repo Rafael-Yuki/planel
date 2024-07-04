@@ -1,6 +1,6 @@
 <?php
 session_start();
-require(dirname(__DIR__) . '../../models/conexao.php');
+require('Application/models/conexao.php');
 mysqli_set_charset($conexao, "utf8");
 ?>
 <!doctype html>
@@ -14,7 +14,7 @@ mysqli_set_charset($conexao, "utf8");
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
-<body>
+<body data-bs-theme="dark">
     <?php include(__DIR__ . '/../navbar.php');?>
     <div class="container mt-5">
         <div class="row">
@@ -22,7 +22,7 @@ mysqli_set_charset($conexao, "utf8");
                 <div class="card">
                     <div class="card-header">
                         <h4>Editar Fornecedor
-                            <a href="../dashboard" class="btn btn-danger float-end">
+                            <a href="/planel/fornecedores" class="btn btn-danger float-end">
                             <span class="bi-arrow-left"></span>&nbsp;Voltar</a>
                         </h4>
                     </div>
@@ -104,7 +104,7 @@ mysqli_set_charset($conexao, "utf8");
                                             var estadoId = $(this).val();
                                             if (estadoId) {
                                                 $.ajax({
-                                                    url: '/planel/fornecedor/cidades',
+                                                    url: '/planel/cidades',
                                                     type: 'POST',
                                                     data: {estado_id: estadoId},
                                                     success: function(data) {

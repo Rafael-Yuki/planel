@@ -1,7 +1,6 @@
 <?php
 session_start();
-
-require_once(dirname(__DIR__) . '/models/conexao.php');
+require('Application/models/conexao.php');
 
 if(empty($_POST['login']) || empty($_POST['senha'])) {
     header('Location: /planel/');

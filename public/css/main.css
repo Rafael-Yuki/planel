@@ -1,0 +1,16 @@
+/* main.css */
+
+/* Tabela Responsiva */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table td, .table th {
+    white-space: nowrap;
+}
+
+/* Link Hover e Active */
+.nav-link:hover, .nav-link.active {
+    text-decoration: underline;
+}
+

@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/../models/conexao.php');
+require('Application/models/conexao.php');
 mysqli_set_charset($conexao, "utf8");
 
 if (isset($_POST['estado_id'])) {

@@ -7,7 +7,7 @@ require('Application/models/conexao.php');
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Adicionar Fornecedor</title>
+  <title>Adicionar Cliente</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
   integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -25,13 +25,13 @@ require('Application/models/conexao.php');
       <div class="col-md-12">
         <div class="card">
           <div class="card-header">
-            <h4>Adicionar Fornecedor
-              <a href="/planel/fornecedores" class="btn btn-danger float-end">
+            <h4>Adicionar Cliente
+              <a href="/planel/clientes" class="btn btn-danger float-end">
               <span class="bi-arrow-left"></span>&nbsp;Voltar</a>
             </h4>
           </div>
           <div class="card-body">
-            <form id="formFornecedor" action="/planel/fornecedor/atualizar" method="POST">
+            <form id="formcliente" action="/planel/cliente/atualizar" method="POST">
               <div class="mb-3">
                 <label for="nome">Nome</label>
                 <input type="text" id="nome" name="nome" class="form-control" required>
@@ -77,7 +77,7 @@ require('Application/models/conexao.php');
                 <div id="cidadeError" class="invalid-feedback">Selecione uma cidade.</div>
               </div>
               <div class="mb-3">
-                <button type="submit" name="criar_fornecedor" class="btn btn-primary">
+                <button type="submit" name="criar_cliente" class="btn btn-primary">
                   <span class="bi-save"></span>&nbsp;Salvar
                 </button>
               </div>
@@ -189,7 +189,7 @@ require('Application/models/conexao.php');
             }
         });
 
-        $('#formFornecedor').submit(function(event) {
+        $('#formcliente').submit(function(event) {
             var cnpj = $('#cnpj').val();
             var nome = $('#nome').val();
             var email = $('#email').val();
