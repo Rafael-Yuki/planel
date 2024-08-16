@@ -4,7 +4,7 @@ mysqli_set_charset($conexao, "utf8");
 
 if (isset($_POST['estado_id'])) {
     $estado_id = intval($_POST['estado_id']);
-    $query = "SELECT id_cidade, nome_cidade FROM cidades WHERE id_estado = ?";
+    $query = "SELECT id_cidade, nome_cidade FROM cidades WHERE fk_estados_id_estado = ?";
     
     if ($stmt = $conexao->prepare($query)) {
         $stmt->bind_param("i", $estado_id);

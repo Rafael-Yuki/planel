@@ -50,7 +50,7 @@ class ClienteDAO {
         global $conexao;
         $sql = 'SELECT clientes.*, cidades.nome_cidade, estados.sigla_estado FROM clientes 
                 INNER JOIN cidades ON clientes.fk_cidades_id_cidade = cidades.id_cidade
-                INNER JOIN estados ON cidades.id_estado = estados.id_estado
+                INNER JOIN estados ON cidades.fk_estados_id_estado = estados.id_estado
                 WHERE clientes.ativo = TRUE';
         $clientes = mysqli_query($conexao, $sql);
         return $clientes;

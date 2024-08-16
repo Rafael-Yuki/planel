@@ -31,7 +31,7 @@ require('Application/models/conexao.php');
                             $fornecedor_id = mysqli_real_escape_string($conexao, $_GET['id']);
                             $sql = "SELECT fornecedores.*, cidades.nome_cidade, estados.sigla_estado FROM fornecedores 
                                     INNER JOIN cidades ON fornecedores.fk_cidades_id_cidade = cidades.id_cidade
-                                    INNER JOIN estados ON cidades.id_estado = estados.id_estado
+                                    INNER JOIN estados ON cidades.fk_estados_id_estado = estados.id_estado
                                     WHERE fornecedores.ativo = TRUE
                                       and fornecedores.id_fornecedor = {$fornecedor_id}";
                             $query = mysqli_query($conexao, $sql);

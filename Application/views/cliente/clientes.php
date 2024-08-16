@@ -77,7 +77,7 @@ require('Application/models/cliente_dao.php');
                             </div>
                             <?php
                         } else {
-                            echo '<h5>Nenhum cliente cadastrado</h5>';
+                            echo '<h5>Nenhum Cliente Cadastrado...</h5>';
                         }
                         ?>
                     </div>

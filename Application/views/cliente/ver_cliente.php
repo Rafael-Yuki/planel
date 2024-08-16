@@ -31,9 +31,9 @@ require('Application/models/conexao.php');
                             $cliente_id = mysqli_real_escape_string($conexao, $_GET['id']);
                             $sql = "SELECT clientes.*, cidades.nome_cidade, estados.sigla_estado FROM clientes 
                                     INNER JOIN cidades ON clientes.fk_cidades_id_cidade = cidades.id_cidade
-                                    INNER JOIN estados ON cidades.id_estado = estados.id_estado
+                                    INNER JOIN estados ON cidades.fk_estados_id_estado = estados.id_estado
                                     WHERE clientes.ativo = TRUE
-                                      and clientees.id_cliente = {$cliente_id}";
+                                      and clientes.id_cliente = {$cliente_id}";
                             $query = mysqli_query($conexao, $sql);
                             if (mysqli_num_rows($query) > 0) {
                                 $cliente = mysqli_fetch_array($query);

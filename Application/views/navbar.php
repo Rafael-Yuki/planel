@@ -36,19 +36,19 @@ function isActive($route) {
                         <a class="nav-link text-light <?php echo isActive('/planel/clientes'); ?>" href="/planel/clientes">Clientes</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive('/planel/materiais'); ?>" href="/planel/materiais">Materiais</a>
-                    </li>
-                    <li class="nav-item me-4">
                         <a class="nav-link text-light <?php echo isActive('/planel/contas-a-pagar'); ?>" href="/planel/contas-a-pagar">Contas a Pagar</a>
                     </li>
                     <li class="nav-item me-4">
                         <a class="nav-link text-light <?php echo isActive('/planel/contas-a-receber'); ?>" href="/planel/contas-a-receber">Contas a Receber</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive('/planel/notas-fiscais'); ?>" href="/planel/notas-fiscais">Notas fiscais</a>
+                        <a class="nav-link text-light <?php echo isActive('/planel/materiais'); ?>" href="/planel/materiais">Materiais</a>
                     </li>
                     <li class="nav-item me-4">
                         <a class="nav-link text-light <?php echo isActive('/planel/orcamentos'); ?>" href="/planel/orcamentos">Orçamentos</a>
+                    </li>
+                    <li class="nav-item me-4">
+                        <a class="nav-link text-light <?php echo isActive('/planel/notas-fiscais'); ?>" href="/planel/notas-fiscais">Notas fiscais</a>
                     </li>
                 </ul>
             </div>
