@@ -19,7 +19,7 @@ require('Application/models/conexao.php');
 </head>
 
 <body data-bs-theme="dark">
-  <?php include('view/navbar.php');?>
+  <?php include(__DIR__ . '/../navbar.php');?>
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-12">

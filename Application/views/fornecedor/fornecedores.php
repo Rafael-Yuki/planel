@@ -77,7 +77,7 @@ require('Application/models/fornecedor_dao.php');
                             </div>
                             <?php
                         } else {
-                            echo '<h5>Nenhum Fornecedor Cadastrado...</h5>';
+                            echo '<h5>Nenhum fornecedor cadastrado...</h5>';
                         }
                         ?>
                     </div>

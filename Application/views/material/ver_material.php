@@ -7,7 +7,7 @@ require('Application/models/conexao.php');
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Visualizar Orçamento</title>
+    <title>Visualizar Material</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -20,73 +20,68 @@ require('Application/models/conexao.php');
             <div class="col">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Visualizar Orçamento
-                            <a href="/planel/orcamentos" class="btn btn-danger float-end">
+                        <h4>Visualizar Material
+                            <a href="/planel/materiais" class="btn btn-danger float-end">
                             <span class="bi-arrow-left"></span>&nbsp;Voltar</a>
                         </h4>
                     </div>
                     <div class="card-body">
                         <?php
                         if (isset($_GET['id'])) {
-                            $orcamento_id = mysqli_real_escape_string($conexao, $_GET['id']);
-                            $sql = "SELECT orcamentos.*, clientes.nome_cliente FROM orcamentos 
-                                    INNER JOIN clientes ON orcamentos.fk_clientes_id_cliente = clientes.id_cliente
-                                    WHERE orcamentos.ativo = TRUE AND orcamentos.id_orcamento = {$orcamento_id}";
+                            $material_id = mysqli_real_escape_string($conexao, $_GET['id']);
+                            $sql = "SELECT materiais.*, fornecedores.nome_fornecedor FROM materiais 
+                                    INNER JOIN fornecedores ON materiais.fk_fornecedores_id_fornecedor = fornecedores.id_fornecedor
+                                    WHERE materiais.ativo = TRUE
+                                      and materiais.id_material = {$material_id}";
                             $query = mysqli_query($conexao, $sql);
                             if (mysqli_num_rows($query) > 0) {
-                                $orcamento = mysqli_fetch_array($query);
+                                $material = mysqli_fetch_array($query);
                                 ?>
                                 <div class="mb-3">
-                                    <label for="nome_orcamento">Nome do Orçamento</label>
+                                    <label for="nome_material">Nome do Material</label>
                                     <p class="form-control">
-                                        <?= $orcamento['nome_orcamento']; ?>
+                                        <?= $material['nome_material']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="cliente">Cliente</label>
+                                    <label for="valor_compra">Valor de Compra</label>
                                     <p class="form-control">
-                                        <?= $orcamento['nome_cliente']; ?>
+                                        R$ <?= number_format($material['valor_compra'], 2, ',', '.'); ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="data_orcamento">Data do Orçamento</label>
+                                    <label for="valor_venda">Valor de Venda</label>
                                     <p class="form-control">
-                                        <?= date('d/m/Y', strtotime($orcamento['data_orcamento'])); ?>
+                                        R$ <?= number_format($material['valor_venda'], 2, ',', '.'); ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="validade">Validade</label>
+                                    <label for="data_compra">Data da Compra</label>
                                     <p class="form-control">
-                                        <?= date('d/m/Y', strtotime($orcamento['validade'])); ?>
+                                        <?= date('d/m/Y', strtotime($material['data_compra'])); ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="status">Status</label>
+                                    <label for="quantidade">Quantidade</label>
                                     <p class="form-control">
-                                        <?= $orcamento['status']; ?>
+                                        <?= $material['quantidade']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="observacao">Observação</label>
+                                    <label for="unidade_medida">Unidade de Medida</label>
                                     <p class="form-control">
-                                        <?= $orcamento['observacao']; ?>
+                                        <?= $material['unidade_medida']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
-                                    <h4>Visualizar Anexo</h4>
-                                    <?php if (!empty($orcamento['caminho_arquivo'])): ?>
-                                        <a href="<?= '/planel/upload?file=' . urlencode(basename($orcamento['caminho_arquivo'])); ?>" 
-                                        class="btn btn-primary mt-2"
-                                        target="_blank">
-                                            <span class="bi-file-earmark-pdf-fill"></span>&nbsp;<?= basename($orcamento['caminho_arquivo']); ?>
-                                        </a>
-                                    <?php else: ?>
-                                        <p class="form-control">Nenhum arquivo anexado.</p>
-                                    <?php endif; ?>
+                                    <label for="fornecedor">Fornecedor</label>
+                                    <p class="form-control">
+                                        <?= $material['nome_fornecedor']; ?>
+                                    </p>
                                 </div>
                                 <?php
                             } else {
-                                echo "<h5>Orçamento não encontrado</h5>";
+                                echo "<h5>Material não encontrado</h5>";
                             }
                         }
                         ?>

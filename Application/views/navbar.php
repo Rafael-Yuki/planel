@@ -1,7 +1,14 @@
 <?php
-function isActive($route) {
+function isActive($routes) {
     $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    return $currentPath === $route ? 'active' : '';
+
+    foreach ($routes as $route) {
+        if (strpos($currentPath, $route) !== false) {
+            return 'active';
+        }
+    }
+    
+    return '';
 }
 ?>
 
@@ -30,25 +37,25 @@ function isActive($route) {
             <div class="collapse navbar-collapse order-lg-0" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive('/planel/fornecedores'); ?>" href="/planel/fornecedores">Fornecedores</a>
+                        <a class="nav-link text-light <?php echo isActive(['/planel/fornecedores', '/planel/fornecedor/cadastro', '/planel/fornecedor/editar', '/planel/fornecedor/visualizar']); ?>" href="/planel/fornecedores">Fornecedores</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive('/planel/clientes'); ?>" href="/planel/clientes">Clientes</a>
+                        <a class="nav-link text-light <?php echo isActive(['/planel/clientes', '/planel/cliente/cadastro', '/planel/cliente/editar', '/planel/cliente/visualizar']); ?>" href="/planel/clientes">Clientes</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive('/planel/contas-a-pagar'); ?>" href="/planel/contas-a-pagar">Contas a Pagar</a>
+                        <a class="nav-link text-light <?php echo isActive(['/planel/contas-a-pagar']); ?>" href="/planel/contas-a-pagar">Contas a Pagar</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive('/planel/contas-a-receber'); ?>" href="/planel/contas-a-receber">Contas a Receber</a>
+                        <a class="nav-link text-light <?php echo isActive(['/planel/contas-a-receber']); ?>" href="/planel/contas-a-receber">Contas a Receber</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive('/planel/materiais'); ?>" href="/planel/materiais">Materiais</a>
+                        <a class="nav-link text-light <?php echo isActive(['/planel/materiais']); ?>" href="/planel/materiais">Materiais</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive('/planel/orcamentos'); ?>" href="/planel/orcamentos">Orçamentos</a>
+                        <a class="nav-link text-light <?php echo isActive(['/planel/orcamentos', '/planel/orcamento/cadastro', '/planel/orcamento/editar', '/planel/orcamento/visualizar']); ?>" href="/planel/orcamentos">Orçamentos</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive('/planel/notas-fiscais'); ?>" href="/planel/notas-fiscais">Notas fiscais</a>
+                        <a class="nav-link text-light <?php echo isActive(['/planel/notas-fiscais']); ?>" href="/planel/notas-fiscais">Notas fiscais</a>
                     </li>
                 </ul>
             </div>

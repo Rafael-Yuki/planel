@@ -1,14 +1,18 @@
 <?php
 session_start();
-require('Application/models/cliente_dao.php');
+require('Application/models/contas_receber_dao.php');
+
+function formatarMoeda($valor) {
+    return 'R$ ' . number_format($valor, 2, ',', '.');
+}
 ?>
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Clientes</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+    <title>Contas a Receber</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="public/css/main.css">
@@ -22,48 +26,50 @@ require('Application/models/cliente_dao.php');
             <div class="col">
                 <div class="card">
                     <div class="card-header">
-                        <h4> Clientes
-                            <a href="cliente/cadastro" class="btn btn-primary float-end">
-                            <span class="bi-person-plus-fill"></span>&nbsp;Adicionar Cliente</a>
+                        <h4> Contas a Receber
+                            <a href="conta-a-receber/cadastro" class="btn btn-primary float-end">
+                            <span class="bi-plus-circle-fill"></span>&nbsp;Adicionar Conta</a>
                         </h4>
                     </div>
                     <div class="card-body">
                         <?php
-                        $cliente_dao = new clienteDAO;
-                        $clientes = $cliente_dao->listarClientes();
-                        if (mysqli_num_rows($clientes) > 0) {
+                        $conta_receber_dao = new ContasReceberDAO;
+                        $contas_receber = $conta_receber_dao->listarContasReceber();
+                        if (mysqli_num_rows($contas_receber) > 0) {
                             ?>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
-                                        <th>Nome</th>
-                                        <th>CNPJ</th>
-                                        <th>Telefone</th>
-                                        <th>E-mail</th>
-                                        <th>Endereço</th>
+                                        <th>Orçamento</th>
+                                        <th>Cliente</th>
+                                        <th>Valor</th>
+                                        <th>Data de Vencimento</th>
+                                        <th>Parcela Atual</th>
+                                        <th>Parcelas</th>
                                         <th>Opções</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php
-                                    foreach ($clientes as $cliente) {
+                                    while ($conta_receber = mysqli_fetch_assoc($contas_receber)) {
                                         ?>
                                         <tr>
-                                            <td><?= $cliente['nome_cliente'] ?></td>
-                                            <td><?= $cliente['cnpj'] ?></td>
-                                            <td><?= $cliente['telefone'] ?></td>
-                                            <td><?= $cliente['email'] ?></td>
-                                            <td><?= $cliente['endereco'] . ', ' . utf8_decode($cliente['nome_cidade']) . ' - ' . $cliente['sigla_estado'] ?></td>
+                                            <td><?= $conta_receber['nome_orcamento']; ?></td>
+                                            <td><?= $conta_receber['nome_cliente']; ?></td>
+                                            <td><?= formatarMoeda($conta_receber['valor']); ?></td>
+                                            <td><?= date('d/m/Y', strtotime($conta_receber['data_vencimento'])); ?></td>
+                                            <td><?= $conta_receber['parcela_atual']; ?></td>
+                                            <td><?= $conta_receber['parcelas']; ?></td>
                                             <td>
-                                                <a href="cliente/visualizar?id=<?= $cliente['id_cliente'] ?>" class="btn btn-secondary btn-sm">
+                                                <a href="conta-a-receber/visualizar?id=<?= $conta_receber['id_conta_receber'] ?>" class="btn btn-secondary btn-sm">
                                                     <span class="bi-eye-fill"></span>&nbsp;Visualizar
                                                 </a>
-                                                <a href="cliente/editar?id=<?= $cliente['id_cliente'] ?>" class="btn btn-success btn-sm">
+                                                <a href="conta-a-receber/editar?id=<?= $conta_receber['id_conta_receber'] ?>" class="btn btn-success btn-sm">
                                                     <span class="bi-pencil-fill"></span>&nbsp;Editar
                                                 </a>
-                                                <form action="cliente/atualizar" method="POST" class="d-inline">
-                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_cliente" value="<?= $cliente['id_cliente'] ?>" class="btn btn-danger btn-sm">
+                                                <form action="conta-a-receber/atualizar" method="POST" class="d-inline">
+                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_conta_receber" value="<?= $conta_receber['id_conta_receber'] ?>" class="btn btn-danger btn-sm">
                                                         <span class="bi-trash3-fill"></span>&nbsp;Excluir
                                                     </button>
                                                 </form>
@@ -77,7 +83,7 @@ require('Application/models/cliente_dao.php');
                             </div>
                             <?php
                         } else {
-                            echo '<h5>Nenhum cliente cadastrado...</h5>';
+                            echo '<h5>Nenhuma conta a receber cadastrada</h5>';
                         }
                         ?>
                     </div>
@@ -85,7 +91,7 @@ require('Application/models/cliente_dao.php');
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -53,14 +53,14 @@ require('Application/models/orcamento_dao.php');
                                         <tr>
                                             <td><?= $orcamento['nome_orcamento'] ?></td>
                                             <td><?= $orcamento['nome_cliente'] ?></td>
-                                            <td><?= $orcamento['data_orcamento'] ?></td>
-                                            <td><?= $orcamento['validade'] ?></td>
+                                            <td><?= date('d/m/Y', strtotime($orcamento['data_orcamento'])) ?></td>
+                                            <td><?= date('d/m/Y', strtotime($orcamento['validade'])) ?></td>
                                             <td><?= $orcamento['status'] ?></td>
                                             <td>
                                                 <?php if (!empty($orcamento['caminho_arquivo'])): ?>
                                                     <a href="<?= '/planel/upload?file=' . urlencode(basename($orcamento['caminho_arquivo'])); ?>" 
-                                                       class="btn btn-info btn-sm" target="_blank">
-                                                       <span class="bi-file-earmark-pdf-fill"></span>&nbsp;Ver Arquivo
+                                                    class="btn btn-sm" target="_blank">
+                                                    <span class="bi-file-earmark-pdf-fill"></span>&nbsp;Ver Arquivo
                                                     </a>
                                                 <?php else: ?>
                                                     <span class="text-muted">Nenhum anexo</span>
