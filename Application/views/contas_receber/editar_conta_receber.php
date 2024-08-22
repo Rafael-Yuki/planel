@@ -46,6 +46,21 @@ require('Application/models/parcelas_receber_dao.php');
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label for="orcamento">Orçamento</label>
+                                    <input type="text" id="orcamento" class="form-control" value="<?= $conta_receber['nome_orcamento'] ?>" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="cliente">Cliente</label>
+                                    <input type="text" id="cliente" class="form-control" value="<?= $conta_receber['nome_cliente'] ?>" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
                                     <label for="valor">Valor</label>
                                     <input type="text" id="valor" name="valor" class="form-control" value="<?= number_format($conta_receber['valor'], 2, ',', '.') ?>" required>
                                 </div>
@@ -145,36 +160,56 @@ require('Application/models/parcelas_receber_dao.php');
                                 const valorParcela = (parseFloat(valor) / parcelas).toFixed(2).replace('.', ',');
                                 const vencimento = new Date($('#data_vencimento').val());
 
+                                // Preserva os valores atuais dos campos antes da atualização
+                                let tiposPagamento = [];
+                                let valoresParcelas = [];
+                                let vencimentosParcelas = [];
+                                let datasRecebimento = [];
+
+                                $('.row.parcela').each(function(index) {
+                                    const i = index + 1;
+                                    tiposPagamento[i] = $(`#tipo_pagamento_${i}`).val();
+                                    valoresParcelas[i] = $(`#valor_parcela_${i}`).val();
+                                    vencimentosParcelas[i] = $(`#vencimento_parcela_${i}`).val();
+                                    datasRecebimento[i] = $(`#data_recebimento_${i}`).val();
+                                });
+
                                 let parcelasHtml = '';
                                 for (let i = 1; i <= parcelas; i++) {
                                     const vencimentoParcela = new Date(vencimento);
                                     vencimentoParcela.setMonth(vencimentoParcela.getMonth() + (i - 1));
                                     const vencimentoStr = vencimentoParcela.toISOString().split('T')[0];
 
+                                    // Reaplica os valores preservados ou usa o padrão
+                                    const valorParcelaExistente = valoresParcelas[i] || valorParcela;
+                                    const vencimentoParcelaExistente = vencimentosParcelas[i] || vencimentoStr;
+                                    const dataRecebimentoExistente = datasRecebimento[i] || '';
+                                    const tipoPagamentoExistente = tiposPagamento[i] || '';
+
                                     parcelasHtml += `
                                         <div class="row parcela" data-id="${i}">
                                             <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label for="valor_parcela_${i}">Valor da Parcela ${i}</label>
-                                                    <input type="text" id="valor_parcela_${i}" name="valor_parcela_${i}" class="form-control" value="${valorParcela}" required>
+                                                    <input type="text" id="valor_parcela_${i}" name="valor_parcela_${i}" class="form-control" value="${valorParcelaExistente}" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label for="vencimento_parcela_${i}">Vencimento da Parcela ${i}</label>
-                                                    <input type="date" id="vencimento_parcela_${i}" name="vencimento_parcela_${i}" class="form-control" value="${vencimentoStr}" required>
+                                                    <input type="date" id="vencimento_parcela_${i}" name="vencimento_parcela_${i}" class="form-control" value="${vencimentoParcelaExistente}" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label for="data_recebimento_${i}">Data de Recebimento</label>
-                                                    <input type="date" id="data_recebimento_${i}" name="data_recebimento_${i}" class="form-control" disabled>
+                                                    <input type="date" id="data_recebimento_${i}" name="data_recebimento_${i}" class="form-control" value="${dataRecebimentoExistente}">
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label for="tipo_pagamento_${i}">Tipo de Pagamento</label>
-                                                    <select id="tipo_pagamento_${i}" name="tipo_pagamento_${i}" class="form-control" disabled>
+                                                    <select id="tipo_pagamento_${i}" name="tipo_pagamento_${i}" class="form-control">
                                                         <option value="">Selecione</option>
                                                         <?php
                                                         $result_tipos_pagamento = mysqli_query($conexao, $query_tipos_pagamento);
@@ -190,6 +225,12 @@ require('Application/models/parcelas_receber_dao.php');
                                     `;
                                 }
                                 $('#parcelas_detalhes').html(parcelasHtml);
+
+                                // Reaplica os tipos de pagamento preservados
+                                for (let i = 1; i <= parcelas; i++) {
+                                    $(`#tipo_pagamento_${i}`).val(tiposPagamento[i]);
+                                }
+
                                 applyMasks();
                                 toggleParcelasEditable();
                             }
@@ -203,13 +244,8 @@ require('Application/models/parcelas_receber_dao.php');
                                     const tipoPagamentoField = $(`#tipo_pagamento_${parcelaIndex}`);
 
                                     if (parcelaIndex <= parcelaAtual) {
-                                        const vencimento = $(`#vencimento_parcela_${parcelaIndex}`).val();
                                         dataRecebimentoField.prop('disabled', false);
                                         tipoPagamentoField.prop('disabled', false);
-
-                                        if (!dataRecebimentoField.val()) {
-                                            dataRecebimentoField.val(vencimento);
-                                        }
                                     } else {
                                         dataRecebimentoField.prop('disabled', true).val('');
                                         tipoPagamentoField.prop('disabled', true).val('');
@@ -219,6 +255,23 @@ require('Application/models/parcelas_receber_dao.php');
 
                             function validateForm() {
                                 const parcelas = parseInt($('#parcelas').val());
+                                let totalParcelas = 0;
+
+                                // Calcula a soma dos valores das parcelas
+                                for (let i = 1; i <= parcelas; i++) {
+                                    let valorParcela = $(`#valor_parcela_${i}`).val();
+                                    valorParcela = valorParcela.replace(/\./g, '').replace(',', '.');
+                                    totalParcelas += parseFloat(valorParcela);
+                                }
+
+                                let valorTotal = $('#valor').val();
+                                valorTotal = valorTotal.replace(/\./g, '').replace(',', '.');
+
+                                if (Math.abs(totalParcelas - parseFloat(valorTotal)) > 0.01) {
+                                    alert('A soma dos valores das parcelas deve ser igual ao valor total da Conta a Receber.');
+                                    return false;
+                                }
+
                                 let isValid = true;
 
                                 for (let i = 1; i <= parcelas; i++) {
