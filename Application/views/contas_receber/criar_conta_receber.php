@@ -118,7 +118,6 @@ require('Application/controllers/parcelas_receber_controller.php'); // Incluindo
             const valorParcela = (parseFloat(valor) / parcelas).toFixed(2).replace('.', ','); // Calcula o valor da parcela e formata
 
             const vencimento = new Date($('#data_vencimento').val());
-            const parcelaAtual = parseInt($('#parcela_atual').val());
 
             let parcelasHtml = '';
             for (let i = 1; i <= parcelas; i++) {
@@ -132,7 +131,7 @@ require('Application/controllers/parcelas_receber_controller.php'); // Incluindo
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="valor_parcela_${i}">Valor da Parcela ${i}</label>
-                                <input type="text" id="valor_parcela_${i}" name="valor_parcela_${i}" class="form-control" value="${valorParcela}" readonly>
+                                <input type="text" id="valor_parcela_${i}" name="valor_parcela_${i}" class="form-control" value="${valorParcela}" required>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -144,13 +143,13 @@ require('Application/controllers/parcelas_receber_controller.php'); // Incluindo
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="data_recebimento_${i}">Data de Recebimento da Parcela ${i}</label>
-                                <input type="date" id="data_recebimento_${i}" name="data_recebimento_${i}" class="form-control" ${i <= parcelaAtual ? `value="${vencimentoStr}"` : ''} ${i <= parcelaAtual ? '' : 'disabled'}>
+                                <input type="date" id="data_recebimento_${i}" name="data_recebimento_${i}" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="tipo_pagamento_${i}">Tipo de Pagamento da Parcela ${i}</label>
-                                <select id="tipo_pagamento_${i}" name="tipo_pagamento_${i}" class="form-control" ${i <= parcelaAtual ? '' : 'disabled'}>
+                                <select id="tipo_pagamento_${i}" name="tipo_pagamento_${i}" class="form-control" disabled>
                                     <option value="">Selecione</option>
                                     <?php
                                     $query_tipos_pagamento = "SELECT * FROM tipo_pagamento";
@@ -167,15 +166,63 @@ require('Application/controllers/parcelas_receber_controller.php'); // Incluindo
                 `;
             }
             $('#parcelas_detalhes').html(parcelasHtml);
+
+            // Aplica a máscara nos novos campos de valor de parcela
+            $('input[id^="valor_parcela_"]').mask('000.000.000.000.000,00', {reverse: true});
         }
 
-        $('#parcelas, #data_vencimento, #parcela_atual').on('input change', function() {
+        function toggleParcelasEditable() {
+            const parcelaAtual = parseInt($('#parcela_atual').val());
+
+            $('.row').each(function(index) {
+                const parcelaIndex = index + 1;
+                const dataRecebimentoField = $(`#data_recebimento_${parcelaIndex}`);
+                const tipoPagamentoField = $(`#tipo_pagamento_${parcelaIndex}`);
+
+                if (parcelaIndex <= parcelaAtual) {
+                    const vencimento = $(`#vencimento_parcela_${parcelaIndex}`).val();
+                    dataRecebimentoField.prop('disabled', false);
+                    tipoPagamentoField.prop('disabled', false);
+
+                    // Se a data de recebimento estiver vazia, definir como a data de vencimento
+                    if (!dataRecebimentoField.val()) {
+                        dataRecebimentoField.val(vencimento);
+                    }
+                } else {
+                    dataRecebimentoField.prop('disabled', true).val('');
+                    tipoPagamentoField.prop('disabled', true).val('');
+                }
+            });
+        }
+
+        $('#parcelas, #data_vencimento, #valor').on('input change', function() {
             updateParcelas();
+            toggleParcelasEditable();
+        });
+
+        $('#parcela_atual').on('input change', function() {
+            toggleParcelasEditable();
         });
 
         $('#formContaReceber').on('submit', function(e) {
             const parcelas = parseInt($('#parcelas').val());
-            const parcelaAtual = parseInt($('#parcela_atual').val());
+            let totalParcelas = 0;
+
+            // Calcula a soma dos valores das parcelas
+            for (let i = 1; i <= parcelas; i++) {
+                let valorParcela = $(`#valor_parcela_${i}`).val();
+                valorParcela = valorParcela.replace(/\./g, '').replace(',', '.');
+                totalParcelas += parseFloat(valorParcela);
+            }
+
+            let valorTotal = $('#valor').val();
+            valorTotal = valorTotal.replace(/\./g, '').replace(',', '.');
+
+            if (Math.abs(totalParcelas - parseFloat(valorTotal)) > 0.01) {
+                e.preventDefault();
+                alert('A soma dos valores das parcelas deve ser igual ao valor total da Conta a Receber.');
+                return false;
+            }
 
             // Validação para impedir criação se data de recebimento estiver sem tipo de pagamento
             for (let i = 1; i <= parcelas; i++) {
@@ -187,15 +234,11 @@ require('Application/controllers/parcelas_receber_controller.php'); // Incluindo
                     return;
                 }
             }
-
-            if (parcelaAtual > parcelas) {
-                e.preventDefault();
-                alert('A parcela atual não pode ser maior que o número total de parcelas.');
-            }
         });
 
-        // Atualizar parcelas no carregamento inicial
+        // Atualizar parcelas e bloqueio de campos no carregamento inicial
         updateParcelas();
+        toggleParcelasEditable();
     });
   </script>
 </body>

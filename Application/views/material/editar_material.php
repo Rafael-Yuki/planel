@@ -44,6 +44,16 @@ mysqli_set_charset($conexao, "utf8");
                                             class="form-control" required>
                                     </div>
                                     <div class="mb-3">
+                                        <label for="quantidade">Quantidade</label>
+                                        <input type="number" name="quantidade" value="<?= $material['quantidade'] ?>"
+                                            class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="unidade_medida">Unidade de Medida</label>
+                                        <input type="text" name="unidade_medida" value="<?= $material['unidade_medida'] ?>"
+                                            class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
                                         <label for="valor_compra">Valor de Compra</label>
                                         <input type="number" step="0.01" name="valor_compra" value="<?= $material['valor_compra'] ?>"
                                             class="form-control" required>
@@ -56,16 +66,6 @@ mysqli_set_charset($conexao, "utf8");
                                     <div class="mb-3">
                                         <label for="data_compra">Data da Compra</label>
                                         <input type="date" name="data_compra" value="<?= $material['data_compra'] ?>"
-                                            class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="quantidade">Quantidade</label>
-                                        <input type="number" name="quantidade" value="<?= $material['quantidade'] ?>"
-                                            class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="unidade_medida">Unidade de Medida</label>
-                                        <input type="text" name="unidade_medida" value="<?= $material['unidade_medida'] ?>"
                                             class="form-control" required>
                                     </div>
                                     <div class="mb-3">

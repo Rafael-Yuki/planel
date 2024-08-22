@@ -32,6 +32,14 @@ require('Application/models/conexao.php');
                 <input type="text" id="nome_material" name="nome_material" class="form-control" required>
               </div>
               <div class="mb-3">
+                <label for="quantidade">Quantidade</label>
+                <input type="number" id="quantidade" name="quantidade" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="unidade_medida">Unidade de Medida</label>
+                <input type="text" id="unidade_medida" name="unidade_medida" class="form-control" required>
+              </div>
+              <div class="mb-3">
                 <label for="valor_compra">Valor de Compra</label>
                 <input type="text" id="valor_compra" name="valor_compra" class="form-control valor-mask" required>
               </div>
@@ -42,14 +50,6 @@ require('Application/models/conexao.php');
               <div class="mb-3">
                 <label for="data_compra">Data da Compra</label>
                 <input type="date" id="data_compra" name="data_compra" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label for="quantidade">Quantidade</label>
-                <input type="number" id="quantidade" name="quantidade" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label for="unidade_medida">Unidade de Medida</label>
-                <input type="text" id="unidade_medida" name="unidade_medida" class="form-control" required>
               </div>
               <div class="mb-3">
                 <label for="fornecedor">Fornecedor</label>

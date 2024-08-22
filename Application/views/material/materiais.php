@@ -37,11 +37,11 @@ require('Application/models/material_dao.php');
                                     <thead>
                                     <tr>
                                         <th>Nome do Material</th>
+                                        <th>Quantidade</th>
+                                        <th>Unidade de Medida</th>
                                         <th>Valor de Compra</th>
                                         <th>Valor de Venda</th>
                                         <th>Data de Compra</th>
-                                        <th>Quantidade</th>
-                                        <th>Unidade de Medida</th>
                                         <th>Fornecedor</th>
                                         <th>Opções</th>
                                     </tr>
@@ -52,11 +52,11 @@ require('Application/models/material_dao.php');
                                         ?>
                                         <tr>
                                             <td><?= $material['nome_material'] ?></td>
+                                            <td><?= $material['quantidade'] ?></td>
+                                            <td><?= $material['unidade_medida'] ?></td>
                                             <td><?= number_format($material['valor_compra'], 2, ',', '.') ?></td>
                                             <td><?= number_format($material['valor_venda'], 2, ',', '.') ?></td>
                                             <td><?= date('d/m/Y', strtotime($material['data_compra'])) ?></td>
-                                            <td><?= $material['quantidade'] ?></td>
-                                            <td><?= $material['unidade_medida'] ?></td>
                                             <td><?= $material['nome_fornecedor'] ?></td>
                                             <td>
                                                 <a href="material/visualizar?id=<?= $material['id_material'] ?>" class="btn btn-secondary btn-sm">

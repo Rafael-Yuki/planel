@@ -44,6 +44,18 @@ require('Application/models/conexao.php');
                                     </p>
                                 </div>
                                 <div class="mb-3">
+                                    <label for="quantidade">Quantidade</label>
+                                    <p class="form-control">
+                                        <?= $material['quantidade']; ?>
+                                    </p>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="unidade_medida">Unidade de Medida</label>
+                                    <p class="form-control">
+                                        <?= $material['unidade_medida']; ?>
+                                    </p>
+                                </div>
+                                <div class="mb-3">
                                     <label for="valor_compra">Valor de Compra</label>
                                     <p class="form-control">
                                         R$ <?= number_format($material['valor_compra'], 2, ',', '.'); ?>
@@ -59,18 +71,6 @@ require('Application/models/conexao.php');
                                     <label for="data_compra">Data da Compra</label>
                                     <p class="form-control">
                                         <?= date('d/m/Y', strtotime($material['data_compra'])); ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="quantidade">Quantidade</label>
-                                    <p class="form-control">
-                                        <?= $material['quantidade']; ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="unidade_medida">Unidade de Medida</label>
-                                    <p class="form-control">
-                                        <?= $material['unidade_medida']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
