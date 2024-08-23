@@ -3,11 +3,11 @@ session_start();
 require('Application/models/conexao.php');
 ?>
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Visualizar Fornecedor</title>
+    <title>Visualizar Nota Fiscal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -20,57 +20,67 @@ require('Application/models/conexao.php');
             <div class="col">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Visualizar Fornecedor
-                            <a href="/planel/fornecedores" class="btn btn-danger float-end">
+                        <h4>Visualizar Nota Fiscal
+                            <a href="/planel/notas-fiscais" class="btn btn-danger float-end">
                             <span class="bi-arrow-left"></span>&nbsp;Voltar</a>
                         </h4>
                     </div>
                     <div class="card-body">
                         <?php
                         if (isset($_GET['id'])) {
-                            $fornecedor_id = mysqli_real_escape_string($conexao, $_GET['id']);
-                            $sql = "SELECT fornecedores.*, cidades.nome_cidade, estados.sigla_estado FROM fornecedores 
-                                    INNER JOIN cidades ON fornecedores.fk_cidades_id_cidade = cidades.id_cidade
-                                    INNER JOIN estados ON cidades.fk_estados_id_estado = estados.id_estado
-                                    WHERE fornecedores.ativo = TRUE
-                                      and fornecedores.id_fornecedor = {$fornecedor_id}";
+                            $nota_fiscal_id = mysqli_real_escape_string($conexao, $_GET['id']);
+                            $sql = "SELECT notas_fiscais.*, fornecedores.nome_fornecedor FROM notas_fiscais 
+                                    INNER JOIN fornecedores ON notas_fiscais.fk_fornecedores_id_fornecedor = fornecedores.id_fornecedor
+                                    WHERE notas_fiscais.ativo = TRUE AND notas_fiscais.id_nota_fiscal = {$nota_fiscal_id}";
                             $query = mysqli_query($conexao, $sql);
                             if (mysqli_num_rows($query) > 0) {
-                                $fornecedor = mysqli_fetch_array($query);
+                                $nota_fiscal = mysqli_fetch_array($query);
                                 ?>
                                 <div class="mb-3">
-                                    <label for="nome">Nome</label>
+                                    <label for="numero">Número da Nota Fiscal</label>
                                     <p class="form-control">
-                                        <?= $fornecedor['nome_fornecedor']; ?>
+                                        <?= $nota_fiscal['numero']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="cnpj">CNPJ</label>
+                                    <label for="fornecedor">Fornecedor</label>
                                     <p class="form-control">
-                                        <?= $fornecedor['cnpj']; ?>
+                                        <?= $nota_fiscal['nome_fornecedor']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="telefone">Telefone</label>
+                                    <label for="data_emissao">Data de Emissão</label>
                                     <p class="form-control">
-                                        <?= $fornecedor['telefone']; ?>
+                                        <?= date('d/m/Y', strtotime($nota_fiscal['data_emissao'])); ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="email">E-mail</label>
+                                    <label for="valor_total">Valor Total</label>
                                     <p class="form-control">
-                                        <?= $fornecedor['email']; ?>
+                                        <?= number_format($nota_fiscal['valor_total'], 2, ',', '.'); ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="endereco">Endereço</label>
+                                    <label for="parcelas">Parcelas</label>
                                     <p class="form-control">
-                                    <?=$fornecedor['endereco'].', '. $fornecedor['nome_cidade'].' - '. $fornecedor['sigla_estado']?>
+                                        <?= $nota_fiscal['parcelas']; ?>
                                     </p>
+                                </div>
+                                <div class="mb-3">
+                                    <h4>Visualizar XML</h4>
+
+                                    <?php if (!empty($nota_fiscal['caminho_xml'])): ?>
+                                        <a href="<?= '/planel/upload?file=' . urlencode(basename($nota_fiscal['caminho_xml'])); ?>" 
+                                        class="btn btn-primary mt-2" target="_blank">
+                                        <span class="bi-file-earmark-text-fill"></span>&nbsp;<?= basename($nota_fiscal['caminho_xml']); ?>
+                                        </a>
+                                    <?php else: ?>
+                                        <span class="text-muted">Nenhum XML</span>
+                                    <?php endif; ?>
                                 </div>
                                 <?php
                             } else {
-                                echo "<h5>Fornecedor não encontrado</h5>";
+                                echo "<h5>Nota Fiscal não encontrada</h5>";
                             }
                         }
                         ?>

@@ -11,6 +11,7 @@ if (isset($_POST['criar_material'])) {
     $quantidade = mysqli_real_escape_string($conexao, $_POST['quantidade']);
     $unidade_medida = mysqli_real_escape_string($conexao, $_POST['unidade_medida']);
     $fornecedor_id = mysqli_real_escape_string($conexao, $_POST['fornecedor']);
+    $ncm = mysqli_real_escape_string($conexao, $_POST['ncm']);
 
     if (empty($nome_material)) {
         $_SESSION['mensagem'] = 'O nome do material é obrigatório!';
@@ -19,7 +20,7 @@ if (isset($_POST['criar_material'])) {
         exit;
     }
 
-    $result = MaterialDAO::criarMaterial($nome_material, $valor_compra, $valor_venda, $data_compra, $quantidade, $unidade_medida, $fornecedor_id);
+    $result = MaterialDAO::criarMaterial($nome_material, $valor_compra, $valor_venda, $data_compra, $quantidade, $unidade_medida, $fornecedor_id, $ncm);
     if ($result > 0) {
         $_SESSION['mensagem'] = 'Material criado com sucesso!';
         $_SESSION['mensagem_tipo'] = 'success';
@@ -40,6 +41,7 @@ if (isset($_POST['editar_material'])) {
     $quantidade = mysqli_real_escape_string($conexao, $_POST['quantidade']);
     $unidade_medida = mysqli_real_escape_string($conexao, $_POST['unidade_medida']);
     $fornecedor_id = mysqli_real_escape_string($conexao, $_POST['fornecedor']);
+    $ncm = mysqli_real_escape_string($conexao, $_POST['ncm']);
 
     if (empty($nome_material)) {
         $_SESSION['mensagem'] = 'O nome do material é obrigatório!';
@@ -48,7 +50,7 @@ if (isset($_POST['editar_material'])) {
         exit;
     }
 
-    $result = MaterialDAO::editarMaterial($id, $nome_material, $valor_compra, $valor_venda, $data_compra, $quantidade, $unidade_medida, $fornecedor_id);
+    $result = MaterialDAO::editarMaterial($id, $nome_material, $valor_compra, $valor_venda, $data_compra, $quantidade, $unidade_medida, $fornecedor_id, $ncm);
     if ($result >= 0) {
         $_SESSION['mensagem'] = 'Material atualizado com sucesso!';
         $_SESSION['mensagem_tipo'] = 'success';
@@ -74,3 +76,4 @@ if (isset($_POST['excluir_material'])) {
     header('Location: /planel/materiais');
     exit;
 }
+?>

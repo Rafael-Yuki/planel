@@ -32,6 +32,10 @@ require('Application/models/conexao.php');
                 <input type="text" id="nome_material" name="nome_material" class="form-control" required>
               </div>
               <div class="mb-3">
+                <label for="ncm">NCM</label>
+                <input type="text" id="ncm" name="ncm" class="form-control" required>
+              </div>
+              <div class="mb-3">
                 <label for="quantidade">Quantidade</label>
                 <input type="number" id="quantidade" name="quantidade" class="form-control" required>
               </div>

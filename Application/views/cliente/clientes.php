@@ -54,7 +54,7 @@ require('Application/models/cliente_dao.php');
                                             <td><?= $cliente['cnpj'] ?></td>
                                             <td><?= $cliente['telefone'] ?></td>
                                             <td><?= $cliente['email'] ?></td>
-                                            <td><?= $cliente['endereco'] . ', ' . utf8_decode($cliente['nome_cidade']) . ' - ' . $cliente['sigla_estado'] ?></td>
+                                            <td><?= $cliente['endereco'] . ', ' . $cliente['nome_cidade'] . ' - ' . $cliente['sigla_estado'] ?></td>
                                             <td>
                                                 <a href="cliente/visualizar?id=<?= $cliente['id_cliente'] ?>" class="btn btn-secondary btn-sm">
                                                     <span class="bi-eye-fill"></span>&nbsp;Visualizar
@@ -77,7 +77,7 @@ require('Application/models/cliente_dao.php');
                             </div>
                             <?php
                         } else {
-                            echo '<h5>Nenhum cliente cadastrado...</h5>';
+                            echo '<h5>Nenhum cliente cadastrado</h5>';
                         }
                         ?>
                     </div>

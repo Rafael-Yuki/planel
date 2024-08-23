@@ -73,7 +73,7 @@ mysqli_set_charset($conexao, "utf8");
                                         $result_estados = mysqli_query($conexao, $query_estados);
                                         while($row_estado = mysqli_fetch_assoc($result_estados)) {
                                             $selected = ($row_estado['id_estado'] == $estado_id) ? 'selected' : '';
-                                            echo "<option value='".$row_estado['id_estado']."' $selected>". utf8_decode($row_estado['nome_estado'])."</option>";
+                                            echo "<option value='".$row_estado['id_estado']."' $selected>". $row_estado['nome_estado']."</option>";
                                         }
                                         ?>
                                         </select>
@@ -87,7 +87,7 @@ mysqli_set_charset($conexao, "utf8");
                                         $result_cidades = mysqli_query($conexao, $query_cidades);
                                         while($row_cidade = mysqli_fetch_assoc($result_cidades)) {
                                             $selected = ($row_cidade['id_cidade'] == $cidade_id) ? 'selected' : '';
-                                            echo "<option value='".$row_cidade['id_cidade']."' $selected>". utf8_decode($row_cidade['nome_cidade'])."</option>";
+                                            echo "<option value='".$row_cidade['id_cidade']."' $selected>". $row_cidade['nome_cidade']."</option>";
                                         }
                                         ?>
                                         </select>

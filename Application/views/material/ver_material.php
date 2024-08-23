@@ -44,6 +44,12 @@ require('Application/models/conexao.php');
                                     </p>
                                 </div>
                                 <div class="mb-3">
+                                    <label for="ncm">NCM</label>
+                                    <p class="form-control">
+                                        <?= $material['ncm']; ?>
+                                    </p>
+                                </div>
+                                <div class="mb-3">
                                     <label for="quantidade">Quantidade</label>
                                     <p class="form-control">
                                         <?= $material['quantidade']; ?>

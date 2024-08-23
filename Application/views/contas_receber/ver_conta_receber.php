@@ -122,7 +122,7 @@ function formatarMoeda($valor) {
                                         <?php
                                     }
                                 } else {
-                                    echo "<p>Não há parcelas cadastradas para esta conta.</p>";
+                                    echo "<p>Não há parcelas cadastradas para esta conta</p>";
                                 }
                                 ?>
                                 <?php

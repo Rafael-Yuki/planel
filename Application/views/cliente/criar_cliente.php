@@ -63,7 +63,7 @@ require('Application/models/conexao.php');
                   $query_estados = "SELECT * FROM estados";
                   $result_estados = mysqli_query($conexao, $query_estados);
                   while($row_estado = mysqli_fetch_assoc($result_estados)) {
-                      echo "<option value='".$row_estado['id_estado']."'>". utf8_decode($row_estado['nome_estado'])."</option>";
+                      echo "<option value='".$row_estado['id_estado']."'>". $row_estado['nome_estado']."</option>";
                   }
                   ?>
                 </select>

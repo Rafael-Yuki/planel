@@ -55,7 +55,10 @@ function isActive($routes) {
                         <a class="nav-link text-light <?php echo isActive(['/planel/orcamentos', '/planel/orcamento/cadastro', '/planel/orcamento/editar', '/planel/orcamento/visualizar']); ?>" href="/planel/orcamentos">Orçamentos</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive(['/planel/notas-fiscais']); ?>" href="/planel/notas-fiscais">Notas fiscais</a>
+                        <a class="nav-link text-light <?php echo isActive(['/planel/notas-fiscais']); ?>" href="/planel/notas-fiscais">Notas Fiscais</a>
+                    </li>
+                    <li class="nav-item me-4">
+                        <a class="nav-link text-light <?php echo isActive(['/planel/xml']); ?>" href="/planel/xml">XML</a>
                     </li>
                 </ul>
             </div>

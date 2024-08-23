@@ -11,12 +11,21 @@ if (!isset($_SESSION['login'])) {
 // Verifica se o arquivo foi especificado na URL
 if (isset($_GET['file'])) {
     $file = basename($_GET['file']);  // Protege contra ataques de path traversal
-    $file_path = __DIR__ . '/../../uploads/' . $file;
+    $file_extension = pathinfo($file, PATHINFO_EXTENSION);
+
+    // Determina o caminho com base na extensão do arquivo
+    if ($file_extension === 'xml') {
+        $file_path = __DIR__ . '/../../uploads/xml/' . $file;
+        $content_type = 'application/xml';
+    } else {
+        $file_path = __DIR__ . '/../../uploads/' . $file;
+        $content_type = 'application/pdf';  // Tipo de conteúdo para PDF
+    }
 
     // Verifica se o arquivo existe
     if (file_exists($file_path)) {
         header('Content-Description: File Transfer');
-        header('Content-Type: application/pdf'); // Você pode ajustar o tipo conforme necessário
+        header('Content-Type: ' . $content_type);
         header('Content-Disposition: inline; filename="'.basename($file_path).'"');
         header('Expires: 0');
         header('Cache-Control: must-revalidate');
@@ -33,4 +42,3 @@ if (isset($_GET['file'])) {
     echo "Nenhum arquivo especificado.";
     exit();
 }
-?>

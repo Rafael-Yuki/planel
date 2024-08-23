@@ -45,8 +45,19 @@ if (isset($_POST['editar_orcamento'])) {
     $observacao = mysqli_real_escape_string($conexao, $_POST['observacao']);
     $fk_clientes_id_cliente = mysqli_real_escape_string($conexao, $_POST['cliente']);
 
-    $caminho_arquivo = null;
+    // Obter o caminho do arquivo atual
+    $sql = "SELECT caminho_arquivo FROM orcamentos WHERE id_orcamento = '$id_orcamento'";
+    $query = mysqli_query($conexao, $sql);
+    $orcamento_atual = mysqli_fetch_assoc($query);
+    $caminho_arquivo_atual = $orcamento_atual['caminho_arquivo'];
+
+    $caminho_arquivo = $caminho_arquivo_atual; // Manter o arquivo atual por padrão
     if (isset($_FILES['arquivo_pdf']) && $_FILES['arquivo_pdf']['error'] == UPLOAD_ERR_OK) {
+        // Se um novo arquivo for enviado, excluir o antigo
+        if (!empty($caminho_arquivo_atual) && file_exists($caminho_arquivo_atual)) {
+            unlink($caminho_arquivo_atual);
+        }
+        // Mover o novo arquivo e atualizar o caminho
         $caminho_arquivo = 'uploads/' . basename($_FILES['arquivo_pdf']['name']);
         move_uploaded_file($_FILES['arquivo_pdf']['tmp_name'], $caminho_arquivo);
     }

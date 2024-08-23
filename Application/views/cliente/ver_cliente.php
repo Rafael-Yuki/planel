@@ -65,7 +65,7 @@ require('Application/models/conexao.php');
                                 <div class="mb-3">
                                     <label for="endereco">Endereço</label>
                                     <p class="form-control">
-                                    <?=$cliente['endereco'].', '.  utf8_decode($cliente['nome_cidade']).' - '. utf8_decode($cliente['sigla_estado'])?>
+                                    <?=$cliente['endereco'].', '. $cliente['nome_cidade'].' - '. $cliente['sigla_estado']?>
                                     </p>
                                 </div>
                                 <?php

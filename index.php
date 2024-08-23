@@ -42,8 +42,16 @@ $routes = [
     'material/editar' => 'Application/views/material/editar_material.php',
     'material/visualizar' => 'Application/views/material/ver_material.php',
 
+    'xml' => 'Application/views/xml/xml.php',
+    'xml/atualizar' => 'Application/controllers/xml_controller.php',
+
+    'notas-fiscais' => 'Application/views/notas_fiscais/notas_fiscais.php',
+    'nota-fiscal/atualizar' => 'Application/controllers/nota_fiscal_controller.php',
+    'nota-fiscal/editar' => 'Application/views/notas_fiscais/editar_nota_fiscal.php',
+    'nota-fiscal/visualizar' => 'Application/views/notas_fiscais/ver_nota_fiscal.php',
+
+
     'contas-a-pagar' => 'Application/views/contas_a_pagar.php',
-    'notas-fiscais' => 'Application/views/notas_fiscais.php',
 ];
 
 // Obter o caminho da URL
