@@ -114,6 +114,21 @@ if (isset($_POST['importar_xml'])) {
                 }
             }
 
+            // Verificar se o XML já foi importado
+            $query_xml_existente = "
+                SELECT id_nota_fiscal 
+                FROM notas_fiscais 
+                WHERE caminho_xml = '$caminho_xml'
+            ";
+            $result_xml_existente = mysqli_query($conexao, $query_xml_existente);
+
+            if ($result_xml_existente && mysqli_num_rows($result_xml_existente) > 0) {
+                $_SESSION['mensagem'] = 'Este XML já foi importado anteriormente.';
+                $_SESSION['mensagem_tipo'] = 'warning';
+                header('Location: /planel/xml');
+                exit;
+            }
+
             // Cadastrar a nota fiscal no banco de dados
             $nota_fiscal_id = XMLDAO::cadastrarNotaFiscal([
                 'numero' => $numero_nota,
@@ -137,9 +152,8 @@ if (isset($_POST['importar_xml'])) {
                 $ncm_produto = mysqli_real_escape_string($conexao, (string)$item->prod->NCM);
                 $descricao_produto = mysqli_real_escape_string($conexao, (string)$item->prod->xProd);
                 $quantidade = mysqli_real_escape_string($conexao, (float)$item->prod->qCom);
-                $bc_icms = mysqli_real_escape_string($conexao, (float)$item->imposto->ICMS->ICMS10->vBC);
-                $icms_subst = mysqli_real_escape_string($conexao, (float)$item->imposto->ICMS->ICMS10->vICMSST);
-                $valor_compra = $bc_icms + $icms_subst;
+                $valor_unitario = mysqli_real_escape_string($conexao, (float)$item->prod->vUnTrib);
+                $valor_compra = $valor_unitario;
                 $valor_venda = $valor_compra * 1.4;
                 $data_compra = date('Y-m-d');
                 $unidade_medida = mysqli_real_escape_string($conexao, (string)$item->prod->uCom);

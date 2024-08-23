@@ -19,7 +19,6 @@ session_start();
                 <h4>Importar XML de Nota Fiscal</h4>
             </div>
             <div class="card-body">
-                <!-- Atualização da ação do formulário -->
                 <form action="xml/atualizar" method="POST" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="xmlFile" class="form-label">Selecione o arquivo XML</label>
