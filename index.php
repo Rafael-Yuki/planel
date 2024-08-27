@@ -50,8 +50,14 @@ $routes = [
     'nota-fiscal/editar' => 'Application/views/notas_fiscais/editar_nota_fiscal.php',
     'nota-fiscal/visualizar' => 'Application/views/notas_fiscais/ver_nota_fiscal.php',
 
+    'contas-a-pagar' => 'Application/views/contas_pagar/contas_pagar.php',
+    'conta-a-pagar/atualizar' => 'Application/controllers/contas_pagar_controller.php',
+    'conta-a-pagar/cadastro' => 'Application/views/contas_pagar/criar_conta_pagar.php',
+    'conta-a-pagar/editar' => 'Application/views/contas_pagar/editar_conta_pagar.php',
+    'conta-a-pagar/visualizar' => 'Application/views/contas_pagar/ver_conta_pagar.php',
 
-    'contas-a-pagar' => 'Application/views/contas_a_pagar.php',
+    'parcelas-pagar/atualizar' => 'Application/controllers/parcelas_pagar_controller.php',
+    
 ];
 
 // Obter o caminho da URL
