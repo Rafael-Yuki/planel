@@ -29,7 +29,7 @@ function isActive($routes) {
                 <button id="themeToggleBtn" class="btn btn-outline-light me-2">
                     <i id="themeIcon" class="bi bi-moon"></i>
                 </button>
-                <a class="btn btn-outline-light me-2" href="/planel/logout">Sair&nbsp;<span class="bi bi-box-arrow-right"></span></a>
+                <a class="btn btn-outline-light me-2" href="/planel/logout">Sair<span class="bi bi-box-arrow-right ms-2"></span></a>
                 <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -43,19 +43,19 @@ function isActive($routes) {
                         <a class="nav-link text-light <?php echo isActive(['/planel/clientes', '/planel/cliente/cadastro', '/planel/cliente/editar', '/planel/cliente/visualizar']); ?>" href="/planel/clientes">Clientes</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive(['/planel/contas-a-pagar']); ?>" href="/planel/contas-a-pagar">Contas a Pagar</a>
+                        <a class="nav-link text-light <?php echo isActive(['/planel/contas-a-pagar', '/planel/conta-a-pagar/cadastro', '/planel/conta-a-pagar/editar', '/planel/conta-a-pagar/visualizar']); ?>" href="/planel/contas-a-pagar">Contas a Pagar</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive(['/planel/contas-a-receber']); ?>" href="/planel/contas-a-receber">Contas a Receber</a>
+                        <a class="nav-link text-light <?php echo isActive(['/planel/contas-a-receber', '/planel/conta-a-receber/cadastro', '/planel/conta-a-receber/editar', '/planel/conta-a-receber/visualizar']); ?>" href="/planel/contas-a-receber">Contas a Receber</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive(['/planel/materiais']); ?>" href="/planel/materiais">Materiais</a>
+                        <a class="nav-link text-light <?php echo isActive(['/planel/materiais', '/planel/material/cadastro', '/planel/material/editar', '/planel/material/visualizar']); ?>" href="/planel/materiais">Materiais</a>
                     </li>
                     <li class="nav-item me-4">
                         <a class="nav-link text-light <?php echo isActive(['/planel/orcamentos', '/planel/orcamento/cadastro', '/planel/orcamento/editar', '/planel/orcamento/visualizar']); ?>" href="/planel/orcamentos">Orçamentos</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link text-light <?php echo isActive(['/planel/notas-fiscais']); ?>" href="/planel/notas-fiscais">Notas Fiscais</a>
+                        <a class="nav-link text-light <?php echo isActive(['/planel/notas-fiscais', '/planel/nota-fiscal/cadastro', '/planel/nota-fiscal/editar', '/planel/nota-fiscal/visualizar']); ?>" href="/planel/notas-fiscais">Notas Fiscais</a>
                     </li>
                     <li class="nav-item me-4">
                         <a class="nav-link text-light <?php echo isActive(['/planel/xml']); ?>" href="/planel/xml">XML</a>

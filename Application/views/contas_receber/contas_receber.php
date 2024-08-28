@@ -28,7 +28,7 @@ function formatarMoeda($valor) {
                     <div class="card-header">
                         <h4> Contas a Receber
                             <a href="conta-a-receber/cadastro" class="btn btn-primary float-end">
-                            <span class="bi-plus-circle-fill"></span>&nbsp;Adicionar Conta</a>
+                            <span class="bi bi-wallet2 me-2"></span>Adicionar Conta</a>
                         </h4>
                     </div>
                     <div class="card-body">
@@ -61,16 +61,16 @@ function formatarMoeda($valor) {
                                             <td><?= date('d/m/Y', strtotime($conta_receber['data_vencimento'])); ?></td>
                                             <td><?= $conta_receber['parcela_atual']; ?></td>
                                             <td><?= $conta_receber['parcelas']; ?></td>
-                                            <td>
+                                            <td class="text-center text-nowrap">
                                                 <a href="conta-a-receber/visualizar?id=<?= $conta_receber['id_conta_receber'] ?>" class="btn btn-secondary btn-sm">
-                                                    <span class="bi-eye-fill"></span>&nbsp;Visualizar
+                                                    <span class="bi-eye-fill"></span>
                                                 </a>
                                                 <a href="conta-a-receber/editar?id=<?= $conta_receber['id_conta_receber'] ?>" class="btn btn-success btn-sm">
-                                                    <span class="bi-pencil-fill"></span>&nbsp;Editar
+                                                    <span class="bi-pencil-fill"></span>
                                                 </a>
                                                 <form action="conta-a-receber/atualizar" method="POST" class="d-inline">
                                                     <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_conta_receber" value="<?= $conta_receber['id_conta_receber'] ?>" class="btn btn-danger btn-sm">
-                                                        <span class="bi-trash3-fill"></span>&nbsp;Excluir
+                                                        <span class="bi-trash3-fill"></span>
                                                     </button>
                                                 </form>
                                             </td>

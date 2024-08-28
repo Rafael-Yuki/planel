@@ -24,7 +24,7 @@ require('Application/models/fornecedor_dao.php');
                     <div class="card-header">
                         <h4> Fornecedores
                             <a href="fornecedor/cadastro" class="btn btn-primary float-end">
-                            <span class="bi-person-plus-fill"></span>&nbsp;Adicionar Fornecedor</a>
+                            <span class="bi-person-plus-fill me-2"></span>Adicionar Fornecedor</a>
                         </h4>
                     </div>
                     <div class="card-body">
@@ -55,16 +55,16 @@ require('Application/models/fornecedor_dao.php');
                                             <td><?= $fornecedor['telefone'] ?></td>
                                             <td><?= $fornecedor['email'] ?></td>
                                             <td><?= $fornecedor['endereco'] . ', ' . $fornecedor['nome_cidade'] . ' - ' . $fornecedor['sigla_estado'] ?></td>
-                                            <td>
+                                            <td class="text-center text-nowrap">
                                                 <a href="fornecedor/visualizar?id=<?= $fornecedor['id_fornecedor'] ?>" class="btn btn-secondary btn-sm">
-                                                    <span class="bi-eye-fill"></span>&nbsp;Visualizar
+                                                    <span class="bi-eye-fill"></span>
                                                 </a>
                                                 <a href="fornecedor/editar?id=<?= $fornecedor['id_fornecedor'] ?>" class="btn btn-success btn-sm">
-                                                    <span class="bi-pencil-fill"></span>&nbsp;Editar
+                                                    <span class="bi-pencil-fill"></span>
                                                 </a>
                                                 <form action="fornecedor/atualizar" method="POST" class="d-inline">
                                                     <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_fornecedor" value="<?= $fornecedor['id_fornecedor'] ?>" class="btn btn-danger btn-sm">
-                                                        <span class="bi-trash3-fill"></span>&nbsp;Excluir
+                                                        <span class="bi-trash3-fill"></span>
                                                     </button>
                                                 </form>
                                             </td>

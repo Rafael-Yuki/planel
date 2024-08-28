@@ -24,7 +24,7 @@ require('Application/models/nota_fiscal_dao.php');
                     <div class="card-header">
                         <h4> Notas Fiscais
                             <a href="nota-fiscal/cadastro" class="btn btn-primary float-end">
-                            <span class="bi-plus-circle-fill"></span>&nbsp;Adicionar Nota Fiscal</a>
+                            <span class="bi-receipt me-2"></span>Adicionar Nota Fiscal</a>
                         </h4>
                     </div>
                     <div class="card-body">
@@ -54,7 +54,7 @@ require('Application/models/nota_fiscal_dao.php');
                                             <td><?= $nota_fiscal['numero'] ?></td>
                                             <td><?= $nota_fiscal['nome_fornecedor'] ?></td>
                                             <td><?= date('d/m/Y', strtotime($nota_fiscal['data_emissao'])) ?></td>
-                                            <td><?= number_format($nota_fiscal['valor_total'], 2, ',', '.') ?></td>
+                                            <td>R$ <?= number_format($nota_fiscal['valor_total'], 2, ',', '.') ?></td>
                                             <td><?= $nota_fiscal['parcelas'] ?></td>
                                             <td>
                                                 <?php if (!empty($nota_fiscal['caminho_xml'])): ?>
@@ -66,16 +66,16 @@ require('Application/models/nota_fiscal_dao.php');
                                                     <span class="text-muted">Nenhum XML</span>
                                                 <?php endif; ?>
                                             </td>
-                                            <td>
+                                            <td class="text-center text-nowrap">
                                                 <a href="nota-fiscal/visualizar?id=<?= $nota_fiscal['id_nota_fiscal'] ?>" class="btn btn-secondary btn-sm">
-                                                    <span class="bi-eye-fill"></span>&nbsp;Visualizar
+                                                    <span class="bi-eye-fill"></span>
                                                 </a>
                                                 <a href="nota-fiscal/editar?id=<?= $nota_fiscal['id_nota_fiscal'] ?>" class="btn btn-success btn-sm">
-                                                    <span class="bi-pencil-fill"></span>&nbsp;Editar
+                                                    <span class="bi-pencil-fill"></span>
                                                 </a>
                                                 <form action="nota-fiscal/atualizar" method="POST" class="d-inline">
                                                     <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_nota_fiscal" value="<?= $nota_fiscal['id_nota_fiscal'] ?>" class="btn btn-danger btn-sm">
-                                                        <span class="bi-trash3-fill"></span>&nbsp;Excluir
+                                                        <span class="bi-trash3-fill"></span>
                                                     </button>
                                                 </form>
                                             </td>

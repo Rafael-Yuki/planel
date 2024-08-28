@@ -70,7 +70,7 @@ require('Application/models/conexao.php');
               </div>
               <div class="mb-3">
                 <button type="submit" name="criar_material" class="btn btn-primary">
-                  <span class="bi-save"></span>&nbsp;Salvar
+                  Salvar<span class="bi-save ms-2"></span>
                 </button>
               </div>
             </form>

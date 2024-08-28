@@ -24,7 +24,7 @@ require('Application/models/cliente_dao.php');
                     <div class="card-header">
                         <h4> Clientes
                             <a href="cliente/cadastro" class="btn btn-primary float-end">
-                            <span class="bi-person-plus-fill"></span>&nbsp;Adicionar Cliente</a>
+                            <span class="bi-person-plus-fill me-2"></span>Adicionar Cliente</a>
                         </h4>
                     </div>
                     <div class="card-body">
@@ -55,16 +55,16 @@ require('Application/models/cliente_dao.php');
                                             <td><?= $cliente['telefone'] ?></td>
                                             <td><?= $cliente['email'] ?></td>
                                             <td><?= $cliente['endereco'] . ', ' . $cliente['nome_cidade'] . ' - ' . $cliente['sigla_estado'] ?></td>
-                                            <td>
+                                            <td class="text-center text-nowrap">
                                                 <a href="cliente/visualizar?id=<?= $cliente['id_cliente'] ?>" class="btn btn-secondary btn-sm">
-                                                    <span class="bi-eye-fill"></span>&nbsp;Visualizar
+                                                    <span class="bi-eye-fill"></span>
                                                 </a>
                                                 <a href="cliente/editar?id=<?= $cliente['id_cliente'] ?>" class="btn btn-success btn-sm">
-                                                    <span class="bi-pencil-fill"></span>&nbsp;Editar
+                                                    <span class="bi-pencil-fill"></span>
                                                 </a>
                                                 <form action="cliente/atualizar" method="POST" class="d-inline">
                                                     <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_cliente" value="<?= $cliente['id_cliente'] ?>" class="btn btn-danger btn-sm">
-                                                        <span class="bi-trash3-fill"></span>&nbsp;Excluir
+                                                        <span class="bi-trash3-fill"></span>
                                                     </button>
                                                 </form>
                                             </td>

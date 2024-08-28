@@ -23,7 +23,7 @@ require('Application/models/material_dao.php');
                     <div class="card-header">
                         <h4> Materiais
                             <a href="material/cadastro" class="btn btn-primary float-end">
-                            <span class="bi-box-seam"></span>&nbsp;Adicionar Material</a>
+                            <span class="bi-box-seam me-2"></span>Adicionar Material</a>
                         </h4>
                     </div>
                     <div class="card-body">
@@ -56,20 +56,20 @@ require('Application/models/material_dao.php');
                                             <td><?= $material['ncm'] ?></td>
                                             <td><?= $material['quantidade'] ?></td>
                                             <td><?= $material['unidade_medida'] ?></td>
-                                            <td><?= number_format($material['valor_compra'], 2, ',', '.') ?></td>
-                                            <td><?= number_format($material['valor_venda'], 2, ',', '.') ?></td>
+                                            <td>R$ <?= number_format($material['valor_compra'], 2, ',', '.') ?></td>
+                                            <td>R$ <?= number_format($material['valor_venda'], 2, ',', '.') ?></td>
                                             <td><?= date('d/m/Y', strtotime($material['data_compra'])) ?></td>
                                             <td><?= $material['nome_fornecedor'] ?></td>
-                                            <td>
+                                            <td class="text-center text-nowrap">
                                                 <a href="material/visualizar?id=<?= $material['id_material'] ?>" class="btn btn-secondary btn-sm">
-                                                    <span class="bi-eye-fill"></span>&nbsp;Visualizar
+                                                    <span class="bi-eye-fill"></span>
                                                 </a>
                                                 <a href="material/editar?id=<?= $material['id_material'] ?>" class="btn btn-success btn-sm">
-                                                    <span class="bi-pencil-fill"></span>&nbsp;Editar
+                                                    <span class="bi-pencil-fill"></span>
                                                 </a>
                                                 <form action="material/atualizar" method="POST" class="d-inline">
                                                     <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_material" value="<?= $material['id_material'] ?>" class="btn btn-danger btn-sm">
-                                                        <span class="bi-trash3-fill"></span>&nbsp;Excluir
+                                                        <span class="bi-trash3-fill"></span>
                                                     </button>
                                                 </form>
                                             </td>

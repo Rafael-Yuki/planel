@@ -14,7 +14,7 @@ if (isset($_POST['estado_id'])) {
         if ($result->num_rows > 0) {
             $cidades = $result->fetch_all(MYSQLI_ASSOC);
             foreach ($cidades as $cidade) {
-                echo "<option value='" . $cidade['id_cidade'] . "'>" . utf8_decode($cidade['nome_cidade']) . "</option>";
+                echo "<option value='" . $cidade['id_cidade'] . "'>" . $cidade['nome_cidade'] . "</option>";
             }
         } else {
             echo "<option value=''>Nenhuma cidade encontrada</option>";

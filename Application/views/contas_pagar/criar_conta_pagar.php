@@ -103,7 +103,7 @@ require('Application/controllers/parcelas_pagar_controller.php'); // Incluindo o
 
               <div class="mb-3">
                 <button type="submit" name="criar_conta_pagar" class="btn btn-primary">
-                <span class="bi-save"></span>&nbsp;Salvar
+                    Salvar<span class="bi-save ms-2"></span>
                 </button>
               </div>
             </form>

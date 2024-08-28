@@ -24,7 +24,7 @@ require('Application/models/orcamento_dao.php');
                     <div class="card-header">
                         <h4> Orçamentos
                             <a href="orcamento/cadastro" class="btn btn-primary float-end">
-                            <span class="bi-plus-circle-fill"></span>&nbsp;Adicionar Orçamento</a>
+                            <span class="bi-file-earmark-text me-2"></span>Adicionar Orçamento</a>
                         </h4>
                     </div>
                     <div class="card-body">
@@ -66,16 +66,16 @@ require('Application/models/orcamento_dao.php');
                                                     <span class="text-muted">Nenhum anexo</span>
                                                 <?php endif; ?>
                                             </td>
-                                            <td>
+                                            <td class="text-center text-nowrap">
                                                 <a href="orcamento/visualizar?id=<?= $orcamento['id_orcamento'] ?>" class="btn btn-secondary btn-sm">
-                                                    <span class="bi-eye-fill"></span>&nbsp;Visualizar
+                                                    <span class="bi-eye-fill"></span>
                                                 </a>
                                                 <a href="orcamento/editar?id=<?= $orcamento['id_orcamento'] ?>" class="btn btn-success btn-sm">
-                                                    <span class="bi-pencil-fill"></span>&nbsp;Editar
+                                                    <span class="bi-pencil-fill"></span>
                                                 </a>
                                                 <form action="orcamento/atualizar" method="POST" class="d-inline">
                                                     <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_orcamento" value="<?= $orcamento['id_orcamento'] ?>" class="btn btn-danger btn-sm">
-                                                        <span class="bi-trash3-fill"></span>&nbsp;Excluir
+                                                        <span class="bi-trash3-fill"></span>
                                                     </button>
                                                 </form>
                                             </td>
