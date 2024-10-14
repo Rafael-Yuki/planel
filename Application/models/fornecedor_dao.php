@@ -55,5 +55,20 @@ class FornecedorDAO {
         $fornecedores = mysqli_query($conexao, $sql);
         return $fornecedores;
     }
+
+    public static function buscarFornecedorPorCNPJ($cnpj) {
+        global $conexao;
+        $cnpj = mysqli_real_escape_string($conexao, trim($cnpj));
+    
+        $sql = "SELECT * FROM fornecedores WHERE cnpj = '$cnpj' AND ativo = TRUE";
+        $result = mysqli_query($conexao, $sql);
+    
+        if (mysqli_num_rows($result) > 0) {
+            return mysqli_fetch_assoc($result);
+        } else {
+            return false;
+        }
+    }
+    
 }
 ?>
