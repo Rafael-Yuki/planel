@@ -22,7 +22,7 @@ class ParcelasPagarDAO {
             $tipo_pagamento = !empty($postData["tipo_pagamento_$i"]) ? (int)mysqli_real_escape_string($conexao, $postData["tipo_pagamento_$i"]) : null;
 
             if ($i <= count($parcelas_existentes_ids)) {
-                self::reativarParcela($parcela_id); // Reativar a parcela se já existir
+                self::reativarParcela($parcela_id); 
                 self::criarOuAtualizarParcela($parcela_id, $valor_parcela, $vencimento_parcela, $data_pagamento, $conta_pagar_id, $nota_fiscal_id, $fornecedor_id, $tipo_pagamento);
             } else {
                 self::criarOuAtualizarParcela(null, $valor_parcela, $vencimento_parcela, $data_pagamento, $conta_pagar_id, $nota_fiscal_id, $fornecedor_id, $tipo_pagamento);
@@ -55,7 +55,7 @@ class ParcelasPagarDAO {
                     VALUES ('$valor_parcela', $vencimento_parcela, $data_pagamento, $conta_pagar_id, $nota_fiscal_id, $fornecedor_id, $tipo_pagamento)";
             return mysqli_query($conexao, $sql) ? mysqli_insert_id($conexao) : false;
         }
-    }    
+    }      
 
     public static function desativarParcela($id) {
         global $conexao;
