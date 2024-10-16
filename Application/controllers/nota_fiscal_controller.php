@@ -2,11 +2,12 @@
 session_start();
 require('Application/models/nota_fiscal_dao.php');
 require('Application/models/conexao.php');
+require('Application/models/fornecedor_dao.php');
 
 if (isset($_POST['criar_nota_fiscal'])) {
     $numero = mysqli_real_escape_string($conexao, $_POST['numero']);
     $data_emissao = mysqli_real_escape_string($conexao, $_POST['data_emissao']);
-    $valor_total = mysqli_real_escape_string($conexao, $_POST['valor_total']);
+    $valor_total = mysqli_real_escape_string($conexao, str_replace(',', '.', str_replace('.', '', $_POST['valor_total'])));
     $parcelas = mysqli_real_escape_string($conexao, $_POST['parcelas']);
     $fk_fornecedores_id_fornecedor = mysqli_real_escape_string($conexao, $_POST['fornecedor']);
 

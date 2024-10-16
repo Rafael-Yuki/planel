@@ -106,8 +106,8 @@ require('Application/models/nota_fiscal_dao.php');
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button form="formImportXML" type="submit" name="importar_xml" class="btn btn-primary">Importar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-2"></i>Cancelar</button>
+                    <button form="formImportXML" type="submit" name="importar_xml" class="btn btn-primary"><i class="bi bi-upload me-2"></i>Importar</button>
                 </div>
             </div>
         </div>

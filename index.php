@@ -47,6 +47,7 @@ $routes = [
 
     'notas-fiscais' => 'Application/views/notas_fiscais/notas_fiscais.php',
     'nota-fiscal/atualizar' => 'Application/controllers/nota_fiscal_controller.php',
+    'nota-fiscal/cadastro' => 'Application/views/notas_fiscais/criar_nota_fiscal.php',
     'nota-fiscal/editar' => 'Application/views/notas_fiscais/editar_nota_fiscal.php',
     'nota-fiscal/visualizar' => 'Application/views/notas_fiscais/ver_nota_fiscal.php',
 
