@@ -119,8 +119,12 @@ if (isset($_POST['importar_xml'])) {
                     $fornecedor_id = $fornecedor_existente['id_fornecedor'];
                 }
 
-                // Criar Nota Fiscal e armazenar o caminho do arquivo XML
-                NotaFiscalDAO::criarNotaFiscal($numero_nota, $data_emissao, $valor_total, 0, $fornecedor_id, $caminho_xml);
+                // Extrair duplicatas e parcelas da Nota Fiscal
+                $duplicatas = $xml->xpath('//nfe:dup');
+                $numero_parcelas = count($duplicatas);
+
+                // Criar Nota Fiscal e armazenar o caminho do arquivo XML, associando o número de parcelas
+                NotaFiscalDAO::criarNotaFiscal($numero_nota, $data_emissao, $valor_total, $numero_parcelas, $fornecedor_id, $caminho_xml);
 
                 // Obter o ID da nota fiscal recém-criada
                 $id_nota_fiscal = mysqli_insert_id($conexao);
@@ -132,12 +136,8 @@ if (isset($_POST['importar_xml'])) {
                     exit;
                 }
 
-                // Extrair duplicatas e parcelas da Nota Fiscal
-                $duplicatas = $xml->xpath('//nfe:dup');
-                $numero_parcelas = count($duplicatas);
-
                 if ($numero_parcelas > 0) {
-                    // Criar Conta a Pagar associada à Nota Fiscal
+                    // Criar Conta a Pagar associada à Nota Fiscal com o número correto de parcelas
                     $data_vencimento_primeira = mysqli_real_escape_string($conexao, (string)$duplicatas[0]->dVenc);
                     $conta_pagar_id = ContasPagarDAO::criarContaPagar($valor_total, $data_vencimento_primeira, $numero_parcelas, 0, $id_nota_fiscal, $fornecedor_id);
 
@@ -150,7 +150,37 @@ if (isset($_POST['importar_xml'])) {
                     }
                 }
 
-                $_SESSION['mensagem'] = 'Importação de XML e criação de contas a pagar e parcelas concluídas com sucesso.';
+                // Criar materiais associados à Nota Fiscal
+                $items = $xml->xpath('//nfe:det');
+                foreach ($items as $item) {
+                    $ncm_produto = mysqli_real_escape_string($conexao, (string)$item->prod->NCM);
+                    $descricao_produto = mysqli_real_escape_string($conexao, (string)$item->prod->xProd);
+                    $quantidade = mysqli_real_escape_string($conexao, (float)$item->prod->qCom);
+                    $valor_unitario = mysqli_real_escape_string($conexao, (float)$item->prod->vUnTrib);
+                    
+                    // Atribuir valores para compra e venda
+                    $valor_compra = $valor_unitario;
+                    $valor_venda = $valor_compra * 1.4;  // Aplicar margem de 40% no valor de venda
+                    
+                    // Definir data de compra como a data atual
+                    $data_compra = date('Y-m-d');
+                    
+                    // Unidade de medida do produto
+                    $unidade_medida = mysqli_real_escape_string($conexao, (string)$item->prod->uCom);
+                
+                    // Verificar se os dados são válidos
+                    if ($quantidade == 0 || $valor_compra == 0 || empty($descricao_produto)) {
+                        $_SESSION['mensagem'] = 'Erro na extração dos dados do material. Quantidade, valor de compra ou descrição estão incorretos.';
+                        $_SESSION['mensagem_tipo'] = 'error';
+                        header('Location: /planel/xml');
+                        exit;
+                    }
+                
+                    // Inserir material no banco de dados
+                    MaterialDAO::criarMaterial($descricao_produto, $valor_compra, $valor_venda, $data_compra, $quantidade, $unidade_medida, $fornecedor_id, $ncm_produto);
+                }
+
+                $_SESSION['mensagem'] = 'Importação de XML e criação de contas a pagar, parcelas e materiais concluídas com sucesso.';
                 $_SESSION['mensagem_tipo'] = 'success';
                 header('Location: /planel/xml');  // Redirecionar após o sucesso
                 exit;
