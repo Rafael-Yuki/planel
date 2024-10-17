@@ -56,18 +56,31 @@ require('Application/models/conexao.php');
                 <input type="date" id="data_compra" name="data_compra" class="form-control" required>
               </div>
               <div class="mb-3">
-                <label for="fornecedor">Fornecedor</label>
-                <select id="fornecedor" name="fornecedor" class="form-control" required>
-                  <option value="">Selecione um Fornecedor</option>
-                  <?php
-                  $query_fornecedores = "SELECT * FROM fornecedores WHERE ativo = TRUE";
-                  $result_fornecedores = mysqli_query($conexao, $query_fornecedores);
-                  while($row_fornecedor = mysqli_fetch_assoc($result_fornecedores)) {
-                      echo "<option value='".$row_fornecedor['id_fornecedor']."'>".$row_fornecedor['nome_fornecedor']."</option>";
-                  }
-                  ?>
+                <label for="fornecedor">Fornecedor (Opcional)</label>
+                <select id="fornecedor" name="fornecedor" class="form-control">
+                    <option value="">Selecione um Fornecedor</option>
+                    <?php
+                    $query_fornecedores = "SELECT * FROM fornecedores WHERE ativo = TRUE";
+                    $result_fornecedores = mysqli_query($conexao, $query_fornecedores);
+                    while($row_fornecedor = mysqli_fetch_assoc($result_fornecedores)) {
+                        echo "<option value='".$row_fornecedor['id_fornecedor']."'>".$row_fornecedor['nome_fornecedor']."</option>";
+                    }
+                    ?>
                 </select>
-              </div>
+            </div>
+            <div class="mb-3">
+                <label for="nota_fiscal">Nota Fiscal (Opcional)</label>
+                <select id="nota_fiscal" name="nota_fiscal" class="form-control">
+                    <option value="">Nenhuma Nota Fiscal</option>
+                    <?php
+                    $query_notas = "SELECT * FROM notas_fiscais WHERE ativo = TRUE";
+                    $result_notas = mysqli_query($conexao, $query_notas);
+                    while($row_nota = mysqli_fetch_assoc($result_notas)) {
+                        echo "<option value='".$row_nota['id_nota_fiscal']."'>".$row_nota['numero']."</option>";
+                    }
+                    ?>
+                </select>
+            </div>
               <div class="mb-3">
                 <button type="submit" name="criar_material" class="btn btn-primary">
                   Salvar<span class="bi-save ms-2"></span>
@@ -90,7 +103,6 @@ require('Application/models/conexao.php');
             var valorCompra = $('#valor_compra').val().replace(/\./g, '').replace(',', '.');
             var valorVenda = $('#valor_venda').val().replace(/\./g, '').replace(',', '.');
             var quantidade = $('#quantidade').val();
-            var fornecedor = $('#fornecedor').val();
             var valid = true;
 
             if (isNaN(parseFloat(valorCompra)) || parseFloat(valorCompra) <= 0) {
@@ -112,13 +124,6 @@ require('Application/models/conexao.php');
                 valid = false;
             } else {
                 $('#quantidade').removeClass('is-invalid');
-            }
-
-            if (fornecedor === "") {
-                $('#fornecedor').addClass('is-invalid');
-                valid = false;
-            } else {
-                $('#fornecedor').removeClass('is-invalid');
             }
 
             if (!valid) {

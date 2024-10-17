@@ -26,7 +26,7 @@ require('Application/models/nota_fiscal_dao.php');
             <div class="card-body">
                 <?php
                 $nota_fiscal_dao = new NotaFiscalDAO;
-                $xml_importados = $nota_fiscal_dao->listarNotasFiscaisComParcelas(); // Função ajustada no DAO para incluir parcelas
+                $xml_importados = $nota_fiscal_dao->listarNotasFiscaisComParcelas();
                 if (mysqli_num_rows($xml_importados) > 0) {
                     ?>
                     <div class="table-responsive">
@@ -37,8 +37,8 @@ require('Application/models/nota_fiscal_dao.php');
                                 <th>Fornecedor</th>
                                 <th>Data de Emissão</th>
                                 <th>Valor Total</th>
-                                <th>Parcela Atual</th> <!-- Coluna de Parcela Atual -->
-                                <th>Total Parcelas</th> <!-- Coluna de Total de Parcelas -->
+                                <th>Parcela Atual</th>
+                                <th>Total Parcelas</th>
                                 <th>Opções</th>
                             </tr>
                             </thead>
@@ -51,8 +51,8 @@ require('Application/models/nota_fiscal_dao.php');
                                     <td><?= $xml['nome_fornecedor'] ?></td>
                                     <td><?= date('d/m/Y', strtotime($xml['data_emissao'])) ?></td>
                                     <td>R$ <?= number_format($xml['valor_total'], 2, ',', '.') ?></td>
-                                    <td><?= $xml['parcela_atual'] ?></td> <!-- Exibe a parcela atual -->
-                                    <td><?= $xml['total_parcelas'] ?></td> <!-- Exibe o total de parcelas -->
+                                    <td><?= $xml['parcela_atual'] ?></td>
+                                    <td><?= $xml['total_parcelas'] ?></td>
                                     <td class="text-center text-nowrap">
                                         <?php if (!empty($xml['caminho_xml'])): ?>
                                             <a href="<?= '/planel/upload?file=' . urlencode(basename($xml['caminho_xml'])); ?>" 
@@ -67,7 +67,7 @@ require('Application/models/nota_fiscal_dao.php');
                                             </a>
                                         <?php endif; ?>
                                         <form action="xml/excluir" method="POST" class="d-inline">
-                                            <button onclick="return confirm('Tem certeza que deseja excluir apenas o XML?')" type="submit" name="excluir_xml" value="<?= $xml['id_nota_fiscal'] ?>" class="btn btn-sm btn-danger" title="Excluir XML">
+                                            <button onclick="return confirm('Tem certeza que deseja excluir o XML e permitir uma nova importação?')" type="submit" name="excluir_xml" value="<?= $xml['id_nota_fiscal'] ?>" class="btn btn-sm btn-danger" title="Excluir XML">
                                                 <i class="bi-trash3-fill"></i>
                                             </button>
                                         </form>

@@ -81,5 +81,11 @@ class ParcelasPagarDAO {
 
         return mysqli_query($conexao, $sql);
     }
+
+    public static function deletarParcelasPorNotaFiscal($id_nota_fiscal) {
+        global $conexao;
+        $sql = "DELETE FROM parcelas_pagar WHERE fk_notas_fiscais_id_nota_fiscal = '$id_nota_fiscal'";
+        mysqli_query($conexao, $sql);
+    }     
 }
 ?>

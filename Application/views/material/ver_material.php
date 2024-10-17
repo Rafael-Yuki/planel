@@ -29,10 +29,13 @@ require('Application/models/conexao.php');
                         <?php
                         if (isset($_GET['id'])) {
                             $material_id = mysqli_real_escape_string($conexao, $_GET['id']);
-                            $sql = "SELECT materiais.*, fornecedores.nome_fornecedor FROM materiais 
-                                    INNER JOIN fornecedores ON materiais.fk_fornecedores_id_fornecedor = fornecedores.id_fornecedor
+                            // Atualizando a consulta para permitir valores nulos de fornecedor e nota fiscal
+                            $sql = "SELECT materiais.*, fornecedores.nome_fornecedor, notas_fiscais.numero AS numero_nota_fiscal
+                                    FROM materiais
+                                    LEFT JOIN fornecedores ON materiais.fk_fornecedores_id_fornecedor = fornecedores.id_fornecedor
+                                    LEFT JOIN notas_fiscais ON materiais.fk_notas_fiscais_id_nota_fiscal = notas_fiscais.id_nota_fiscal
                                     WHERE materiais.ativo = TRUE
-                                      and materiais.id_material = {$material_id}";
+                                      AND materiais.id_material = {$material_id}";
                             $query = mysqli_query($conexao, $sql);
                             if (mysqli_num_rows($query) > 0) {
                                 $material = mysqli_fetch_array($query);
@@ -82,7 +85,13 @@ require('Application/models/conexao.php');
                                 <div class="mb-3">
                                     <label for="fornecedor">Fornecedor</label>
                                     <p class="form-control">
-                                        <?= $material['nome_fornecedor']; ?>
+                                        <?= $material['nome_fornecedor'] ?? 'Sem Fornecedor'; ?>
+                                    </p>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nota_fiscal">Nota Fiscal</label>
+                                    <p class="form-control">
+                                        <?= $material['numero_nota_fiscal'] ?? 'Sem Nota Fiscal'; ?>
                                     </p>
                                 </div>
                                 <?php

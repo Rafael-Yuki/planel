@@ -75,5 +75,11 @@ class ContasPagarDAO {
         $result = mysqli_query($conexao, $sql);
         return mysqli_fetch_assoc($result);
     }    
+
+    public static function deletarContasPorNotaFiscal($id_nota_fiscal) {
+        global $conexao;
+        $sql = "DELETE FROM contas_pagar WHERE fk_notas_fiscais_id_nota_fiscal = '$id_nota_fiscal'";
+        mysqli_query($conexao, $sql);
+    }    
 }
 ?>

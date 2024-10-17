@@ -36,14 +36,15 @@ require('Application/models/material_dao.php');
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
-                                        <th>Nome do Material</th>
+                                        <th>Material</th>
                                         <th>NCM</th>
-                                        <th>Quantidade</th>
-                                        <th>Unidade de Medida</th>
+                                        <th>Qnt.</th>
+                                        <th>Unid.</th>
                                         <th>Valor de Compra</th>
                                         <th>Valor de Venda</th>
                                         <th>Data de Compra</th>
                                         <th>Fornecedor</th>
+                                        <th>Nota Fiscal</th>
                                         <th>Opções</th>
                                     </tr>
                                     </thead>
@@ -60,6 +61,7 @@ require('Application/models/material_dao.php');
                                             <td>R$ <?= number_format($material['valor_venda'], 2, ',', '.') ?></td>
                                             <td><?= date('d/m/Y', strtotime($material['data_compra'])) ?></td>
                                             <td><?= $material['nome_fornecedor'] ?></td>
+                                            <td><?= $material['numero_nota_fiscal'] ?></td>
                                             <td class="text-center text-nowrap">
                                                 <a href="material/visualizar?id=<?= $material['id_material'] ?>" class="btn btn-secondary btn-sm" title="Ver Material">
                                                     <span class="bi-eye-fill"></span>

@@ -44,6 +44,7 @@ $routes = [
 
     'xml' => 'Application/views/xml/xml.php',
     'xml/atualizar' => 'Application/controllers/xml_controller.php',
+    'xml/excluir' => 'Application/controllers/xml_controller.php',
 
     'notas-fiscais' => 'Application/views/notas_fiscais/notas_fiscais.php',
     'nota-fiscal/atualizar' => 'Application/controllers/nota_fiscal_controller.php',

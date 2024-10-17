@@ -26,17 +26,19 @@ function formatarTelefone($telefone) {
 
 if (isset($_POST['importar_xml'])) {
     if (isset($_FILES['xmlFile']) && $_FILES['xmlFile']['error'] == UPLOAD_ERR_OK) {
-        $xmlFile = $_FILES['xmlFile']['tmp_name'];
         $nome_arquivo_xml = basename($_FILES['xmlFile']['name']);
         $caminho_xml = 'uploads/xml/' . $nome_arquivo_xml;
 
-        // Verificar se a pasta 'uploads/xml' existe e criar caso não exista
-        if (!is_dir('uploads/xml')) {
-            mkdir('uploads/xml', 0777, true);
+        // Verificar se o arquivo XML já existe na pasta
+        if (file_exists($caminho_xml)) {
+            $_SESSION['mensagem'] = 'Esse arquivo XML já foi importado anteriormente.';
+            $_SESSION['mensagem_tipo'] = 'error';
+            header('Location: /planel/xml');
+            exit;
         }
 
-        // Mover o arquivo XML para a pasta 'uploads/xml'
-        if (move_uploaded_file($xmlFile, $caminho_xml)) {
+        // Mover o arquivo XML para a pasta 'uploads/xml' se ele não existir
+        if (move_uploaded_file($_FILES['xmlFile']['tmp_name'], $caminho_xml)) {
             $xmlContent = file_get_contents($caminho_xml);
 
             if ($xmlContent) {
@@ -46,17 +48,6 @@ if (isset($_POST['importar_xml'])) {
 
                 // Extrair dados da Nota Fiscal
                 $numero_nota = mysqli_real_escape_string($conexao, (string)$xml->xpath('//nfe:ide/nfe:nNF')[0]);
-
-                // Verificar se a nota fiscal já foi importada
-                $query_verifica_nota = "SELECT id_nota_fiscal FROM notas_fiscais WHERE numero = '$numero_nota'";
-                $result_verifica_nota = mysqli_query($conexao, $query_verifica_nota);
-
-                if (mysqli_num_rows($result_verifica_nota) > 0) {
-                    $_SESSION['mensagem'] = 'Essa nota fiscal já foi importada anteriormente.';
-                    $_SESSION['mensagem_tipo'] = 'error';
-                    header('Location: /planel/xml');
-                    exit;
-                }
 
                 $data_emissao = mysqli_real_escape_string($conexao, (string)$xml->xpath('//nfe:ide/nfe:dhEmi')[0]);
                 $valor_total = mysqli_real_escape_string($conexao, (float)$xml->xpath('//nfe:ICMSTot/nfe:vNF')[0]);
@@ -177,12 +168,12 @@ if (isset($_POST['importar_xml'])) {
                     }
                 
                     // Inserir material no banco de dados
-                    MaterialDAO::criarMaterial($descricao_produto, $valor_compra, $valor_venda, $data_compra, $quantidade, $unidade_medida, $fornecedor_id, $ncm_produto);
+                    MaterialDAO::criarMaterial($descricao_produto, $valor_compra, $valor_venda, $data_compra, $quantidade, $unidade_medida, $fornecedor_id, $ncm_produto, $id_nota_fiscal);
                 }
 
                 $_SESSION['mensagem'] = 'Importação de XML e criação de contas a pagar, parcelas e materiais concluídas com sucesso.';
                 $_SESSION['mensagem_tipo'] = 'success';
-                header('Location: /planel/xml');  // Redirecionar após o sucesso
+                header('Location: /planel/xml');
                 exit;
             } else {
                 $_SESSION['mensagem'] = 'Falha ao carregar o conteúdo do arquivo XML.';
@@ -194,6 +185,45 @@ if (isset($_POST['importar_xml'])) {
         }
     }
 
-    header('Location: /planel/xml'); // Redireciona em caso de falha
+    header('Location: /planel/xml');
+    exit;
+}
+
+if (isset($_POST['excluir_xml'])) {
+    $idNotaFiscal = $_POST['excluir_xml'];
+
+    // Buscar informações da nota fiscal antes de deletar os dados
+    $xmlInfo = NotaFiscalDAO::buscarNotaFiscalPorId($idNotaFiscal);
+
+    if ($xmlInfo && !empty($xmlInfo['caminho_xml'])) {
+        $caminhoArquivo = 'uploads/xml/' . basename($xmlInfo['caminho_xml']);
+    } else {
+        $_SESSION['mensagem'] = 'Erro ao obter o caminho do XML para exclusão.';
+        $_SESSION['mensagem_tipo'] = 'error';
+        header('Location: /planel/xml');
+        exit;
+    }
+
+    // Deletar parcelas, contas a pagar, materiais e a nota fiscal
+    ParcelasPagarDAO::deletarParcelasPorNotaFiscal($idNotaFiscal);
+    ContasPagarDAO::deletarContasPorNotaFiscal($idNotaFiscal);
+    MaterialDAO::deletarMateriaisPorNotaFiscal($idNotaFiscal);
+    NotaFiscalDAO::deletarNotaFiscal($idNotaFiscal);
+
+    // Deletar o arquivo XML fisicamente após deletar os dados no banco
+    if (file_exists($caminhoArquivo)) {
+        if (unlink($caminhoArquivo)) {
+            $_SESSION['mensagem'] = 'O arquivo XML e todos os dados relacionados foram excluídos com sucesso.';
+            $_SESSION['mensagem_tipo'] = 'success';
+        } else {
+            $_SESSION['mensagem'] = 'Erro ao excluir o arquivo XML fisicamente.';
+            $_SESSION['mensagem_tipo'] = 'error';
+        }
+    } else {
+        $_SESSION['mensagem'] = 'O arquivo XML não foi encontrado na pasta.';
+        $_SESSION['mensagem_tipo'] = 'error';
+    }
+
+    header('Location: /planel/xml');
     exit;
 }
