@@ -56,14 +56,14 @@ require('Application/models/fornecedor_dao.php');
                                             <td><?= $fornecedor['email'] ?></td>
                                             <td><?= $fornecedor['endereco'] . ', ' . $fornecedor['nome_cidade'] . ' - ' . $fornecedor['sigla_estado'] ?></td>
                                             <td class="text-center text-nowrap">
-                                                <a href="fornecedor/visualizar?id=<?= $fornecedor['id_fornecedor'] ?>" class="btn btn-secondary btn-sm">
+                                                <a href="fornecedor/visualizar?id=<?= $fornecedor['id_fornecedor'] ?>" class="btn btn-secondary btn-sm" title="Ver Fornecedor">
                                                     <span class="bi-eye-fill"></span>
                                                 </a>
-                                                <a href="fornecedor/editar?id=<?= $fornecedor['id_fornecedor'] ?>" class="btn btn-success btn-sm">
+                                                <a href="fornecedor/editar?id=<?= $fornecedor['id_fornecedor'] ?>" class="btn btn-success btn-sm" title="Editar Fornecedor">
                                                     <span class="bi-pencil-fill"></span>
                                                 </a>
                                                 <form action="fornecedor/atualizar" method="POST" class="d-inline">
-                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_fornecedor" value="<?= $fornecedor['id_fornecedor'] ?>" class="btn btn-danger btn-sm">
+                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_fornecedor" value="<?= $fornecedor['id_fornecedor'] ?>" class="btn btn-danger btn-sm" title="Excluir Fornecedores">
                                                         <span class="bi-trash3-fill"></span>
                                                     </button>
                                                 </form>

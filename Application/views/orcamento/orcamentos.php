@@ -67,14 +67,14 @@ require('Application/models/orcamento_dao.php');
                                                 <?php endif; ?>
                                             </td>
                                             <td class="text-center text-nowrap">
-                                                <a href="orcamento/visualizar?id=<?= $orcamento['id_orcamento'] ?>" class="btn btn-secondary btn-sm">
+                                                <a href="orcamento/visualizar?id=<?= $orcamento['id_orcamento'] ?>" class="btn btn-secondary btn-sm" title="Ver Orçamento">
                                                     <span class="bi-eye-fill"></span>
                                                 </a>
-                                                <a href="orcamento/editar?id=<?= $orcamento['id_orcamento'] ?>" class="btn btn-success btn-sm">
+                                                <a href="orcamento/editar?id=<?= $orcamento['id_orcamento'] ?>" class="btn btn-success btn-sm" title="Editar Orçamento">
                                                     <span class="bi-pencil-fill"></span>
                                                 </a>
                                                 <form action="orcamento/atualizar" method="POST" class="d-inline">
-                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_orcamento" value="<?= $orcamento['id_orcamento'] ?>" class="btn btn-danger btn-sm">
+                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_orcamento" value="<?= $orcamento['id_orcamento'] ?>" class="btn btn-danger btn-sm" title="Excluir Orçamento">
                                                         <span class="bi-trash3-fill"></span>
                                                     </button>
                                                 </form>

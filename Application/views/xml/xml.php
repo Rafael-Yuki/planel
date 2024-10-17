@@ -26,7 +26,7 @@ require('Application/models/nota_fiscal_dao.php');
             <div class="card-body">
                 <?php
                 $nota_fiscal_dao = new NotaFiscalDAO;
-                $xml_importados = $nota_fiscal_dao->listarNotasFiscais(); 
+                $xml_importados = $nota_fiscal_dao->listarNotasFiscaisComParcelas(); // Função ajustada no DAO para incluir parcelas
                 if (mysqli_num_rows($xml_importados) > 0) {
                     ?>
                     <div class="table-responsive">
@@ -37,7 +37,8 @@ require('Application/models/nota_fiscal_dao.php');
                                 <th>Fornecedor</th>
                                 <th>Data de Emissão</th>
                                 <th>Valor Total</th>
-                                <th>XML</th>
+                                <th>Parcela Atual</th> <!-- Coluna de Parcela Atual -->
+                                <th>Total Parcelas</th> <!-- Coluna de Total de Parcelas -->
                                 <th>Opções</th>
                             </tr>
                             </thead>
@@ -50,26 +51,24 @@ require('Application/models/nota_fiscal_dao.php');
                                     <td><?= $xml['nome_fornecedor'] ?></td>
                                     <td><?= date('d/m/Y', strtotime($xml['data_emissao'])) ?></td>
                                     <td>R$ <?= number_format($xml['valor_total'], 2, ',', '.') ?></td>
-                                    <td>
+                                    <td><?= $xml['parcela_atual'] ?></td> <!-- Exibe a parcela atual -->
+                                    <td><?= $xml['total_parcelas'] ?></td> <!-- Exibe o total de parcelas -->
+                                    <td class="text-center text-nowrap">
                                         <?php if (!empty($xml['caminho_xml'])): ?>
                                             <a href="<?= '/planel/upload?file=' . urlencode(basename($xml['caminho_xml'])); ?>" 
-                                            class="btn btn-sm" target="_blank">
-                                            <span class="bi-file-earmark-text-fill"></span>&nbsp;Ver XML
+                                            class="btn btn-sm btn-secondary" target="_blank" title="Ver XML">
+                                            <i class="bi-eye-fill"></i>
                                             </a>
-                                        <?php else: ?>
-                                            <span class="text-muted">Nenhum XML</span>
                                         <?php endif; ?>
-                                    </td>
-                                    <td class="text-center text-nowrap">
-                                        <a href="xml/visualizar?id=<?= $xml['id_nota_fiscal'] ?>" class="btn btn-secondary btn-sm">
-                                            <span class="bi-eye-fill"></span>&nbsp;Ver
-                                        </a>
-                                        <a href="xml/editar?id=<?= $xml['id_nota_fiscal'] ?>" class="btn btn-success btn-sm">
-                                            <span class="bi-pencil-fill"></span>&nbsp;Editar
-                                        </a>
+                                        <?php if (!empty($xml['caminho_xml'])): ?>
+                                            <a href="<?= '/planel/upload?file=' . urlencode(basename($xml['caminho_xml'])); ?>" 
+                                            class="btn btn-sm btn-success" download title="Download XML">
+                                            <i class="bi-download"></i>
+                                            </a>
+                                        <?php endif; ?>
                                         <form action="xml/excluir" method="POST" class="d-inline">
-                                            <button onclick="return confirm('Tem certeza que deseja excluir apenas o XML?')" type="submit" name="excluir_xml" value="<?= $xml['id_nota_fiscal'] ?>" class="btn btn-danger btn-sm">
-                                                <span class="bi-trash3-fill"></span>&nbsp;Excluir XML
+                                            <button onclick="return confirm('Tem certeza que deseja excluir apenas o XML?')" type="submit" name="excluir_xml" value="<?= $xml['id_nota_fiscal'] ?>" class="btn btn-sm btn-danger" title="Excluir XML">
+                                                <i class="bi-trash3-fill"></i>
                                             </button>
                                         </form>
                                     </td>

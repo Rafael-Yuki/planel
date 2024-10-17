@@ -61,14 +61,14 @@ require('Application/models/material_dao.php');
                                             <td><?= date('d/m/Y', strtotime($material['data_compra'])) ?></td>
                                             <td><?= $material['nome_fornecedor'] ?></td>
                                             <td class="text-center text-nowrap">
-                                                <a href="material/visualizar?id=<?= $material['id_material'] ?>" class="btn btn-secondary btn-sm">
+                                                <a href="material/visualizar?id=<?= $material['id_material'] ?>" class="btn btn-secondary btn-sm" title="Ver Material">
                                                     <span class="bi-eye-fill"></span>
                                                 </a>
-                                                <a href="material/editar?id=<?= $material['id_material'] ?>" class="btn btn-success btn-sm">
+                                                <a href="material/editar?id=<?= $material['id_material'] ?>" class="btn btn-success btn-sm" title="Editar Material">
                                                     <span class="bi-pencil-fill"></span>
                                                 </a>
                                                 <form action="material/atualizar" method="POST" class="d-inline">
-                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_material" value="<?= $material['id_material'] ?>" class="btn btn-danger btn-sm">
+                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_material" value="<?= $material['id_material'] ?>" class="btn btn-danger btn-sm" title="Excluir Material">
                                                         <span class="bi-trash3-fill"></span>
                                                     </button>
                                                 </form>

@@ -67,14 +67,14 @@ require('Application/models/nota_fiscal_dao.php');
                                                 <?php endif; ?>
                                             </td>
                                             <td class="text-center text-nowrap">
-                                                <a href="nota-fiscal/visualizar?id=<?= $nota_fiscal['id_nota_fiscal'] ?>" class="btn btn-secondary btn-sm">
+                                                <a href="nota-fiscal/visualizar?id=<?= $nota_fiscal['id_nota_fiscal'] ?>" class="btn btn-secondary btn-sm" title="Ver Nota Fiscal">
                                                     <span class="bi-eye-fill"></span>
                                                 </a>
-                                                <a href="nota-fiscal/editar?id=<?= $nota_fiscal['id_nota_fiscal'] ?>" class="btn btn-success btn-sm">
+                                                <a href="nota-fiscal/editar?id=<?= $nota_fiscal['id_nota_fiscal'] ?>" class="btn btn-success btn-sm" title="Editar Nota Fiscal">
                                                     <span class="bi-pencil-fill"></span>
                                                 </a>
                                                 <form action="nota-fiscal/atualizar" method="POST" class="d-inline">
-                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_nota_fiscal" value="<?= $nota_fiscal['id_nota_fiscal'] ?>" class="btn btn-danger btn-sm">
+                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_nota_fiscal" value="<?= $nota_fiscal['id_nota_fiscal'] ?>" class="btn btn-danger btn-sm" title="Excluir Nota Fiscal">
                                                         <span class="bi-trash3-fill"></span>
                                                     </button>
                                                 </form>

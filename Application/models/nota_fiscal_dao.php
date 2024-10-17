@@ -59,4 +59,21 @@ class NotaFiscalDAO {
         $notas_fiscais = mysqli_query($conexao, $sql);
         return $notas_fiscais;
     }
+
+    public static function listarNotasFiscaisComParcelas(){
+        global $conexao;
+        $sql = "
+            SELECT 
+                nf.*, 
+                f.nome_fornecedor, 
+                cp.parcela_atual, 
+                cp.parcelas AS total_parcelas
+            FROM notas_fiscais nf
+            INNER JOIN fornecedores f ON nf.fk_fornecedores_id_fornecedor = f.id_fornecedor
+            LEFT JOIN contas_pagar cp ON nf.id_nota_fiscal = cp.fk_notas_fiscais_id_nota_fiscal
+            WHERE nf.ativo = TRUE
+        ";
+        $notas_fiscais = mysqli_query($conexao, $sql);
+        return $notas_fiscais;
+    }     
 }

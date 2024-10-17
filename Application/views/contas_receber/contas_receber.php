@@ -62,14 +62,14 @@ function formatarMoeda($valor) {
                                             <td><?= $conta_receber['parcela_atual']; ?></td>
                                             <td><?= $conta_receber['parcelas']; ?></td>
                                             <td class="text-center text-nowrap">
-                                                <a href="conta-a-receber/visualizar?id=<?= $conta_receber['id_conta_receber'] ?>" class="btn btn-secondary btn-sm">
+                                                <a href="conta-a-receber/visualizar?id=<?= $conta_receber['id_conta_receber'] ?>" class="btn btn-secondary btn-sm" title="Ver Conta a Receber">
                                                     <span class="bi-eye-fill"></span>
                                                 </a>
-                                                <a href="conta-a-receber/editar?id=<?= $conta_receber['id_conta_receber'] ?>" class="btn btn-success btn-sm">
+                                                <a href="conta-a-receber/editar?id=<?= $conta_receber['id_conta_receber'] ?>" class="btn btn-success btn-sm" title="Editar Conta a Receber">
                                                     <span class="bi-pencil-fill"></span>
                                                 </a>
                                                 <form action="conta-a-receber/atualizar" method="POST" class="d-inline">
-                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_conta_receber" value="<?= $conta_receber['id_conta_receber'] ?>" class="btn btn-danger btn-sm">
+                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_conta_receber" value="<?= $conta_receber['id_conta_receber'] ?>" class="btn btn-danger btn-sm" title="Excluir Conta a Receber">
                                                         <span class="bi-trash3-fill"></span>
                                                     </button>
                                                 </form>

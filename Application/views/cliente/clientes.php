@@ -56,14 +56,14 @@ require('Application/models/cliente_dao.php');
                                             <td><?= $cliente['email'] ?></td>
                                             <td><?= $cliente['endereco'] . ', ' . $cliente['nome_cidade'] . ' - ' . $cliente['sigla_estado'] ?></td>
                                             <td class="text-center text-nowrap">
-                                                <a href="cliente/visualizar?id=<?= $cliente['id_cliente'] ?>" class="btn btn-secondary btn-sm">
+                                                <a href="cliente/visualizar?id=<?= $cliente['id_cliente'] ?>" class="btn btn-secondary btn-sm" title="Ver Cliente">
                                                     <span class="bi-eye-fill"></span>
                                                 </a>
-                                                <a href="cliente/editar?id=<?= $cliente['id_cliente'] ?>" class="btn btn-success btn-sm">
+                                                <a href="cliente/editar?id=<?= $cliente['id_cliente'] ?>" class="btn btn-success btn-sm" title="Editar Cliente">
                                                     <span class="bi-pencil-fill"></span>
                                                 </a>
                                                 <form action="cliente/atualizar" method="POST" class="d-inline">
-                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_cliente" value="<?= $cliente['id_cliente'] ?>" class="btn btn-danger btn-sm">
+                                                    <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="excluir_cliente" value="<?= $cliente['id_cliente'] ?>" class="btn btn-danger btn-sm" title="Excluir Cliente">
                                                         <span class="bi-trash3-fill"></span>
                                                     </button>
                                                 </form>
