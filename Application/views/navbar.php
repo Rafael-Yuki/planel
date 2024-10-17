@@ -72,14 +72,34 @@ function isActive($routes) {
     </style>
 
     <script>
-        document.getElementById('themeToggleBtn').addEventListener('click', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             const body = document.body;
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
             const themeIcon = document.getElementById('themeIcon');
-            const currentTheme = body.getAttribute('data-bs-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            body.setAttribute('data-bs-theme', newTheme);
-            themeIcon.classList.toggle('bi-sun');
-            themeIcon.classList.toggle('bi-moon');
+
+            // Verificar o tema salvo no localStorage ao carregar a página
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            body.setAttribute('data-bs-theme', savedTheme);
+
+            if (savedTheme === 'light') {
+                themeIcon.classList.remove('bi-moon');
+                themeIcon.classList.add('bi-sun');
+            } else {
+                themeIcon.classList.remove('bi-sun');
+                themeIcon.classList.add('bi-moon');
+            }
+
+            // Alternar o tema ao clicar no botão e salvar no localStorage
+            themeToggleBtn.addEventListener('click', function() {
+                const currentTheme = body.getAttribute('data-bs-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                body.setAttribute('data-bs-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+
+                themeIcon.classList.toggle('bi-sun');
+                themeIcon.classList.toggle('bi-moon');
+            });
         });
     </script>
 
