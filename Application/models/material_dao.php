@@ -89,4 +89,17 @@ class MaterialDAO {
         $sql = "DELETE FROM materiais WHERE fk_notas_fiscais_id_nota_fiscal = '$id_nota_fiscal'";
         mysqli_query($conexao, $sql);
     }      
+
+    public static function adicionarMaterialOrcamento($orcamento_id, $nome_material, $quantidade, $preco) {
+        global $conexao;
+
+        $nome_material = mysqli_real_escape_string($conexao, $nome_material);
+        $quantidade = (float) $quantidade;
+        $preco = (float) $preco;
+
+        $sql = "INSERT INTO orcamento_material (nome_orcamento_material, quantidade_material, valor_unitario, fk_orcamentos_id_orcamento)
+                VALUES ('$nome_material', '$quantidade', '$preco', '$orcamento_id')";
+        
+        mysqli_query($conexao, $sql);
+    } 
 }
