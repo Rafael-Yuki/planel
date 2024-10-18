@@ -42,6 +42,12 @@ $routes = [
     'material/editar' => 'Application/views/material/editar_material.php',
     'material/visualizar' => 'Application/views/material/ver_material.php',
 
+    'servicos' => 'Application/views/servico/servicos.php',
+    'servico/atualizar' => 'Application/controllers/servico_controller.php',
+    'servico/cadastro' => 'Application/views/servico/criar_servico.php',
+    'servico/editar' => 'Application/views/servico/editar_servico.php',
+    'servico/visualizar' => 'Application/views/servico/ver_servico.php',
+
     'xml' => 'Application/views/xml/xml.php',
     'xml/atualizar' => 'Application/controllers/xml_controller.php',
     'xml/excluir' => 'Application/controllers/xml_controller.php',
