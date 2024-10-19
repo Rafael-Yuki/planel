@@ -40,7 +40,7 @@ require('Application/models/conexao.php');
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="nome_servico">Nome do Serviço</label>
-                                            <p class="form-control">
+                                            <p class="form-control" style="min-height: 38px;">
                                                 <?= $servico['nome_servico']; ?>
                                             </p>
                                         </div>
@@ -48,7 +48,7 @@ require('Application/models/conexao.php');
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="valor_servico">Valor do Serviço</label>
-                                            <p class="form-control">
+                                            <p class="form-control" style="min-height: 38px;">
                                                 R$ <?= number_format($servico['valor_servico'], 2, ',', '.'); ?>
                                             </p>
                                         </div>
@@ -59,7 +59,7 @@ require('Application/models/conexao.php');
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="descricao_servico">Descrição</label>
-                                            <p class="form-control">
+                                            <p class="form-control" style="min-height: 75px;">
                                                 <?= $servico['descricao_servico']; ?>
                                             </p>
                                         </div>

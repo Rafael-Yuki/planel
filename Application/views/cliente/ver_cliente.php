@@ -40,31 +40,31 @@ require('Application/models/conexao.php');
                                 ?>
                                 <div class="mb-3">
                                     <label for="nome">Nome</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= $cliente['nome_cliente']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="cnpj">CNPJ</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= $cliente['cnpj']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="telefone">Telefone</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= $cliente['telefone']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="email">E-mail</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= $cliente['email']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="endereco">Endereço</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                     <?=$cliente['endereco'].', '. $cliente['nome_cidade'].' - '. $cliente['sigla_estado']?>
                                     </p>
                                 </div>

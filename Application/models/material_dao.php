@@ -19,7 +19,7 @@ class MaterialDAO {
         
         mysqli_query($conexao, $sql);
         return mysqli_affected_rows($conexao);
-    }    
+    }
 
     public static function editarMaterial($id, $nome_material, $valor_compra, $valor_venda, $data_compra, $quantidade, $unidade_medida, $fk_fornecedores_id_fornecedor = null, $fk_nota_fiscal_id = null) {
         global $conexao;
@@ -42,7 +42,7 @@ class MaterialDAO {
         
         mysqli_query($conexao, $sql);
         return mysqli_affected_rows($conexao);
-    }    
+    }
 
     public static function atualizarMaterial($id, $nova_quantidade, $valor_compra, $valor_venda, $data_compra) {
         global $conexao;
@@ -71,7 +71,7 @@ class MaterialDAO {
         return mysqli_affected_rows($conexao);
     }
 
-    public static function listarMateriais(){
+    public static function listarMateriais() {
         global $conexao;
         $sql = 'SELECT materiais.*, 
                        fornecedores.nome_fornecedor, 
@@ -82,24 +82,71 @@ class MaterialDAO {
                 WHERE materiais.ativo = TRUE';
         $materiais = mysqli_query($conexao, $sql);
         return $materiais;
-    }    
+    }
 
     public static function deletarMateriaisPorNotaFiscal($id_nota_fiscal) {
         global $conexao;
         $sql = "DELETE FROM materiais WHERE fk_notas_fiscais_id_nota_fiscal = '$id_nota_fiscal'";
         mysqli_query($conexao, $sql);
-    }      
+    }
 
-    public static function adicionarMaterialOrcamento($orcamento_id, $nome_material, $quantidade, $preco) {
+    public static function adicionarMaterialOrcamento($orcamento_id, $id_material, $quantidade, $preco) {
         global $conexao;
-
-        $nome_material = mysqli_real_escape_string($conexao, $nome_material);
+    
+        // Buscar o nome do material baseado no ID
+        $nome_material = self::buscarNomeMaterial($id_material); 
+    
+        if (!$nome_material) {
+            throw new Exception('Material não encontrado');
+        }
+    
         $quantidade = (float) $quantidade;
         $preco = (float) $preco;
+    
+        // Inserir no orcamento_material com o nome do material
+        $sql = "INSERT INTO orcamento_material (fk_materiais_id_material, nome_orcamento_material, quantidade_material, valor_unitario, fk_orcamentos_id_orcamento)
+                VALUES ('$id_material', '$nome_material', '$quantidade', '$preco', '$orcamento_id')";
+    
+        mysqli_query($conexao, $sql);
+    }
 
-        $sql = "INSERT INTO orcamento_material (nome_orcamento_material, quantidade_material, valor_unitario, fk_orcamentos_id_orcamento)
-                VALUES ('$nome_material', '$quantidade', '$preco', '$orcamento_id')";
+    public static function buscarNomeMaterial($id_material) {
+        global $conexao;
+        $sql = "SELECT nome_material FROM materiais WHERE id_material = ?";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bind_param('i', $id_material);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            $material = $result->fetch_assoc();
+            return $material['nome_material'];
+        }
+        return null;
+    }
+
+    public static function buscarPrecoMaterial($id_material) {
+        global $conexao;
+        $id_material = mysqli_real_escape_string($conexao, $id_material);
+
+        $query = "SELECT valor_venda AS preco FROM materiais WHERE id_material = '$id_material' AND ativo = TRUE";
+        $result = mysqli_query($conexao, $query);
+
+        if (mysqli_num_rows($result) > 0) {
+            return mysqli_fetch_assoc($result)['preco'];
+        } else {
+            return null;
+        }
+    }
+
+    public static function editarMaterialOrcamento($id_orcamento_material, $id_material, $quantidade, $preco) {
+        global $conexao;
+    
+        $sql = "UPDATE orcamento_material 
+                SET fk_materiais_id_material = '$id_material', quantidade_material = '$quantidade', valor_unitario = '$preco' 
+                WHERE id_orcamento_material = '$id_orcamento_material'";
         
         mysqli_query($conexao, $sql);
-    } 
+        return mysqli_affected_rows($conexao);
+    }    
 }
+?>

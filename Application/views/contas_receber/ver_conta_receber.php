@@ -43,13 +43,13 @@ function formatarMoeda($valor) {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="orcamento">Orçamento</label>
-                                            <p class="form-control"><?= $conta_receber['nome_orcamento']; ?></p>
+                                            <p class="form-control" style="min-height: 38px;"><?= $conta_receber['nome_orcamento']; ?></p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="cliente">Cliente</label>
-                                            <p class="form-control"><?= $conta_receber['nome_cliente']; ?></p>
+                                            <p class="form-control" style="min-height: 38px;"><?= $conta_receber['nome_cliente']; ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -57,13 +57,13 @@ function formatarMoeda($valor) {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="valor">Valor</label>
-                                            <p class="form-control"><?= formatarMoeda($conta_receber['valor']); ?></p>
+                                            <p class="form-control" style="min-height: 38px;"><?= formatarMoeda($conta_receber['valor']); ?></p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="data_vencimento">Data de Vencimento</label>
-                                            <p class="form-control"><?= date('d/m/Y', strtotime($conta_receber['data_vencimento'])); ?></p>
+                                            <p class="form-control" style="min-height: 38px;"><?= date('d/m/Y', strtotime($conta_receber['data_vencimento'])); ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -71,13 +71,13 @@ function formatarMoeda($valor) {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="parcela_atual">Parcela Atual</label>
-                                            <p class="form-control"><?= $conta_receber['parcela_atual']; ?></p>
+                                            <p class="form-control" style="min-height: 38px;"><?= $conta_receber['parcela_atual']; ?></p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="parcelas">Parcelas</label>
-                                            <p class="form-control"><?= $conta_receber['parcelas']; ?></p>
+                                            <p class="form-control" style="min-height: 38px;"><?= $conta_receber['parcelas']; ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -96,25 +96,25 @@ function formatarMoeda($valor) {
                                             <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label>Valor da Parcela</label>
-                                                    <p class="form-control"><?= formatarMoeda($parcela['valor_parcela']); ?></p>
+                                                    <p class="form-control" style="min-height: 38px;"><?= formatarMoeda($parcela['valor_parcela']); ?></p>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label>Vencimento da Parcela</label>
-                                                    <p class="form-control"><?= date('d/m/Y', strtotime($parcela['vencimento_parcela'])); ?></p>
+                                                    <p class="form-control" style="min-height: 38px;"><?= date('d/m/Y', strtotime($parcela['vencimento_parcela'])); ?></p>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label>Data de Recebimento</label>
-                                                    <p class="form-control"><?= $parcela['data_recebimento'] ? date('d/m/Y', strtotime($parcela['data_recebimento'])) : '-'; ?></p>
+                                                    <p class="form-control" style="min-height: 38px;"><?= $parcela['data_recebimento'] ? date('d/m/Y', strtotime($parcela['data_recebimento'])) : '-'; ?></p>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label>Tipo de Pagamento</label>
-                                                    <p class="form-control"><?= $parcela['tipo_pagamento'] ? $parcela['tipo_pagamento'] : '-'; ?></p>
+                                                    <p class="form-control" style="min-height: 38px;"><?= $parcela['tipo_pagamento'] ? $parcela['tipo_pagamento'] : '-'; ?></p>
                                                 </div>
                                             </div>
                                         </div>

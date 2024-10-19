@@ -38,31 +38,31 @@ require('Application/models/conexao.php');
                                 ?>
                                 <div class="mb-3">
                                     <label for="numero">Número da Nota Fiscal</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= $nota_fiscal['numero']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="fornecedor">Fornecedor</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= $nota_fiscal['nome_fornecedor']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="data_emissao">Data de Emissão</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= date('d/m/Y', strtotime($nota_fiscal['data_emissao'])); ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="valor_total">Valor Total</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= number_format($nota_fiscal['valor_total'], 2, ',', '.'); ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="parcelas">Parcelas</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= $nota_fiscal['parcelas']; ?>
                                     </p>
                                 </div>

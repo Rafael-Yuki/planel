@@ -14,7 +14,7 @@ class ServicoDAO {
         
         mysqli_query($conexao, $sql);
         return mysqli_affected_rows($conexao);
-    }    
+    }
 
     public static function editarServico($id, $nome_servico, $valor_servico, $descricao_servico) {
         global $conexao;
@@ -30,7 +30,7 @@ class ServicoDAO {
         
         mysqli_query($conexao, $sql);
         return mysqli_affected_rows($conexao);
-    }    
+    }
 
     public static function excluirServico($id) {
         global $conexao;
@@ -47,18 +47,65 @@ class ServicoDAO {
         $sql = "SELECT * FROM servicos WHERE ativo = TRUE";
         $servicos = mysqli_query($conexao, $sql);
         return $servicos;
+    }
+
+    public static function adicionarServicoOrcamento($orcamento_id, $id_servico, $quantidade_servico, $preco_servico) {
+        global $conexao;
+    
+        // Buscar o nome do serviço baseado no ID
+        $nome_servico = self::buscarNomeServico($id_servico); 
+    
+        if (!$nome_servico) {
+            throw new Exception('Serviço não encontrado');
+        }
+    
+        $quantidade_servico = (float) $quantidade_servico;
+        $preco_servico = (float) $preco_servico;
+    
+        // Inserir no orcamento_servico com o nome do serviço
+        $sql = "INSERT INTO orcamento_servico (fk_servicos_id_servico, nome_orcamento_servico, quantidade_servico, valor_unitario, fk_orcamentos_id_orcamento)
+                VALUES ('$id_servico', '$nome_servico', '$quantidade_servico', '$preco_servico', '$orcamento_id')";
+    
+        mysqli_query($conexao, $sql);
     }    
 
-    public static function adicionarServicoOrcamento($orcamento_id, $nome_servico, $quantidade, $preco) {
+    public static function buscarNomeServico($id_servico) {
         global $conexao;
+        $sql = "SELECT nome_servico FROM servicos WHERE id_servico = ?";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bind_param('i', $id_servico);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            $servico = $result->fetch_assoc();
+            return $servico['nome_servico'];
+        }
+        return null;
+    }
 
-        $nome_servico = mysqli_real_escape_string($conexao, $nome_servico);
-        $quantidade = (float) $quantidade;
-        $preco = (float) $preco;
+    public static function buscarPrecoServico($id_servico) {
+        global $conexao;
+        $id_servico = mysqli_real_escape_string($conexao, $id_servico);
 
-        $sql = "INSERT INTO orcamento_servico (nome_orcamento_servico, quantidade_servico, valor_unitario, fk_orcamentos_id_orcamento)
-                VALUES ('$nome_servico', '$quantidade', '$preco', '$orcamento_id')";
+        $query = "SELECT valor_servico AS preco FROM servicos WHERE id_servico = '$id_servico' AND ativo = TRUE";
+        $result = mysqli_query($conexao, $query);
+
+        if (mysqli_num_rows($result) > 0) {
+            return mysqli_fetch_assoc($result)['preco'];
+        } else {
+            return null;
+        }
+    }
+
+    public static function editarServicoOrcamento($id_orcamento_servico, $id_servico, $quantidade_servico, $preco_servico) {
+        global $conexao;
+    
+        $sql = "UPDATE orcamento_servico 
+                SET fk_servicos_id_servico = '$id_servico', quantidade_servico = '$quantidade_servico', valor_unitario = '$preco_servico' 
+                WHERE id_orcamento_servico = '$id_orcamento_servico'";
         
         mysqli_query($conexao, $sql);
-    }
+        return mysqli_affected_rows($conexao);
+    }    
 }
+?>

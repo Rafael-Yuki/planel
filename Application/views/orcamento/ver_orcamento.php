@@ -43,7 +43,7 @@ require('Application/models/conexao.php');
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="nome_orcamento">Nome do Orçamento</label>
-                                            <p class="form-control">
+                                            <p class="form-control" style="min-height: 38px;">
                                                 <?= $orcamento['nome_orcamento']; ?>
                                             </p>
                                         </div>
@@ -51,7 +51,7 @@ require('Application/models/conexao.php');
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="cliente">Cliente</label>
-                                            <p class="form-control">
+                                            <p class="form-control" style="min-height: 38px;">
                                                 <?= $orcamento['nome_cliente']; ?>
                                             </p>
                                         </div>
@@ -59,7 +59,7 @@ require('Application/models/conexao.php');
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="data_orcamento">Data do Orçamento</label>
-                                            <p class="form-control">
+                                            <p class="form-control" style="min-height: 38px;">
                                                 <?= date('d/m/Y', strtotime($orcamento['data_orcamento'])); ?>
                                             </p>
                                         </div>
@@ -69,7 +69,7 @@ require('Application/models/conexao.php');
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="validade">Validade</label>
-                                            <p class="form-control">
+                                            <p class="form-control" style="min-height: 38px;">
                                                 <?= date('d/m/Y', strtotime($orcamento['validade'])); ?>
                                             </p>
                                         </div>
@@ -77,7 +77,7 @@ require('Application/models/conexao.php');
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="status">Status</label>
-                                            <p class="form-control">
+                                            <p class="form-control" style="min-height: 38px;">
                                                 <?= $orcamento['status']; ?>
                                             </p>
                                         </div>
@@ -86,7 +86,7 @@ require('Application/models/conexao.php');
                                         <!-- Campo de anexo ajustado para seguir o mesmo estilo dos outros campos -->
                                         <div class="mb-3">
                                             <label for="anexo">Anexo</label>
-                                            <p class="form-control">
+                                            <p class="form-control" style="min-height: 38px;">
                                                 <?php if (!empty($orcamento['caminho_arquivo'])): ?>
                                                     <a href="<?= '/planel/upload?file=' . urlencode(basename($orcamento['caminho_arquivo'])); ?>" 
                                                     class="text-decoration-none" target="_blank">
@@ -105,7 +105,7 @@ require('Application/models/conexao.php');
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="observacao">Observação</label>
-                                            <p class="form-control">
+                                            <p class="form-control" style="min-height: 75px;">
                                                 <?= $orcamento['observacao']; ?>
                                             </p>
                                         </div>
@@ -113,17 +113,17 @@ require('Application/models/conexao.php');
                                 </div>
 
                                 <!-- Materiais relacionados ao orçamento -->
-                                <div class="mt-4">
-                                    <h4>Materiais no Orçamento</h4>
-                                    <?php
-                                    $sql_materiais = "SELECT om.*, m.nome_material 
-                                                      FROM orcamento_material om
-                                                      LEFT JOIN materiais m ON om.fk_materiais_id_material = m.id_material
-                                                      WHERE om.fk_orcamentos_id_orcamento = {$orcamento_id}";
-                                    $query_materiais = mysqli_query($conexao, $sql_materiais);
+                                <?php
+                                $sql_materiais = "SELECT om.*, m.nome_material 
+                                                  FROM orcamento_material om
+                                                  LEFT JOIN materiais m ON om.fk_materiais_id_material = m.id_material
+                                                  WHERE om.fk_orcamentos_id_orcamento = {$orcamento_id}";
+                                $query_materiais = mysqli_query($conexao, $sql_materiais);
 
-                                    if (mysqli_num_rows($query_materiais) > 0) {
-                                        ?>
+                                if (mysqli_num_rows($query_materiais) > 0) {
+                                    ?>
+                                    <div class="mt-4">
+                                        <h4>Materiais</h4>
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
@@ -139,7 +139,7 @@ require('Application/models/conexao.php');
                                                     $valor_total = $material['quantidade_material'] * $material['valor_unitario'];
                                                     ?>
                                                     <tr>
-                                                        <td><?= $material['nome_material'] ?: $material['nome_orcamento_material']; ?></td>
+                                                        <td><?= $material['nome_material']; ?></td>
                                                         <td><?= $material['quantidade_material']; ?></td>
                                                         <td>R$ <?= number_format($material['valor_unitario'], 2, ',', '.'); ?></td>
                                                         <td>R$ <?= number_format($valor_total, 2, ',', '.'); ?></td>
@@ -149,12 +149,52 @@ require('Application/models/conexao.php');
                                                 ?>
                                             </tbody>
                                         </table>
-                                        <?php
-                                    } else {
-                                        echo '<p>Nenhum material adicionado a este orçamento.</p>';
-                                    }
+                                    </div>
+                                    <?php
+                                }
+                                ?>
+
+                                <!-- Serviços relacionados ao orçamento -->
+                                <?php
+                                $sql_servicos = "SELECT os.*, s.nome_servico 
+                                                 FROM orcamento_servico os
+                                                 LEFT JOIN servicos s ON os.fk_servicos_id_servico = s.id_servico
+                                                 WHERE os.fk_orcamentos_id_orcamento = {$orcamento_id}";
+                                $query_servicos = mysqli_query($conexao, $sql_servicos);
+
+                                if (mysqli_num_rows($query_servicos) > 0) {
                                     ?>
-                                </div>
+                                    <div class="mt-4">
+                                        <h4>Serviços</h4>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nome do Serviço</th>
+                                                    <th>Quantidade</th>
+                                                    <th>Preço Unitário</th>
+                                                    <th>Valor Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                while ($servico = mysqli_fetch_assoc($query_servicos)) {
+                                                    $valor_total_servico = $servico['quantidade_servico'] * $servico['valor_unitario'];
+                                                    ?>
+                                                    <tr>
+                                                        <td><?= $servico['nome_servico']; ?></td>
+                                                        <td><?= $servico['quantidade_servico']; ?></td>
+                                                        <td>R$ <?= number_format($servico['valor_unitario'], 2, ',', '.'); ?></td>
+                                                        <td>R$ <?= number_format($valor_total_servico, 2, ',', '.'); ?></td>
+                                                    </tr>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
 
                                 <?php
                             } else {

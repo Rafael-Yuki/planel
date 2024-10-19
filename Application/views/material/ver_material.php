@@ -42,55 +42,55 @@ require('Application/models/conexao.php');
                                 ?>
                                 <div class="mb-3">
                                     <label for="nome_material">Nome do Material</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= $material['nome_material']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="ncm">NCM</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= $material['ncm']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="quantidade">Quantidade</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= $material['quantidade']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="unidade_medida">Unidade de Medida</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= $material['unidade_medida']; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="valor_compra">Valor de Compra</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         R$ <?= number_format($material['valor_compra'], 2, ',', '.'); ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="valor_venda">Valor de Venda</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         R$ <?= number_format($material['valor_venda'], 2, ',', '.'); ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="data_compra">Data da Compra</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= date('d/m/Y', strtotime($material['data_compra'])); ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="fornecedor">Fornecedor</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= $material['nome_fornecedor'] ?? 'Sem Fornecedor'; ?>
                                     </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="nota_fiscal">Nota Fiscal</label>
-                                    <p class="form-control">
+                                    <p class="form-control" style="min-height: 38px;">
                                         <?= $material['numero_nota_fiscal'] ?? 'Sem Nota Fiscal'; ?>
                                     </p>
                                 </div>

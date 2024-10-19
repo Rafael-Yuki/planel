@@ -1,6 +1,8 @@
 <?php
 session_start();
 require('Application/models/conexao.php');
+require('Application/models/material_dao.php');
+require('Application/models/servico_dao.php');
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -83,12 +85,12 @@ require('Application/models/conexao.php');
                 <label for="observacao">Observação</label>
                 <textarea id="observacao" name="observacao" class="form-control"></textarea>
               </div>
-              
+
               <!-- Materiais -->
               <div class="container mt-4">
                 <div class="row">
                   <div class="col-md-12">
-                    <h5>Adicionar Materiais ao Orçamento</h5>
+                    <h5>Materiais</h5>
                     <div id="materiais-container">
                       <div class="row mb-3" id="material-item-1">
                         <div class="col-md-4">
@@ -104,22 +106,74 @@ require('Application/models/conexao.php');
                             ?>
                           </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                           <label for="quantidade">Quantidade</label>
-                          <input type="number" name="quantidade[]" class="form-control" min="1" step="1" required>
+                          <input type="number" name="quantidade[]" class="form-control" min="0" step="1" onchange="atualizarTotal(1)" required>
+                        </div>
+                        <div class="col-md-2">
+                          <label for="preco">Preço Unitário</label>
+                          <input type="number" name="preco[]" id="preco-material-1" class="form-control" step="0.01" onchange="atualizarTotal(1)" min="0" required>
                         </div>
                         <div class="col-md-3">
-                          <label for="preco">Preço Unitário</label>
-                          <input type="number" name="preco[]" id="preco-material-1" class="form-control" step="0.01" required>
+                          <label for="total">Valor Total</label>
+                          <input type="number" name="total[]" id="total-material-1" class="form-control" readonly>
                         </div>
-                        <div class="col-md-2 d-flex align-items-end">
-                          <button type="button" class="btn btn-danger" onclick="removerMaterial('material-item-1')">
+                        <div class="col-md-1 d-flex align-items-end">
+                          <button type="button" class="btn btn-success me-2" onclick="adicionarMaterial()">
+                            <span class="bi-arrow-down"></span>
+                          </button>
+                          <button type="button" class="btn btn-danger" onclick="confirmarRemoverMaterial('material-item-1')">
                             <span class="bi-trash3-fill"></span>
                           </button>
                         </div>
                       </div>
                     </div>
-                    <button type="button" class="btn btn-secondary" onclick="adicionarMaterial()">Adicionar Material</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Serviços -->
+              <div class="container mt-4">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h5>Serviços</h5>
+                    <div id="servicos-container">
+                      <div class="row mb-3" id="servico-item-1">
+                        <div class="col-md-4">
+                          <label for="nome_servico">Nome do Serviço</label>
+                          <select name="nome_servico[]" class="form-control" onchange="buscarPrecoServico(this.value, 1)" required>
+                            <option value="">Selecione um Serviço</option>
+                            <?php
+                            $query_servicos = "SELECT * FROM servicos WHERE ativo = TRUE";
+                            $result_servicos = mysqli_query($conexao, $query_servicos);
+                            while ($row_servico = mysqli_fetch_assoc($result_servicos)) {
+                              echo "<option value='".$row_servico['id_servico']."'>".$row_servico['nome_servico']."</option>";
+                            }
+                            ?>
+                          </select>
+                        </div>
+                        <div class="col-md-2">
+                          <label for="quantidade">Quantidade</label>
+                          <input type="number" name="quantidade_servico[]" class="form-control" min="0" step="1" onchange="atualizarTotalServico(1)" required>
+                        </div>
+                        <div class="col-md-2">
+                          <label for="preco">Preço Unitário</label>
+                          <input type="number" name="preco_servico[]" id="preco-servico-1" class="form-control" step="0.01" onchange="atualizarTotalServico(1)" min="0" required>
+                        </div>
+                        <div class="col-md-3">
+                          <label for="total">Valor Total</label>
+                          <input type="number" name="total_servico[]" id="total-servico-1" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-1 d-flex align-items-end">
+                          <button type="button" class="btn btn-success me-2" onclick="adicionarServico()">
+                            <span class="bi-arrow-down"></span>
+                          </button>
+                          <button type="button" class="btn btn-danger" onclick="confirmarRemoverServico('servico-item-1')">
+                            <span class="bi-trash3-fill"></span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -144,6 +198,7 @@ require('Application/models/conexao.php');
 
   <script>
     let contadorMateriais = 1;
+    let contadorServicos = 1;
 
     function adicionarMaterial() {
       contadorMateriais++;
@@ -162,16 +217,23 @@ require('Application/models/conexao.php');
               ?>
             </select>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label for="quantidade">Quantidade</label>
-            <input type="number" name="quantidade[]" class="form-control" min="1" step="1" required>
+            <input type="number" name="quantidade[]" class="form-control" min="1" step="1" onchange="atualizarTotal(${contadorMateriais})" required>
+          </div>
+          <div class="col-md-2">
+            <label for="preco">Preço Unitário</label>
+            <input type="number" name="preco[]" id="preco-material-${contadorMateriais}" class="form-control" step="0.01" onchange="atualizarTotal(${contadorMateriais})" required>
           </div>
           <div class="col-md-3">
-            <label for="preco">Preço Unitário</label>
-            <input type="number" name="preco[]" id="preco-material-${contadorMateriais}" class="form-control" step="0.01" required>
+            <label for="total">Valor Total</label>
+            <input type="number" name="total[]" id="total-material-${contadorMateriais}" class="form-control" readonly>
           </div>
-          <div class="col-md-2 d-flex align-items-end">
-            <button type="button" class="btn btn-danger" onclick="removerMaterial('material-item-${contadorMateriais}')">
+          <div class="col-md-1 d-flex align-items-end">
+            <button type="button" class="btn btn-success me-2" onclick="adicionarMaterial()">
+              <span class="bi-arrow-down"></span>
+            </button>
+            <button type="button" class="btn btn-danger" onclick="confirmarRemoverMaterial('material-item-${contadorMateriais}')">
               <span class="bi-trash3-fill"></span>
             </button>
           </div>
@@ -179,21 +241,110 @@ require('Application/models/conexao.php');
       document.getElementById('materiais-container').insertAdjacentHTML('beforeend', novoMaterial);
     }
 
+    function adicionarServico() {
+      contadorServicos++;
+      const novoServico = `
+        <div class="row mb-3" id="servico-item-${contadorServicos}">
+          <div class="col-md-4">
+            <label for="nome_servico">Nome do Serviço</label>
+            <select name="nome_servico[]" class="form-control" onchange="buscarPrecoServico(this.value, ${contadorServicos})" required>
+              <option value="">Selecione um Serviço</option>
+              <?php
+              $query_servicos = "SELECT * FROM servicos WHERE ativo = TRUE";
+              $result_servicos = mysqli_query($conexao, $query_servicos);
+              while ($row_servico = mysqli_fetch_assoc($result_servicos)) {
+                echo "<option value='".$row_servico['id_servico']."'>".$row_servico['nome_servico']."</option>";
+              }
+              ?>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="quantidade">Quantidade</label>
+            <input type="number" name="quantidade_servico[]" class="form-control" min="1" step="1" onchange="atualizarTotalServico(${contadorServicos})" required>
+          </div>
+          <div class="col-md-2">
+            <label for="preco">Preço Unitário</label>
+            <input type="number" name="preco_servico[]" id="preco-servico-${contadorServicos}" class="form-control" step="0.01" onchange="atualizarTotalServico(${contadorServicos})" required>
+          </div>
+          <div class="col-md-3">
+            <label for="total">Valor Total</label>
+            <input type="number" name="total_servico[]" id="total-servico-${contadorServicos}" class="form-control" readonly>
+          </div>
+          <div class="col-md-1 d-flex align-items-end">
+            <button type="button" class="btn btn-success me-2" onclick="adicionarServico()">
+              <span class="bi-arrow-down"></span>
+            </button>
+            <button type="button" class="btn btn-danger" onclick="confirmarRemoverServico('servico-item-${contadorServicos}')">
+              <span class="bi-trash3-fill"></span>
+            </button>
+          </div>
+        </div>`;
+      document.getElementById('servicos-container').insertAdjacentHTML('beforeend', novoServico);
+    }
+
+    function atualizarTotal(id) {
+      const quantidade = document.querySelector(`#material-item-${id} input[name="quantidade[]"]`).value;
+      const preco = document.querySelector(`#material-item-${id} input[name="preco[]"]`).value;
+      document.getElementById(`total-material-${id}`).value = (quantidade * preco).toFixed(2);
+    }
+
+    function atualizarTotalServico(id) {
+      const quantidade = document.querySelector(`#servico-item-${id} input[name="quantidade_servico[]"]`).value;
+      const preco = document.querySelector(`#servico-item-${id} input[name="preco_servico[]"]`).value;
+      document.getElementById(`total-servico-${id}`).value = (quantidade * preco).toFixed(2);
+    }
+
+    function confirmarRemoverMaterial(id) {
+      if (confirm('Tem certeza que deseja excluir o material?')) {
+        removerMaterial(id);
+      }
+    }
+
+    function confirmarRemoverServico(id) {
+      if (confirm('Tem certeza que deseja excluir o serviço?')) {
+        removerServico(id);
+      }
+    }
+
     function removerMaterial(id) {
+      document.getElementById(id).remove();
+    }
+
+    function removerServico(id) {
       document.getElementById(id).remove();
     }
 
     function buscarPreco(materialId, contador) {
       if (materialId) {
         $.ajax({
-          url: '/planel/buscar_preco_material.php',
+          url: '/planel/orcamento/atualizar',
           method: 'POST',
           data: { id_material: materialId },
           success: function(response) {
-            document.getElementById('preco-material-' + contador).value = response.preco;
+            var result = JSON.parse(response);
+            document.getElementById('preco-material-' + contador).value = result.preco;
+            atualizarTotal(contador);
           },
           error: function() {
             alert('Erro ao buscar o preço do material.');
+          }
+        });
+      }
+    }
+
+    function buscarPrecoServico(servicoId, contador) {
+      if (servicoId) {
+        $.ajax({
+          url: '/planel/orcamento/atualizar',
+          method: 'POST',
+          data: { id_servico: servicoId },
+          success: function(response) {
+            var result = JSON.parse(response);
+            document.getElementById('preco-servico-' + contador).value = result.preco;
+            atualizarTotalServico(contador);
+          },
+          error: function() {
+            alert('Erro ao buscar o preço do serviço.');
           }
         });
       }

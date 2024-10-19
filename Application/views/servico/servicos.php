@@ -37,8 +37,8 @@ require('Application/models/servico_dao.php');
                                     <thead>
                                     <tr>
                                         <th>Serviço</th>
-                                        <th>Descrição</th>
                                         <th>Valor de Serviço</th>
+                                        <th>Descrição</th>
                                         <th>Opções</th>
                                     </tr>
                                     </thead>
