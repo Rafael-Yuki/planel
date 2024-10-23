@@ -43,6 +43,8 @@ require('Application/models/servico_dao.php');
             ?>
                 <form id="formOrcamento" action="/planel/orcamento/atualizar" method="POST" enctype="multipart/form-data">
                   <input type="hidden" name="orcamento_id" required value="<?= $orcamento['id_orcamento'] ?>">
+                  <input type="hidden" id="materiais_para_remover" name="materiais_para_remover" value="">
+                  <input type="hidden" id="servicos_para_remover" name="servicos_para_remover" value="">
                   <div class="row">
                     <div class="col-md-4">
                       <div class="mb-3">
@@ -101,8 +103,8 @@ require('Application/models/servico_dao.php');
                     <textarea id="observacao" name="observacao" class="form-control"><?= $orcamento['observacao'] ?></textarea>
                   </div>
 
-                    <!-- Materiais -->
-                    <div class="container mt-4">
+                  <!-- Materiais -->
+                  <div class="container mt-4">
                     <div class="row">
                         <div class="col-md-12">
                         <h5>Materiais</h5>
@@ -118,38 +120,41 @@ require('Application/models/servico_dao.php');
                             while ($material = mysqli_fetch_assoc($query_materiais)) {
                             ?>
                                 <div class="row mb-3" id="material-item-<?= $material['id_orcamento_material'] ?>">
-                                <input type="hidden" name="id_orcamento_material[]" value="<?= $material['id_orcamento_material'] ?>" />
-                                <div class="col-md-4">
-                                    <label for="nome_material">Nome do Material</label>
-                                    <select name="nome_material[]" class="form-control" onchange="buscarPreco(this.value, <?= $material['id_orcamento_material'] ?>)" required>
-                                    <option value="">Selecione um Material</option>
-                                    <?php
-                                    $query_materiais_lista = "SELECT * FROM materiais WHERE ativo = TRUE";
-                                    $result_materiais_lista = mysqli_query($conexao, $query_materiais_lista);
-                                    while ($row_material = mysqli_fetch_assoc($result_materiais_lista)) {
-                                        $selected = ($row_material['id_material'] == $material['fk_materiais_id_material']) ? 'selected' : '';
-                                        echo "<option value='".$row_material['id_material']."' $selected>".$row_material['nome_material']."</option>";
-                                    }
-                                    ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="quantidade">Quantidade</label>
-                                    <input type="number" name="quantidade[]" class="form-control" value="<?= $material['quantidade_material'] ?>" onchange="atualizarTotal(<?= $material['id_orcamento_material'] ?>)" required>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="preco">Preço Unitário</label>
-                                    <input type="number" name="preco[]" id="preco-material-<?= $material['id_orcamento_material'] ?>" class="form-control" value="<?= $material['valor_unitario'] ?>" step="0.01" onchange="atualizarTotal(<?= $material['id_orcamento_material'] ?>)" required>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="total">Valor Total</label>
-                                    <input type="text" name="total[]" id="total-material-<?= $material['id_orcamento_material'] ?>" class="form-control" value="<?= number_format($material['quantidade_material'] * $material['valor_unitario'], 2, ',', '.') ?>" readonly>
-                                </div>
-                                <div class="col-md-1 d-flex align-items-end">
-                                    <button type="button" class="btn btn-danger" onclick="confirmarRemoverMaterial('material-item-<?= $material['id_orcamento_material'] ?>')">
-                                    <span class="bi-trash3-fill"></span>
+                                  <input type="hidden" name="id_orcamento_material[]" value="<?= $material['id_orcamento_material'] ?>" />
+                                  <div class="col-md-4">
+                                      <label for="nome_material">Nome do Material</label>
+                                      <select name="nome_material[]" class="form-control" onchange="buscarPreco(this.value, <?= $material['id_orcamento_material'] ?>)" required>
+                                      <option value="">Selecione um Material</option>
+                                      <?php
+                                      $query_materiais_lista = "SELECT * FROM materiais WHERE ativo = TRUE";
+                                      $result_materiais_lista = mysqli_query($conexao, $query_materiais_lista);
+                                      while ($row_material = mysqli_fetch_assoc($result_materiais_lista)) {
+                                          $selected = ($row_material['id_material'] == $material['fk_materiais_id_material']) ? 'selected' : '';
+                                          echo "<option value='".$row_material['id_material']."' $selected>".$row_material['nome_material']."</option>";
+                                      }
+                                      ?>
+                                      </select>
+                                  </div>
+                                  <div class="col-md-2">
+                                      <label for="quantidade">Quantidade</label>
+                                      <input type="number" name="quantidade[]" class="form-control" value="<?= $material['quantidade_material'] ?>" onchange="atualizarTotal(<?= $material['id_orcamento_material'] ?>)" required>
+                                  </div>
+                                  <div class="col-md-2">
+                                      <label for="preco">Preço Unitário</label>
+                                      <input type="number" name="preco[]" id="preco-material-<?= $material['id_orcamento_material'] ?>" class="form-control" value="<?= $material['valor_unitario'] ?>" step="0.01" onchange="atualizarTotal(<?= $material['id_orcamento_material'] ?>)" required>
+                                  </div>
+                                  <div class="col-md-3">
+                                      <label for="total">Valor Total</label>
+                                      <input type="text" name="total[]" id="total-material-<?= $material['id_orcamento_material'] ?>" class="form-control" value="<?= number_format($material['quantidade_material'] * $material['valor_unitario'], 2, ',', '.') ?>" readonly>
+                                  </div>
+                                  <div class="col-md-1 d-flex align-items-end">
+                                    <button type="button" class="btn btn-success me-2" onclick="adicionarMaterial()">
+                                      <span class="bi-arrow-down"></span>
                                     </button>
-                                </div>
+                                    <button type="button" class="btn btn-danger" onclick="confirmarRemoverMaterial('material-item-<?= $material['id_orcamento_material'] ?>')">
+                                      <span class="bi-trash3-fill"></span>
+                                    </button>
+                                  </div>
                                 </div>
                             <?php
                             }
@@ -158,10 +163,10 @@ require('Application/models/servico_dao.php');
                         </div>
                         </div>
                     </div>
-                    </div>
+                  </div>
 
-                    <!-- Serviços -->
-                    <div class="container mt-4">
+                  <!-- Serviços -->
+                  <div class="container mt-4">
                     <div class="row">
                         <div class="col-md-12">
                         <h5>Serviços</h5>
@@ -177,38 +182,41 @@ require('Application/models/servico_dao.php');
                             while ($servico = mysqli_fetch_assoc($query_servicos)) {
                             ?>
                                 <div class="row mb-3" id="servico-item-<?= $servico['id_orcamento_servico'] ?>">
-                                <input type="hidden" name="id_orcamento_servico[]" value="<?= $servico['id_orcamento_servico'] ?>" />
-                                <div class="col-md-4">
-                                    <label for="nome_servico">Nome do Serviço</label>
-                                    <select name="nome_servico[]" class="form-control" onchange="buscarPrecoServico(this.value, <?= $servico['id_orcamento_servico'] ?>)" required>
-                                    <option value="">Selecione um Serviço</option>
-                                    <?php
-                                    $query_servicos_lista = "SELECT * FROM servicos WHERE ativo = TRUE";
-                                    $result_servicos_lista = mysqli_query($conexao, $query_servicos_lista);
-                                    while ($row_servico = mysqli_fetch_assoc($result_servicos_lista)) {
-                                        $selected = ($row_servico['id_servico'] == $servico['fk_servicos_id_servico']) ? 'selected' : '';
-                                        echo "<option value='".$row_servico['id_servico']."' $selected>".$row_servico['nome_servico']."</option>";
-                                    }
-                                    ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="quantidade">Quantidade</label>
-                                    <input type="number" name="quantidade_servico[]" class="form-control" value="<?= $servico['quantidade_servico'] ?>" onchange="atualizarTotalServico(<?= $servico['id_orcamento_servico'] ?>)" required>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="preco">Preço Unitário</label>
-                                    <input type="number" name="preco_servico[]" class="form-control" value="<?= $servico['valor_unitario'] ?>" step="0.01" onchange="atualizarTotalServico(<?= $servico['id_orcamento_servico'] ?>)" required>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="total">Valor Total</label>
-                                    <input type="text" name="total_servico[]" id="total-servico-<?= $servico['id_orcamento_servico'] ?>" class="form-control" value="<?= number_format($servico['quantidade_servico'] * $servico['valor_unitario'], 2, ',', '.') ?>" readonly>
-                                </div>
-                                <div class="col-md-1 d-flex align-items-end">
-                                    <button type="button" class="btn btn-danger" onclick="confirmarRemoverServico('servico-item-<?= $servico['id_orcamento_servico'] ?>')">
-                                    <span class="bi-trash3-fill"></span>
-                                    </button>
-                                </div>
+                                  <input type="hidden" name="id_orcamento_servico[]" value="<?= $servico['id_orcamento_servico'] ?>" />
+                                  <div class="col-md-4">
+                                      <label for="nome_servico">Nome do Serviço</label>
+                                      <select name="nome_servico[]" class="form-control" onchange="buscarPrecoServico(this.value, <?= $servico['id_orcamento_servico'] ?>)" required>
+                                      <option value="">Selecione um Serviço</option>
+                                      <?php
+                                      $query_servicos_lista = "SELECT * FROM servicos WHERE ativo = TRUE";
+                                      $result_servicos_lista = mysqli_query($conexao, $query_servicos_lista);
+                                      while ($row_servico = mysqli_fetch_assoc($result_servicos_lista)) {
+                                          $selected = ($row_servico['id_servico'] == $servico['fk_servicos_id_servico']) ? 'selected' : '';
+                                          echo "<option value='".$row_servico['id_servico']."' $selected>".$row_servico['nome_servico']."</option>";
+                                      }
+                                      ?>
+                                      </select>
+                                  </div>
+                                  <div class="col-md-2">
+                                      <label for="quantidade">Quantidade</label>
+                                      <input type="number" name="quantidade_servico[]" class="form-control" value="<?= $servico['quantidade_servico'] ?>" onchange="atualizarTotalServico(<?= $servico['id_orcamento_servico'] ?>)" required>
+                                  </div>
+                                  <div class="col-md-2">
+                                      <label for="preco">Preço Unitário</label>
+                                      <input type="number" name="preco_servico[]" class="form-control" value="<?= $servico['valor_unitario'] ?>" step="0.01" onchange="atualizarTotalServico(<?= $servico['id_orcamento_servico'] ?>)" required>
+                                  </div>
+                                  <div class="col-md-3">
+                                      <label for="total">Valor Total</label>
+                                      <input type="text" name="total_servico[]" id="total-servico-<?= $servico['id_orcamento_servico'] ?>" class="form-control" value="<?= number_format($servico['quantidade_servico'] * $servico['valor_unitario'], 2, ',', '.') ?>" readonly>
+                                  </div>
+                                  <div class="col-md-1 d-flex align-items-end">
+                                      <button type="button" class="btn btn-success me-2" onclick="adicionarServico()">
+                                        <span class="bi-arrow-down"></span>
+                                      </button>
+                                      <button type="button" class="btn btn-danger" onclick="confirmarRemoverServico('servico-item-<?= $servico['id_orcamento_servico'] ?>')">
+                                        <span class="bi-trash3-fill"></span>
+                                      </button>
+                                  </div>
                                 </div>
                             <?php
                             }
@@ -217,7 +225,7 @@ require('Application/models/servico_dao.php');
                         </div>
                         </div>
                     </div>
-                    </div>
+                  </div>
 
                   <div class="mb-3 mt-4">
                     <button type="submit" name="editar_orcamento" class="btn btn-primary">
@@ -246,6 +254,14 @@ require('Application/models/servico_dao.php');
   <script>
     let contadorMateriais = <?= mysqli_num_rows($query_materiais) + 1 ?>;
     let contadorServicos = <?= mysqli_num_rows($query_servicos) + 1 ?>;
+    let materiaisParaRemover = [];
+    let servicosParaRemover = [];
+
+    // Função para atualizar o campo oculto antes do envio do formulário
+    document.getElementById('formOrcamento').addEventListener('submit', function () {
+        document.getElementById('materiais_para_remover').value = JSON.stringify(materiaisParaRemover);
+        document.getElementById('servicos_para_remover').value = JSON.stringify(servicosParaRemover);
+    });
 
     function atualizarTotal(id) {
         const quantidadeElement = document.querySelector(`#material-item-${id} input[name="quantidade[]"]`);
@@ -257,7 +273,6 @@ require('Application/models/servico_dao.php');
             let preco = parseFloat(precoElement.value) || 0;
 
             if (!isNaN(quantidade) && !isNaN(preco)) {
-                // Formata a quantidade sem casas decimais e o valor total com duas casas decimais
                 quantidadeElement.value = quantidade.toFixed(0);
                 totalElement.value = (quantidade * preco).toFixed(2);
             } else {
@@ -276,7 +291,6 @@ require('Application/models/servico_dao.php');
             let preco = parseFloat(precoElement.value) || 0;
 
             if (!isNaN(quantidade) && !isNaN(preco)) {
-                // Formata a quantidade sem casas decimais, e o valor total com duas casas decimais
                 quantidadeElement.value = quantidade.toFixed(0);
                 totalElement.value = (quantidade * preco).toFixed(2);
             } else {
@@ -286,12 +300,13 @@ require('Application/models/servico_dao.php');
     }
 
     function adicionarMaterial() {
+        const idNovoMaterial = 'novo-' + contadorMateriais;
         contadorMateriais++;
         const novoMaterial = `
-            <div class="row mb-3" id="material-item-${contadorMateriais}">
+            <div class="row mb-3" id="material-item-${idNovoMaterial}">
                 <div class="col-md-4">
                     <label for="nome_material">Nome do Material</label>
-                    <select name="nome_material[]" class="form-control" onchange="buscarPreco(this.value, ${contadorMateriais})" required>
+                    <select name="nome_material[]" class="form-control" onchange="buscarPreco(this.value, '${idNovoMaterial}')" required>
                         <option value="">Selecione um Material</option>
                         <?php
                         $query_materiais = "SELECT * FROM materiais WHERE ativo = TRUE";
@@ -304,21 +319,21 @@ require('Application/models/servico_dao.php');
                 </div>
                 <div class="col-md-2">
                     <label for="quantidade">Quantidade</label>
-                    <input type="number" name="quantidade[]" class="form-control" min="1" step="1" onchange="atualizarTotal(${contadorMateriais})" required>
+                    <input type="number" name="quantidade[]" class="form-control" min="1" step="1" onchange="atualizarTotal('${idNovoMaterial}')" required>
                 </div>
                 <div class="col-md-2">
                     <label for="preco">Preço Unitário</label>
-                    <input type="number" name="preco[]" id="preco-material-${contadorMateriais}" class="form-control" step="0.01" onchange="atualizarTotal(${contadorMateriais})" required>
+                    <input type="number" name="preco[]" id="preco-material-${idNovoMaterial}" class="form-control" step="0.01" onchange="atualizarTotal('${idNovoMaterial}')" required>
                 </div>
                 <div class="col-md-3">
                     <label for="total">Valor Total</label>
-                    <input type="number" name="total[]" id="total-material-${contadorMateriais}" class="form-control" readonly>
+                    <input type="number" name="total[]" id="total-material-${idNovoMaterial}" class="form-control" readonly>
                 </div>
                 <div class="col-md-1 d-flex align-items-end">
                     <button type="button" class="btn btn-success me-2" onclick="adicionarMaterial()">
                         <span class="bi-arrow-down"></span>
                     </button>
-                    <button type="button" class="btn btn-danger" onclick="confirmarRemoverMaterial(${contadorMateriais})">
+                    <button type="button" class="btn btn-danger" onclick="removerItem('material-item-${idNovoMaterial}')">
                         <span class="bi-trash3-fill"></span>
                     </button>
                 </div>
@@ -327,12 +342,13 @@ require('Application/models/servico_dao.php');
     }
 
     function adicionarServico() {
+        const idNovoServico = 'novo-' + contadorServicos;
         contadorServicos++;
         const novoServico = `
-            <div class="row mb-3" id="servico-item-${contadorServicos}">
+            <div class="row mb-3" id="servico-item-${idNovoServico}">
                 <div class="col-md-4">
                     <label for="nome_servico">Nome do Serviço</label>
-                    <select name="nome_servico[]" class="form-control" onchange="buscarPrecoServico(this.value, ${contadorServicos})" required>
+                    <select name="nome_servico[]" class="form-control" onchange="buscarPrecoServico(this.value, '${idNovoServico}')" required>
                         <option value="">Selecione um Serviço</option>
                         <?php
                         $query_servicos = "SELECT * FROM servicos WHERE ativo = TRUE";
@@ -345,21 +361,21 @@ require('Application/models/servico_dao.php');
                 </div>
                 <div class="col-md-2">
                     <label for="quantidade">Quantidade</label>
-                    <input type="number" name="quantidade_servico[]" class="form-control" min="1" step="1" onchange="atualizarTotalServico(${contadorServicos})" required>
+                    <input type="number" name="quantidade_servico[]" class="form-control" min="1" step="1" onchange="atualizarTotalServico('${idNovoServico}')" required>
                 </div>
                 <div class="col-md-2">
                     <label for="preco">Preço Unitário</label>
-                    <input type="number" name="preco_servico[]" id="preco-servico-${contadorServicos}" class="form-control" step="0.01" onchange="atualizarTotalServico(${contadorServicos})" required>
+                    <input type="number" name="preco_servico[]" id="preco-servico-${idNovoServico}" class="form-control" step="0.01" onchange="atualizarTotalServico('${idNovoServico}')" required>
                 </div>
                 <div class="col-md-3">
                     <label for="total">Valor Total</label>
-                    <input type="number" name="total_servico[]" id="total-servico-${contadorServicos}" class="form-control" readonly>
+                    <input type="number" name="total_servico[]" id="total-servico-${idNovoServico}" class="form-control" readonly>
                 </div>
                 <div class="col-md-1 d-flex align-items-end">
                     <button type="button" class="btn btn-success me-2" onclick="adicionarServico()">
                         <span class="bi-arrow-down"></span>
                     </button>
-                    <button type="button" class="btn btn-danger" onclick="confirmarRemoverServico(${contadorServicos})">
+                    <button type="button" class="btn btn-danger" onclick="removerItem('servico-item-${idNovoServico}')">
                         <span class="bi-trash3-fill"></span>
                     </button>
                 </div>
@@ -367,29 +383,42 @@ require('Application/models/servico_dao.php');
         document.getElementById('servicos-container').insertAdjacentHTML('beforeend', novoServico);
     }
 
+    function removerItem(id) {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+            elemento.remove();
+        }
+    }
+
     function confirmarRemoverMaterial(id) {
-        if (confirm('Tem certeza que deseja excluir o material?')) {
-            removerMaterial(id);
+        const materialId = id.replace("material-item-", "");
+        const inputHiddenId = document.querySelector(`#material-item-${materialId} input[name="id_orcamento_material[]"]`);
+
+        if (inputHiddenId && inputHiddenId.value) {
+            // Material já existente com ID atribuído
+            if (confirm('Tem certeza que deseja excluir o material?')) {
+                materiaisParaRemover.push(inputHiddenId.value);
+                document.getElementById("materiais_para_remover").value = JSON.stringify(materiaisParaRemover);
+                document.getElementById(id).style.display = 'none';
+            }
+        } else {
+            removerItem(id);
         }
     }
 
     function confirmarRemoverServico(id) {
-        if (confirm('Tem certeza que deseja excluir o serviço?')) {
-            removerServico(id);
-        }
-    }
+        const servicoId = id.replace("servico-item-", "");
+        const inputHiddenId = document.querySelector(`#servico-item-${servicoId} input[name="id_orcamento_servico[]"]`);
 
-    function removerMaterial(id) {
-        const item = document.getElementById(`material-item-${id}`);
-        if (item) {
-            item.remove();
-        }
-    }
-
-    function removerServico(id) {
-        const item = document.getElementById(`servico-item-${id}`);
-        if (item) {
-            item.remove();
+        if (inputHiddenId && inputHiddenId.value) {
+            // Serviço já existente com ID atribuído
+            if (confirm('Tem certeza que deseja excluir o serviço?')) {
+                servicosParaRemover.push(inputHiddenId.value);
+                document.getElementById("servicos_para_remover").value = JSON.stringify(servicosParaRemover);
+                document.getElementById(id).style.display = 'none';
+            }
+        } else {
+            removerItem(id);
         }
     }
 
@@ -420,8 +449,6 @@ require('Application/models/servico_dao.php');
                 success: function(response) {
                     var result = JSON.parse(response);
                     document.getElementById('preco-servico-' + contador).value = result.preco;
-
-                    // Após buscar o preço, atualize o total
                     atualizarTotalServico(contador);
                 },
                 error: function() {

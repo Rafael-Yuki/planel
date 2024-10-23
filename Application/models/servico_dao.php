@@ -107,5 +107,15 @@ class ServicoDAO {
         mysqli_query($conexao, $sql);
         return mysqli_affected_rows($conexao);
     }    
+
+    public static function excluirServicoOrcamento($id_orcamento_servico) {
+        global $conexao;
+        
+        $id_orcamento_servico = mysqli_real_escape_string($conexao, $id_orcamento_servico);
+        $sql = "DELETE FROM orcamento_servico WHERE id_orcamento_servico = '$id_orcamento_servico'";
+        
+        mysqli_query($conexao, $sql);
+        return mysqli_affected_rows($conexao);
+    }
 }
 ?>

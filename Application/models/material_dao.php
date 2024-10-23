@@ -148,5 +148,15 @@ class MaterialDAO {
         mysqli_query($conexao, $sql);
         return mysqli_affected_rows($conexao);
     }    
+
+    public static function excluirMaterialOrcamento($id_orcamento_material) {
+        global $conexao;
+        
+        $id_orcamento_material = mysqli_real_escape_string($conexao, $id_orcamento_material);
+        $sql = "DELETE FROM orcamento_material WHERE id_orcamento_material = '$id_orcamento_material'";
+        
+        mysqli_query($conexao, $sql);
+        return mysqli_affected_rows($conexao);
+    }
 }
 ?>

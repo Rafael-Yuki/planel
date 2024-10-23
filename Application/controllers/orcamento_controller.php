@@ -26,55 +26,44 @@ if (isset($_POST['criar_orcamento'])) {
         exit;
     }
 
-    // Iniciar uma transação para garantir que todas as operações sejam atômicas
     mysqli_begin_transaction($conexao);
 
     try {
-        // Criar o orçamento
         $result = OrcamentoDAO::criarOrcamento($nome_orcamento, $data_orcamento, $validade, $status, $observacao, $fk_clientes_id_cliente, $caminho_arquivo);
         if ($result > 0) {
-            $orcamento_id = mysqli_insert_id($conexao); // Obter o ID do orçamento criado
+            $orcamento_id = mysqli_insert_id($conexao);
 
-            // Adicionar materiais ao orçamento
             if (isset($_POST['nome_material'])) {
                 foreach ($_POST['nome_material'] as $index => $id_material) {
                     $quantidade = $_POST['quantidade'][$index];
                     $preco = $_POST['preco'][$index];
 
-                    // Formatar corretamente os valores de quantidade e preço
-                    $quantidade = number_format($quantidade, 0, ',', '.'); // Quantidade sem decimais
-                    $preco = number_format($preco, 2, ',', '.'); // Preço com 2 casas decimais
+                    $quantidade = number_format($quantidade, 0, ',', '.');
+                    $preco = number_format($preco, 2, ',', '.');
 
-                    // Adicionar material ao orçamento com o ID correto
                     MaterialDAO::adicionarMaterialOrcamento($orcamento_id, $id_material, $quantidade, $preco);
                 }
             }
 
-            // Adicionar serviços ao orçamento
             if (isset($_POST['nome_servico'])) {
                 foreach ($_POST['nome_servico'] as $index => $id_servico) {
                     $quantidade = $_POST['quantidade_servico'][$index];
                     $preco = $_POST['preco_servico'][$index];
 
-                    // Formatar corretamente os valores de quantidade e preço
-                    $quantidade = number_format($quantidade, 0, ',', '.'); // Quantidade sem decimais
-                    $preco = number_format($preco, 2, ',', '.'); // Preço com 2 casas decimais
+                    $quantidade = number_format($quantidade, 0, ',', '.');
+                    $preco = number_format($preco, 2, ',', '.');
 
-                    // Adicionar serviço ao orçamento com o ID correto
                     ServicoDAO::adicionarServicoOrcamento($orcamento_id, $id_servico, $quantidade, $preco);
                 }
             }
 
-            // Commitar a transação
             mysqli_commit($conexao);
-
             $_SESSION['mensagem'] = 'Orçamento criado com sucesso!';
             $_SESSION['mensagem_tipo'] = 'success';
         } else {
             throw new Exception('Erro ao criar o orçamento');
         }
     } catch (Exception $e) {
-        // Em caso de erro, reverter a transação
         mysqli_rollback($conexao);
         $_SESSION['mensagem'] = 'Erro: ' . $e->getMessage();
         $_SESSION['mensagem_tipo'] = 'error';
@@ -93,40 +82,67 @@ if (isset($_POST['editar_orcamento'])) {
     $observacao = mysqli_real_escape_string($conexao, $_POST['observacao']);
     $fk_clientes_id_cliente = mysqli_real_escape_string($conexao, $_POST['cliente']);
 
-    // Editar materiais
-    if (isset($_POST['id_orcamento_material'])) {
-        foreach ($_POST['id_orcamento_material'] as $index => $id_orcamento_material) {
-            $id_material = $_POST['nome_material'][$index];
-            $quantidade = $_POST['quantidade'][$index];
-            $preco = $_POST['preco'][$index];
+    mysqli_begin_transaction($conexao);
 
-            // Atualizar material no orçamento
-            MaterialDAO::editarMaterialOrcamento($id_orcamento_material, $id_material, $quantidade, $preco);
+    try {
+        // Editar o orçamento principal
+        $result = OrcamentoDAO::editarOrcamento($id_orcamento, $nome_orcamento, $data_orcamento, $validade, $status, $observacao, $fk_clientes_id_cliente);
+        
+        // Verificar e editar/adicionar materiais
+        if (isset($_POST['nome_material'])) {
+            foreach ($_POST['nome_material'] as $index => $id_material) {
+                $quantidade = (float)str_replace(',', '.', $_POST['quantidade'][$index]);
+                $preco = (float)str_replace(',', '.', $_POST['preco'][$index]);
+                $id_orcamento_material = $_POST['id_orcamento_material'][$index] ?? null;
+
+                if ($id_orcamento_material) {
+                    MaterialDAO::editarMaterialOrcamento($id_orcamento_material, $id_material, $quantidade, $preco);
+                } else {
+                    MaterialDAO::adicionarMaterialOrcamento($id_orcamento, $id_material, $quantidade, $preco);
+                }
+            }
         }
-    }
 
-    // Editar serviços
-    if (isset($_POST['id_orcamento_servico'])) {
-        foreach ($_POST['id_orcamento_servico'] as $index => $id_orcamento_servico) {
-            $id_servico = $_POST['nome_servico'][$index];
-            $quantidade_servico = $_POST['quantidade_servico'][$index];
-            $preco_servico = $_POST['preco_servico'][$index];
+        // Verificar e editar/adicionar serviços
+        if (isset($_POST['nome_servico'])) {
+            foreach ($_POST['nome_servico'] as $index => $id_servico) {
+                $quantidade_servico = (float)str_replace(',', '.', $_POST['quantidade_servico'][$index]);
+                $preco_servico = (float)str_replace(',', '.', $_POST['preco_servico'][$index]);
+                $id_orcamento_servico = $_POST['id_orcamento_servico'][$index] ?? null;
 
-            // Atualizar serviço no orçamento
-            ServicoDAO::editarServicoOrcamento($id_orcamento_servico, $id_servico, $quantidade_servico, $preco_servico);
+                if ($id_orcamento_servico) {
+                    ServicoDAO::editarServicoOrcamento($id_orcamento_servico, $id_servico, $quantidade_servico, $preco_servico);
+                } else {
+                    ServicoDAO::adicionarServicoOrcamento($id_orcamento, $id_servico, $quantidade_servico, $preco_servico);
+                }
+            }
         }
-    }
 
-    // Continue com a atualização do orçamento em si
-    $result = OrcamentoDAO::editarOrcamento($id_orcamento, $nome_orcamento, $data_orcamento, $validade, $status, $observacao, $fk_clientes_id_cliente);
-    
-    if ($result >= 0) {
+        // Excluir materiais marcados para remoção
+        if (isset($_POST['materiais_para_remover'])) {
+            $materiaisParaRemover = json_decode($_POST['materiais_para_remover'], true);
+            foreach ($materiaisParaRemover as $id_orcamento_material) {
+                MaterialDAO::excluirMaterialOrcamento($id_orcamento_material);
+            }
+        }
+
+        // Excluir serviços marcados para remoção
+        if (isset($_POST['servicos_para_remover'])) {
+            $servicosParaRemover = json_decode($_POST['servicos_para_remover'], true);
+            foreach ($servicosParaRemover as $id_orcamento_servico) {
+                ServicoDAO::excluirServicoOrcamento($id_orcamento_servico);
+            }
+        }
+
+        mysqli_commit($conexao);
         $_SESSION['mensagem'] = 'Orçamento atualizado com sucesso!';
         $_SESSION['mensagem_tipo'] = 'success';
-    } else {
-        $_SESSION['mensagem'] = 'Orçamento não foi atualizado';
-        $_SESSION['mensagem_tipo'] = 'warning';
+    } catch (Exception $e) {
+        mysqli_rollback($conexao);
+        $_SESSION['mensagem'] = 'Erro ao atualizar orçamento: ' . $e->getMessage();
+        $_SESSION['mensagem_tipo'] = 'error';
     }
+
     header('Location: /planel/orcamentos');
     exit();
 }
