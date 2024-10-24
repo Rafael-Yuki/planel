@@ -90,7 +90,12 @@ require('Application/models/servico_dao.php');
               <div class="container mt-4">
                 <div class="row">
                   <div class="col-md-12">
-                    <h5>Materiais</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h5>Materiais</h5>
+                      <button type="button" class="btn btn-success" onclick="adicionarMaterial()">
+                        <span class="bi-plus"></span>
+                      </button>
+                    </div>
                     <div id="materiais-container">
                       <div class="row mb-3" id="material-item-1">
                         <div class="col-md-4">
@@ -118,10 +123,7 @@ require('Application/models/servico_dao.php');
                           <label for="total">Valor Total</label>
                           <input type="number" name="total[]" id="total-material-1" class="form-control" readonly>
                         </div>
-                        <div class="col-md-1 d-flex align-items-end">
-                          <button type="button" class="btn btn-success me-2" onclick="adicionarMaterial()">
-                            <span class="bi-arrow-down"></span>
-                          </button>
+                        <div class="col-md-1 d-flex justify-content-end align-items-center mt-4">
                           <button type="button" class="btn btn-danger" onclick="confirmarRemoverMaterial('material-item-1')">
                             <span class="bi-trash3-fill"></span>
                           </button>
@@ -136,7 +138,12 @@ require('Application/models/servico_dao.php');
               <div class="container mt-4">
                 <div class="row">
                   <div class="col-md-12">
-                    <h5>Serviços</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h5>Serviços</h5>
+                      <button type="button" class="btn btn-success" onclick="adicionarServico()">
+                        <span class="bi-plus"></span>
+                      </button>
+                    </div>
                     <div id="servicos-container">
                       <div class="row mb-3" id="servico-item-1">
                         <div class="col-md-4">
@@ -164,10 +171,7 @@ require('Application/models/servico_dao.php');
                           <label for="total">Valor Total</label>
                           <input type="number" name="total_servico[]" id="total-servico-1" class="form-control" readonly>
                         </div>
-                        <div class="col-md-1 d-flex align-items-end">
-                          <button type="button" class="btn btn-success me-2" onclick="adicionarServico()">
-                            <span class="bi-arrow-down"></span>
-                          </button>
+                        <div class="col-md-1 d-flex justify-content-end align-items-center mt-4">
                           <button type="button" class="btn btn-danger" onclick="confirmarRemoverServico('servico-item-1')">
                             <span class="bi-trash3-fill"></span>
                           </button>
@@ -229,10 +233,7 @@ require('Application/models/servico_dao.php');
             <label for="total">Valor Total</label>
             <input type="number" name="total[]" id="total-material-${contadorMateriais}" class="form-control" readonly>
           </div>
-          <div class="col-md-1 d-flex align-items-end">
-            <button type="button" class="btn btn-success me-2" onclick="adicionarMaterial()">
-              <span class="bi-arrow-down"></span>
-            </button>
+          <div class="col-md-1 d-flex justify-content-end align-items-center mt-4">
             <button type="button" class="btn btn-danger" onclick="confirmarRemoverMaterial('material-item-${contadorMateriais}')">
               <span class="bi-trash3-fill"></span>
             </button>
@@ -270,10 +271,7 @@ require('Application/models/servico_dao.php');
             <label for="total">Valor Total</label>
             <input type="number" name="total_servico[]" id="total-servico-${contadorServicos}" class="form-control" readonly>
           </div>
-          <div class="col-md-1 d-flex align-items-end">
-            <button type="button" class="btn btn-success me-2" onclick="adicionarServico()">
-              <span class="bi-arrow-down"></span>
-            </button>
+          <div class="col-md-1 d-flex justify-content-end align-items-center mt-4">
             <button type="button" class="btn btn-danger" onclick="confirmarRemoverServico('servico-item-${contadorServicos}')">
               <span class="bi-trash3-fill"></span>
             </button>

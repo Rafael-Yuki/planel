@@ -153,7 +153,7 @@ require('Application/models/conexao.php');
                                     <?php
                                 }
                                 ?>
-
+                                <hr>
                                 <!-- Serviços relacionados ao orçamento -->
                                 <?php
                                 $sql_servicos = "SELECT os.*, s.nome_servico 
