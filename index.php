@@ -1,5 +1,19 @@
 <?php
+session_start(); // Iniciar a sessão no início do arquivo
 require('Application/autoload.php');
+
+// Definir rotas públicas (que não exigem login)
+$publicRoutes = ['', 'login', 'logout'];
+
+// Obter o caminho da URL
+$path = isset($_GET['url']) ? $_GET['url'] : '';
+
+// Verificar se o usuário está logado ou se a rota é pública
+if (!isset($_SESSION['login']) && !in_array($path, $publicRoutes)) {
+    // Se o usuário não estiver logado e a rota não for pública, redirecionar para a página de login
+    header('Location: /planel/?url=login'); // Ajustar a URL para evitar loop
+    exit();
+}
 
 // Definir rotas
 $routes = [
@@ -68,15 +82,12 @@ $routes = [
     
 ];
 
-// Obter o caminho da URL
-$path = isset($_GET['url']) ? $_GET['url'] : '';
-
 // Verificar se a rota existe
 if (array_key_exists($path, $routes)) {
     require_once(__DIR__ . '/' . $routes[$path]);
 } else {
-    // Rota não encontrada, redirecionar para página de erro ou página inicial
-    header('Location: /');
-    exit;
+    // Rota não encontrada, redirecionar para a página de login ou inicial
+    header('Location: /planel/');
+    exit();
 }
 ?>

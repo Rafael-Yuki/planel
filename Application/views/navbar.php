@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 function isActive($routes) {
     $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
@@ -9,6 +11,12 @@ function isActive($routes) {
     }
     
     return '';
+}
+
+// Verificar se o usuário está logado para exibir o navbar
+if (!isset($_SESSION['login'])) {
+    header('Location: /planel/');
+    exit();
 }
 ?>
 
