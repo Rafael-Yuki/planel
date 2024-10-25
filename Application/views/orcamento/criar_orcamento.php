@@ -210,7 +210,7 @@ require('Application/models/servico_dao.php');
           <div class="row mt-3">
             <div class="col-md-4 ms-auto">
               <label for="valor_total_item">Valor Total do Item</label>
-              <input type="number" name="valor_total_item[]" id="valor-total-item-${idNovoItem}" class="form-control" step="0.01" oninput="atualizarValorManual('${idNovoItem}')">
+              <input type="number" name="valor_total_item[]" id="valor-total-item-${idNovoItem}" class="form-control" step="0.01" min="0" oninput="atualizarValorManual('${idNovoItem}')">
             </div>
           </div>
           <hr>

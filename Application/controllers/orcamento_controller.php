@@ -25,9 +25,9 @@ if (isset($_POST['criar_orcamento'])) {
     // Criar o orçamento
     $orcamentoId = OrcamentoDAO::criarOrcamento($nome_orcamento, $data_orcamento, $validade, $status, $observacao, $caminho_arquivo, $fk_cliente_id);
     if ($orcamentoId > 0) {
-        // Decodificar dados dos materiais e serviços
-        $materiais = json_decode($_POST['materiaisCapturados'], true);
-        $servicos = json_decode($_POST['servicosCapturados'], true);
+        // Decodificar dados dos materiais e serviços, se houverem
+        $materiais = isset($_POST['materiaisCapturados']) ? json_decode($_POST['materiaisCapturados'], true) : [];
+        $servicos = isset($_POST['servicosCapturados']) ? json_decode($_POST['servicosCapturados'], true) : [];
 
         // Criar itens de orçamento e vincular materiais e serviços
         foreach ($_POST['nome_item'] as $index => $nomeItem) {
@@ -40,32 +40,36 @@ if (isset($_POST['criar_orcamento'])) {
             $itemId = ItensOrcamentoDAO::criarItemOrcamento($orcamentoId, $nome_item, $descricaoItem, $valor_total_item);
 
             if ($itemId > 0) {
-                // Adicionar materiais ao item, filtrando pelo ID do item
-                foreach ($materiais as $materialGroup) {
-                    if ($materialGroup['idItem'] == "item-".($index+1)) { // Verifica o ID do item (ajuste conforme necessidade)
-                        foreach ($materialGroup['materiaisDoItem'] as $material) {
-                            $materialId = $material['materialId'];
-                            $quantidade = mysqli_real_escape_string($conexao, $material['quantidade']);
-                            $valor_unitario = mysqli_real_escape_string($conexao, $material['preco']);
-                            $nomeMaterial = MaterialDAO::buscarNomeMaterial($materialId);
-                            if (!$nomeMaterial) $nomeMaterial = 'Material Desconhecido';
+                // Verificar se há materiais para este item e adicionar
+                if (!empty($materiais)) {
+                    foreach ($materiais as $materialGroup) {
+                        if ($materialGroup['idItem'] == "item-" . ($index + 1)) {
+                            foreach ($materialGroup['materiaisDoItem'] as $material) {
+                                $materialId = $material['materialId'];
+                                $quantidade = mysqli_real_escape_string($conexao, $material['quantidade']);
+                                $valor_unitario = mysqli_real_escape_string($conexao, $material['preco']);
+                                $nomeMaterial = MaterialDAO::buscarNomeMaterial($materialId);
+                                if (!$nomeMaterial) $nomeMaterial = 'Material Desconhecido';
 
-                            MaterialDAO::adicionarMaterialAoOrcamento($itemId, $materialId, $valor_unitario, $quantidade, $nomeMaterial);
+                                MaterialDAO::adicionarMaterialAoOrcamento($itemId, $materialId, $valor_unitario, $quantidade, $nomeMaterial);
+                            }
                         }
                     }
                 }
 
-                // Adicionar serviços ao item, filtrando pelo ID do item
-                foreach ($servicos as $servicoGroup) {
-                    if ($servicoGroup['idItem'] == "item-".($index+1)) { // Verifica o ID do item (ajuste conforme necessidade)
-                        foreach ($servicoGroup['servicosDoItem'] as $servico) {
-                            $servicoId = $servico['servicoId'];
-                            $quantidade = mysqli_real_escape_string($conexao, $servico['quantidade']);
-                            $valor_unitario = mysqli_real_escape_string($conexao, $servico['preco']);
-                            $nomeServico = ServicoDAO::buscarNomeServico($servicoId);
-                            if (!$nomeServico) $nomeServico = 'Serviço Desconhecido';
+                // Verificar se há serviços para este item e adicionar
+                if (!empty($servicos)) {
+                    foreach ($servicos as $servicoGroup) {
+                        if ($servicoGroup['idItem'] == "item-" . ($index + 1)) {
+                            foreach ($servicoGroup['servicosDoItem'] as $servico) {
+                                $servicoId = $servico['servicoId'];
+                                $quantidade = mysqli_real_escape_string($conexao, $servico['quantidade']);
+                                $valor_unitario = mysqli_real_escape_string($conexao, $servico['preco']);
+                                $nomeServico = ServicoDAO::buscarNomeServico($servicoId);
+                                if (!$nomeServico) $nomeServico = 'Serviço Desconhecido';
 
-                            ServicoDAO::adicionarServicoAoOrcamento($itemId, $servicoId, $valor_unitario, $quantidade, $nomeServico);
+                                ServicoDAO::adicionarServicoAoOrcamento($itemId, $servicoId, $valor_unitario, $quantidade, $nomeServico);
+                            }
                         }
                     }
                 }
