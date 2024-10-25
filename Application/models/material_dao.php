@@ -90,25 +90,13 @@ class MaterialDAO {
         mysqli_query($conexao, $sql);
     }
 
-    public static function adicionarMaterialOrcamento($orcamento_id, $id_material, $quantidade, $preco) {
+    public static function adicionarMaterialAoOrcamento($itemId, $materialId, $valorUnitario, $quantidade, $nomeMaterial) {
         global $conexao;
-    
-        // Buscar o nome do material baseado no ID
-        $nome_material = self::buscarNomeMaterial($id_material); 
-    
-        if (!$nome_material) {
-            throw new Exception('Material não encontrado');
-        }
-    
-        $quantidade = (float) $quantidade;
-        $preco = (float) $preco;
-    
-        // Inserir no orcamento_material com o nome do material
-        $sql = "INSERT INTO orcamento_material (fk_materiais_id_material, nome_orcamento_material, quantidade_material, valor_unitario, fk_orcamentos_id_orcamento)
-                VALUES ('$id_material', '$nome_material', '$quantidade', '$preco', '$orcamento_id')";
-    
-        mysqli_query($conexao, $sql);
-    }
+        $sql = "INSERT INTO orcamento_material (fk_itens_orcamento_id_item_orcamento, fk_materiais_id_material, valor_unitario, quantidade_material, nome_orcamento_material) 
+                VALUES ('$itemId', $materialId, $valorUnitario, $quantidade, '$nomeMaterial')";
+        
+        return mysqli_query($conexao, $sql);
+    }       
 
     public static function buscarNomeMaterial($id_material) {
         global $conexao;

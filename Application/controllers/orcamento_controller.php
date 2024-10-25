@@ -1,9 +1,10 @@
 <?php
 session_start();
+require('Application/models/conexao.php');
 require('Application/models/orcamento_dao.php');
+require('Application/models/itens_orcamento_dao.php');
 require('Application/models/material_dao.php');
 require('Application/models/servico_dao.php');
-require('Application/models/conexao.php');
 
 if (isset($_POST['criar_orcamento'])) {
     $nome_orcamento = mysqli_real_escape_string($conexao, $_POST['nome_orcamento']);
@@ -11,66 +12,72 @@ if (isset($_POST['criar_orcamento'])) {
     $validade = mysqli_real_escape_string($conexao, $_POST['validade']);
     $status = mysqli_real_escape_string($conexao, $_POST['status']);
     $observacao = mysqli_real_escape_string($conexao, $_POST['observacao']);
-    $fk_clientes_id_cliente = mysqli_real_escape_string($conexao, $_POST['cliente']);
-
-    $caminho_arquivo = null;
-    if (isset($_FILES['arquivo_pdf']) && $_FILES['arquivo_pdf']['error'] == UPLOAD_ERR_OK) {
-        $caminho_arquivo = 'uploads/' . basename($_FILES['arquivo_pdf']['name']);
-        move_uploaded_file($_FILES['arquivo_pdf']['tmp_name'], $caminho_arquivo);
-    }
+    $caminho_arquivo = !empty($_FILES['arquivo_pdf']['name']) ? $_FILES['arquivo_pdf']['name'] : NULL;
+    $fk_cliente_id = mysqli_real_escape_string($conexao, $_POST['cliente']);
 
     if (empty($nome_orcamento)) {
         $_SESSION['mensagem'] = 'O nome do orçamento é obrigatório!';
         $_SESSION['mensagem_tipo'] = 'error';
-        header('Location: /planel/orcamento/cadastro');
+        header('Location: /planel/orcamentos');
         exit;
     }
 
-    mysqli_begin_transaction($conexao);
+    // Criar o orçamento
+    $orcamentoId = OrcamentoDAO::criarOrcamento($nome_orcamento, $data_orcamento, $validade, $status, $observacao, $caminho_arquivo, $fk_cliente_id);
+    if ($orcamentoId > 0) {
+        // Decodificar dados dos materiais e serviços
+        $materiais = json_decode($_POST['materiaisCapturados'], true);
+        $servicos = json_decode($_POST['servicosCapturados'], true);
 
-    try {
-        $result = OrcamentoDAO::criarOrcamento($nome_orcamento, $data_orcamento, $validade, $status, $observacao, $fk_clientes_id_cliente, $caminho_arquivo);
-        if ($result > 0) {
-            $orcamento_id = mysqli_insert_id($conexao);
+        // Criar itens de orçamento e vincular materiais e serviços
+        foreach ($materiais as $material) {
+            // Obter o nome do material a partir do ID
+            $nomeMaterial = MaterialDAO::buscarNomeMaterial($material['materialId']);
+            if (!$nomeMaterial) $nomeMaterial = 'Material Desconhecido';
 
-            if (isset($_POST['nome_material'])) {
-                foreach ($_POST['nome_material'] as $index => $id_material) {
-                    $quantidade = $_POST['quantidade'][$index];
-                    $preco = $_POST['preco'][$index];
+            // Criar item de orçamento para materiais
+            $nome_item = "Material: " . $nomeMaterial;
+            $descricao_item = "Descrição gerada automaticamente para o material";
+            $valor_total_item = $material['preco'] * $material['quantidade'];
+            $itemId = ItensOrcamentoDAO::criarItemOrcamento($orcamentoId, $nome_item, $descricao_item, $valor_total_item);
 
-                    $quantidade = number_format($quantidade, 0, ',', '.');
-                    $preco = number_format($preco, 2, ',', '.');
-
-                    MaterialDAO::adicionarMaterialOrcamento($orcamento_id, $id_material, $quantidade, $preco);
-                }
+            // Adicionar material ao item
+            if ($itemId > 0) {
+                $materialId = $material['materialId'];
+                $quantidade = mysqli_real_escape_string($conexao, $material['quantidade']);
+                $valor_unitario = mysqli_real_escape_string($conexao, $material['preco']);
+                MaterialDAO::adicionarMaterialAoOrcamento($itemId, $materialId, $valor_unitario, $quantidade, $nomeMaterial);
             }
-
-            if (isset($_POST['nome_servico'])) {
-                foreach ($_POST['nome_servico'] as $index => $id_servico) {
-                    $quantidade = $_POST['quantidade_servico'][$index];
-                    $preco = $_POST['preco_servico'][$index];
-
-                    $quantidade = number_format($quantidade, 0, ',', '.');
-                    $preco = number_format($preco, 2, ',', '.');
-
-                    ServicoDAO::adicionarServicoOrcamento($orcamento_id, $id_servico, $quantidade, $preco);
-                }
-            }
-
-            mysqli_commit($conexao);
-            $_SESSION['mensagem'] = 'Orçamento criado com sucesso!';
-            $_SESSION['mensagem_tipo'] = 'success';
-        } else {
-            throw new Exception('Erro ao criar o orçamento');
         }
-    } catch (Exception $e) {
-        mysqli_rollback($conexao);
-        $_SESSION['mensagem'] = 'Erro: ' . $e->getMessage();
+
+        foreach ($servicos as $servico) {
+            // Obter o nome do serviço a partir do ID
+            $nomeServico = ServicoDAO::buscarNomeServico($servico['servicoId']);
+            if (!$nomeServico) $nomeServico = 'Serviço Desconhecido';
+
+            // Criar item de orçamento para serviços
+            $nome_item = "Serviço: " . $nomeServico;
+            $descricao_item = "Descrição gerada automaticamente para o serviço";
+            $valor_total_item = $servico['preco'] * $servico['quantidade'];
+            $itemId = ItensOrcamentoDAO::criarItemOrcamento($orcamentoId, $nome_item, $descricao_item, $valor_total_item);
+
+            // Adicionar serviço ao item
+            if ($itemId > 0) {
+                $servicoId = $servico['servicoId'];
+                $quantidade = mysqli_real_escape_string($conexao, $servico['quantidade']);
+                $valor_unitario = mysqli_real_escape_string($conexao, $servico['preco']);
+                ServicoDAO::adicionarServicoAoOrcamento($itemId, $servicoId, $valor_unitario, $quantidade, $nomeServico);
+            }
+        }
+
+        $_SESSION['mensagem'] = 'Orçamento criado com sucesso!';
+        $_SESSION['mensagem_tipo'] = 'success';
+    } else {
+        $_SESSION['mensagem'] = 'Orçamento não foi criado';
         $_SESSION['mensagem_tipo'] = 'error';
     }
-
     header('Location: /planel/orcamentos');
-    exit();
+    exit;
 }
 
 if (isset($_POST['editar_orcamento'])) {
@@ -98,7 +105,7 @@ if (isset($_POST['editar_orcamento'])) {
                 if ($id_orcamento_material) {
                     MaterialDAO::editarMaterialOrcamento($id_orcamento_material, $id_material, $quantidade, $preco);
                 } else {
-                    MaterialDAO::adicionarMaterialOrcamento($id_orcamento, $id_material, $quantidade, $preco);
+                    ItensOrcamentoDAO::adicionarMaterialAoItem($id_orcamento, $id_material, $quantidade, $preco);
                 }
             }
         }
@@ -113,7 +120,7 @@ if (isset($_POST['editar_orcamento'])) {
                 if ($id_orcamento_servico) {
                     ServicoDAO::editarServicoOrcamento($id_orcamento_servico, $id_servico, $quantidade_servico, $preco_servico);
                 } else {
-                    ServicoDAO::adicionarServicoOrcamento($id_orcamento, $id_servico, $quantidade_servico, $preco_servico);
+                    ItensOrcamentoDAO::adicionarServicoAoItem($id_orcamento, $id_servico, $quantidade_servico, $preco_servico);
                 }
             }
         }
@@ -185,3 +192,4 @@ if (isset($_POST['id_servico'])) {
     }
     exit;
 }
+?>

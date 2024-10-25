@@ -49,24 +49,12 @@ class ServicoDAO {
         return $servicos;
     }
 
-    public static function adicionarServicoOrcamento($orcamento_id, $id_servico, $quantidade_servico, $preco_servico) {
+    public static function adicionarServicoAoOrcamento($itemId, $servicoId, $valorUnitario, $quantidade, $nomeServico) {
         global $conexao;
-    
-        // Buscar o nome do serviço baseado no ID
-        $nome_servico = self::buscarNomeServico($id_servico); 
-    
-        if (!$nome_servico) {
-            throw new Exception('Serviço não encontrado');
-        }
-    
-        $quantidade_servico = (float) $quantidade_servico;
-        $preco_servico = (float) $preco_servico;
-    
-        // Inserir no orcamento_servico com o nome do serviço
-        $sql = "INSERT INTO orcamento_servico (fk_servicos_id_servico, nome_orcamento_servico, quantidade_servico, valor_unitario, fk_orcamentos_id_orcamento)
-                VALUES ('$id_servico', '$nome_servico', '$quantidade_servico', '$preco_servico', '$orcamento_id')";
-    
-        mysqli_query($conexao, $sql);
+        $sql = "INSERT INTO orcamento_servico (fk_itens_orcamento_id_item_orcamento, fk_servicos_id_servico, valor_unitario, quantidade_servico, nome_orcamento_servico) 
+                VALUES ('$itemId', $servicoId, $valorUnitario, $quantidade, '$nomeServico')";
+        
+        return mysqli_query($conexao, $sql);
     }    
 
     public static function buscarNomeServico($id_servico) {
@@ -79,7 +67,7 @@ class ServicoDAO {
         if ($result->num_rows > 0) {
             $servico = $result->fetch_assoc();
             return $servico['nome_servico'];
-        }
+        }   
         return null;
     }
 

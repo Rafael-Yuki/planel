@@ -63,7 +63,7 @@ require('Application/models/servico_dao.php');
             </h4>
           </div>
           <div class="card-body">
-            <form id="formOrcamento" action="/planel/orcamento/atualizar" method="POST" enctype="multipart/form-data">
+            <form id="formOrcamento" action="/planel/orcamento/atualizar" method="POST" enctype="multipart/form-data" onsubmit="return verificarEnvio(event)">
               <div class="row">
                 <div class="col-md-4">
                   <div class="mb-3">
@@ -266,6 +266,7 @@ require('Application/models/servico_dao.php');
             </button>
           </div>
         </div>`;
+      
       document.getElementById(`materiais-${idItem}`).insertAdjacentHTML('beforeend', novoMaterial);
     }
 
@@ -306,9 +307,76 @@ require('Application/models/servico_dao.php');
             </button>
           </div>
         </div>`;
+      
       document.getElementById(`servicos-${idItem}`).insertAdjacentHTML('beforeend', novoServico);
     }
 
+    function verificarEnvio(event) {
+      // Captura os dados dos materiais e serviços antes de submeter o formulário
+      const materiais = [];
+      const servicos = [];
+
+      // Loop para capturar todos os itens adicionados
+      document.querySelectorAll('#itens-container > .container').forEach((item, index) => {
+        const idItem = item.getAttribute('id');
+
+        // Capturar os materiais do item
+        document.querySelectorAll(`#materiais-${idItem} select[name^="materiais-"]`).forEach((materialSelect, i) => {
+          const materialId = materialSelect.value;
+          const quantidade = materialSelect.closest('.row').querySelector(`input[name^="quantidade-"]`).value;
+          const preco = materialSelect.closest('.row').querySelector(`input[name^="preco-"]`).value;
+
+          // Verificar se o material está devidamente preenchido
+          if (materialId && quantidade && preco) {
+            console.log(`Item ${index + 1}: Material ${i + 1} - ID: ${materialId}, Quantidade: ${quantidade}, Preço: ${preco}`);
+            materiais.push({ idItem, materialId, quantidade, preco });
+          }
+        });
+
+        // Capturar os serviços do item
+        document.querySelectorAll(`#servicos-${idItem} select[name^="servicos-"]`).forEach((servicoSelect, j) => {
+          const servicoId = servicoSelect.value;
+          const quantidade = servicoSelect.closest('.row').querySelector(`input[name^="quantidade_servico-"]`).value;
+          const preco = servicoSelect.closest('.row').querySelector(`input[name^="preco_servico-"]`).value;
+
+          // Verificar se o serviço está devidamente preenchido
+          if (servicoId && quantidade && preco) {
+            console.log(`Item ${index + 1}: Serviço ${j + 1} - ID: ${servicoId}, Quantidade: ${quantidade}, Preço: ${preco}`);
+            servicos.push({ idItem, servicoId, quantidade, preco });
+          }
+        });
+      });
+
+      // Exibir dados capturados detalhadamente no console
+      console.log('Materiais Capturados Detalhadamente:', JSON.stringify(materiais, null, 2));
+      console.log('Serviços Capturados Detalhadamente:', JSON.stringify(servicos, null, 2));
+      
+      // Verificar se os materiais e serviços foram capturados corretamente
+      if (materiais.length === 0 && servicos.length === 0) {
+        alert('Nenhum material ou serviço foi capturado. Por favor, verifique.');
+        return false; // Impede o envio do formulário
+      }
+
+      // Armazenar os dados capturados em campos ocultos para envio
+      const form = document.getElementById('formOrcamento');
+      const materiaisInput = document.createElement('input');
+      materiaisInput.type = 'hidden';
+      materiaisInput.name = 'materiaisCapturados';
+      materiaisInput.value = JSON.stringify(materiais);
+
+      const servicosInput = document.createElement('input');
+      servicosInput.type = 'hidden';
+      servicosInput.name = 'servicosCapturados';
+      servicosInput.value = JSON.stringify(servicos);
+
+      form.appendChild(materiaisInput);
+      form.appendChild(servicosInput);
+
+      // Retornar true para permitir o envio do formulário
+      return true;
+    }
+
+    // Restante das funções
     function removerElemento(id) {
       document.getElementById(id).remove();
       recontarItens();

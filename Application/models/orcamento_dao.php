@@ -2,21 +2,15 @@
 require 'conexao.php';
 
 class OrcamentoDAO {
-    public static function criarOrcamento($nome_orcamento, $data_orcamento, $validade, $status, $observacao, $fk_clientes_id_cliente, $caminho_arquivo = null) {
+    public static function criarOrcamento($nome, $data, $validade, $status, $observacao, $caminhoArquivo, $clienteId) {
         global $conexao;
-        $nome_orcamento = mysqli_real_escape_string($conexao, trim($nome_orcamento));
-        $data_orcamento = mysqli_real_escape_string($conexao, trim($data_orcamento));
-        $validade = mysqli_real_escape_string($conexao, trim($validade));
-        $status = mysqli_real_escape_string($conexao, trim($status));
-        $observacao = mysqli_real_escape_string($conexao, trim($observacao));
-        $fk_clientes_id_cliente = (int)$fk_clientes_id_cliente;
-        $caminho_arquivo = mysqli_real_escape_string($conexao, $caminho_arquivo);
-
-        $sql = "INSERT INTO orcamentos (nome_orcamento, data_orcamento, validade, status, observacao, fk_clientes_id_cliente, caminho_arquivo) 
-                VALUES ('$nome_orcamento', '$data_orcamento', '$validade', '$status', '$observacao', $fk_clientes_id_cliente, '$caminho_arquivo')";
+        $sql = "INSERT INTO orcamentos (nome_orcamento, data_orcamento, validade, status, observacao, caminho_arquivo, fk_clientes_id_cliente) 
+                VALUES ('$nome', '$data', '$validade', '$status', '$observacao', '$caminhoArquivo', $clienteId)";
         
-        mysqli_query($conexao, $sql);
-        return mysqli_affected_rows($conexao);
+        if (mysqli_query($conexao, $sql)) {
+            return mysqli_insert_id($conexao);
+        }
+        return -1;
     }
 
     public static function editarOrcamento($id_orcamento, $nome_orcamento, $data_orcamento, $validade, $status, $observacao, $fk_clientes_id_cliente, $caminho_arquivo = null) {
