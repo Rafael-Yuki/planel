@@ -312,50 +312,44 @@ require('Application/models/servico_dao.php');
     }
 
     function verificarEnvio(event) {
-      // Captura os dados dos materiais e serviços antes de submeter o formulário
       const materiais = [];
       const servicos = [];
 
       // Loop para capturar todos os itens adicionados
       document.querySelectorAll('#itens-container > .container').forEach((item, index) => {
         const idItem = item.getAttribute('id');
+        const nomeItem = item.querySelector('.input-group-item-name').value;
+        const descricaoItem = item.querySelector('textarea[name="descricao_item[]"]').value;
+        const valorTotalItem = item.querySelector(`#valor-total-item-${idItem}`).value;
 
         // Capturar os materiais do item
+        const materiaisDoItem = [];
         document.querySelectorAll(`#materiais-${idItem} select[name^="materiais-"]`).forEach((materialSelect, i) => {
           const materialId = materialSelect.value;
           const quantidade = materialSelect.closest('.row').querySelector(`input[name^="quantidade-"]`).value;
           const preco = materialSelect.closest('.row').querySelector(`input[name^="preco-"]`).value;
 
-          // Verificar se o material está devidamente preenchido
           if (materialId && quantidade && preco) {
-            console.log(`Item ${index + 1}: Material ${i + 1} - ID: ${materialId}, Quantidade: ${quantidade}, Preço: ${preco}`);
-            materiais.push({ idItem, materialId, quantidade, preco });
+            materiaisDoItem.push({ materialId, quantidade, preco });
           }
         });
 
         // Capturar os serviços do item
+        const servicosDoItem = [];
         document.querySelectorAll(`#servicos-${idItem} select[name^="servicos-"]`).forEach((servicoSelect, j) => {
           const servicoId = servicoSelect.value;
           const quantidade = servicoSelect.closest('.row').querySelector(`input[name^="quantidade_servico-"]`).value;
           const preco = servicoSelect.closest('.row').querySelector(`input[name^="preco_servico-"]`).value;
 
-          // Verificar se o serviço está devidamente preenchido
           if (servicoId && quantidade && preco) {
-            console.log(`Item ${index + 1}: Serviço ${j + 1} - ID: ${servicoId}, Quantidade: ${quantidade}, Preço: ${preco}`);
-            servicos.push({ idItem, servicoId, quantidade, preco });
+            servicosDoItem.push({ servicoId, quantidade, preco });
           }
         });
-      });
 
-      // Exibir dados capturados detalhadamente no console
-      console.log('Materiais Capturados Detalhadamente:', JSON.stringify(materiais, null, 2));
-      console.log('Serviços Capturados Detalhadamente:', JSON.stringify(servicos, null, 2));
-      
-      // Verificar se os materiais e serviços foram capturados corretamente
-      if (materiais.length === 0 && servicos.length === 0) {
-        alert('Nenhum material ou serviço foi capturado. Por favor, verifique.');
-        return false; // Impede o envio do formulário
-      }
+        // Adicionar itens ao array principal
+        materiais.push({ idItem, materiaisDoItem });
+        servicos.push({ idItem, servicosDoItem });
+      });
 
       // Armazenar os dados capturados em campos ocultos para envio
       const form = document.getElementById('formOrcamento');
