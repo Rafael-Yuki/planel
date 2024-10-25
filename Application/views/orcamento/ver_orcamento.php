@@ -27,6 +27,10 @@ require('Application/models/itens_orcamento_dao.php');
         .input-group .form-control {
             border-left: 0;
         }
+
+        body {
+            padding-bottom: 80px;
+        }
     </style>
 </head>
 
@@ -218,6 +222,15 @@ require('Application/models/itens_orcamento_dao.php');
                                     echo "<h5>Nenhum item encontrado para este orçamento.</h5>";
                                 }
                                 ?>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-4 ms-auto">
+                                        <label for="valor_total_orcamento">Valor Total do Orçamento</label>
+                                        <p class="form-control">
+                                            R$ <?= number_format($orcamento['valor_total_orcamento'], 2, ',', '.'); ?>
+                                        </p>
+                                    </div>
+                                </div>
                                 <?php
                             } else {
                                 echo "<h5>Orçamento não encontrado</h5>";

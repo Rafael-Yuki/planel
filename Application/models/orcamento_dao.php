@@ -2,10 +2,10 @@
 require 'conexao.php';
 
 class OrcamentoDAO {
-    public static function criarOrcamento($nome, $data, $validade, $status, $observacao, $caminhoArquivo, $clienteId) {
+    public static function criarOrcamento($nome, $data, $validade, $status, $observacao, $caminhoArquivo, $clienteId, $valorTotalOrcamento) {
         global $conexao;
-        $sql = "INSERT INTO orcamentos (nome_orcamento, data_orcamento, validade, status, observacao, caminho_arquivo, fk_clientes_id_cliente) 
-                VALUES ('$nome', '$data', '$validade', '$status', '$observacao', '$caminhoArquivo', $clienteId)";
+        $sql = "INSERT INTO orcamentos (nome_orcamento, data_orcamento, validade, status, observacao, caminho_arquivo, fk_clientes_id_cliente, valor_total_orcamento) 
+                VALUES ('$nome', '$data', '$validade', '$status', '$observacao', '$caminhoArquivo', $clienteId, $valorTotalOrcamento)";
         
         if (mysqli_query($conexao, $sql)) {
             return mysqli_insert_id($conexao);
@@ -49,7 +49,7 @@ class OrcamentoDAO {
 
     public static function listarOrcamentos(){
         global $conexao;
-        $sql = 'SELECT orcamentos.*, clientes.nome_cliente FROM orcamentos 
+        $sql = 'SELECT orcamentos.*, clientes.nome_cliente, orcamentos.valor_total_orcamento FROM orcamentos 
                 INNER JOIN clientes ON orcamentos.fk_clientes_id_cliente = clientes.id_cliente
                 WHERE orcamentos.ativo = TRUE';
         $orcamentos = mysqli_query($conexao, $sql);

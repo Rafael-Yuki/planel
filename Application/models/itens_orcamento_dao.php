@@ -39,15 +39,6 @@ class ItensOrcamentoDAO {
         return mysqli_affected_rows($conexao);
     }
 
-    public static function buscarItensOrcamento($orcamento_id) {
-        global $conexao;
-        $orcamento_id = mysqli_real_escape_string($conexao, $orcamento_id);
-
-        $sql = "SELECT * FROM itens_orcamento WHERE fk_orcamentos_id_orcamento = '$orcamento_id'";
-        $result = mysqli_query($conexao, $sql);
-        return mysqli_fetch_all($result, MYSQLI_ASSOC);
-    }
-
     public static function listarItensPorOrcamento($orcamento_id) {
         global $conexao;
         $orcamento_id = mysqli_real_escape_string($conexao, $orcamento_id);

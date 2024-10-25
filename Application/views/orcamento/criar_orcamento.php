@@ -139,6 +139,14 @@ require('Application/models/servico_dao.php');
                 </div>
               </div>
 
+              <!-- Valor Total do Orçamento -->
+              <div class="row mt-4">
+                <div class="col-md-4 ms-auto">
+                  <label for="valor_total_orcamento">Valor Total do Orçamento</label>
+                  <input type="number" id="valor_total_orcamento" name="valor_total_orcamento" class="form-control" step="0.01" min="0" oninput="atualizarValorTotalOrcamento()">
+                </div>
+              </div>
+
               <div class="mb-3 mt-4">
                 <button type="submit" name="criar_orcamento" class="btn btn-primary">
                   Salvar<span class="bi-save ms-2"></span>
@@ -182,6 +190,7 @@ require('Application/models/servico_dao.php');
           </div>
           <div class="row mt-4">
             <div class="col-md-12">
+              <label for="descricao_item">Descrição do Item</label>
               <textarea name="descricao_item[]" class="form-control" placeholder="Descrição do Item" required></textarea>
             </div>
           </div>
@@ -217,6 +226,7 @@ require('Application/models/servico_dao.php');
         </div>`;
       document.getElementById('itens-container').insertAdjacentHTML('beforeend', novoItem);
       recontarItens();
+      atualizarValorTotalOrcamento();
     }
 
     function recontarItens() {
@@ -370,7 +380,6 @@ require('Application/models/servico_dao.php');
       return true;
     }
 
-    // Restante das funções
     function removerElemento(id) {
       document.getElementById(id).remove();
       recontarItens();
@@ -446,11 +455,25 @@ require('Application/models/servico_dao.php');
       if (valorTotalInput) {
         valorTotalInput.value = totalItem.toFixed(2);
       }
+      atualizarValorTotalOrcamento();
     }
 
     function atualizarValorManual(idItem) {
       const valorTotalInput = document.getElementById(`valor-total-item-${idItem}`);
       valorTotalInput.setAttribute('data-editado-manualmente', 'true');
+    }
+
+    function atualizarValorTotalOrcamento() {
+      let valorTotalOrcamento = 0;
+      const totaisItens = document.querySelectorAll('[id^="valor-total-item-"]');
+      totaisItens.forEach(item => {
+        valorTotalOrcamento += parseFloat(item.value) || 0;
+      });
+
+      const valorTotalOrcamentoInput = document.getElementById('valor_total_orcamento');
+      if (valorTotalOrcamentoInput && valorTotalOrcamentoInput.getAttribute('data-editado-manualmente') !== 'true') {
+        valorTotalOrcamentoInput.value = valorTotalOrcamento.toFixed(2);
+      }
     }
   </script>
 

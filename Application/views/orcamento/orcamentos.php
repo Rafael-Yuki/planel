@@ -41,6 +41,7 @@ require('Application/models/orcamento_dao.php');
                                         <th>Cliente</th>
                                         <th>Data do Orçamento</th>
                                         <th>Validade</th>
+                                        <th>Valor Total</th>
                                         <th>Status</th>
                                         <th>Anexo</th>
                                         <th>Opções</th>
@@ -55,6 +56,7 @@ require('Application/models/orcamento_dao.php');
                                             <td><?= $orcamento['nome_cliente'] ?></td>
                                             <td><?= date('d/m/Y', strtotime($orcamento['data_orcamento'])) ?></td>
                                             <td><?= date('d/m/Y', strtotime($orcamento['validade'])) ?></td>
+                                            <td>R$ <?= number_format($orcamento['valor_total_orcamento'], 2, ',', '.') ?></td>
                                             <td><?= $orcamento['status'] ?></td>
                                             <td>
                                                 <?php if (!empty($orcamento['caminho_arquivo'])): ?>

@@ -14,6 +14,7 @@ if (isset($_POST['criar_orcamento'])) {
     $observacao = mysqli_real_escape_string($conexao, $_POST['observacao']);
     $caminho_arquivo = !empty($_FILES['arquivo_pdf']['name']) ? $_FILES['arquivo_pdf']['name'] : NULL;
     $fk_cliente_id = mysqli_real_escape_string($conexao, $_POST['cliente']);
+    $valor_total_orcamento = mysqli_real_escape_string($conexao, $_POST['valor_total_orcamento']);
 
     if (empty($nome_orcamento)) {
         $_SESSION['mensagem'] = 'O nome do orçamento é obrigatório!';
@@ -23,7 +24,7 @@ if (isset($_POST['criar_orcamento'])) {
     }
 
     // Criar o orçamento
-    $orcamentoId = OrcamentoDAO::criarOrcamento($nome_orcamento, $data_orcamento, $validade, $status, $observacao, $caminho_arquivo, $fk_cliente_id);
+    $orcamentoId = OrcamentoDAO::criarOrcamento($nome_orcamento, $data_orcamento, $validade, $status, $observacao, $caminho_arquivo, $fk_cliente_id, $valor_total_orcamento);
     if ($orcamentoId > 0) {
         // Decodificar dados dos materiais e serviços, se houverem
         $materiais = isset($_POST['materiaisCapturados']) ? json_decode($_POST['materiaisCapturados'], true) : [];
