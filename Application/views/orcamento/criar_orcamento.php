@@ -17,9 +17,39 @@ require('Application/models/servico_dao.php');
     .hidden {
       display: none;
     }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .input-group-prepend .item-number {
+      background-color: #e9ecef;
+      color: #495057;
+      border: 1px solid #ced4da;
+      border-top-left-radius: .25rem;
+      border-bottom-left-radius: .25rem;
+      padding: 0.375rem 0.75rem;
+    }
+
+    .input-group .form-control {
+      border-left: 0;
+    }
+
+    .input-group-append .btn-group-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-left: auto;
+    }
+
+    .input-group-append button {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
   </style>
 </head>
-
 <body data-bs-theme="dark">
   <?php include(__DIR__ . '/../navbar.php'); ?>
   <div class="container mt-5">
@@ -86,97 +116,24 @@ require('Application/models/servico_dao.php');
                 <textarea id="observacao" name="observacao" class="form-control"></textarea>
               </div>
 
-              <!-- Materiais -->
+              <!-- Itens do Orçamento -->
               <div class="container mt-4">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="d-flex justify-content-between align-items-center">
-                      <h5>Materiais</h5>
-                      <button type="button" class="btn btn-success" onclick="adicionarMaterial()">
-                        <span class="bi-plus"></span>
-                      </button>
-                    </div>
-                    <div id="materiais-container">
-                      <div class="row mb-3" id="material-item-1">
-                        <div class="col-md-4">
-                          <label for="nome_material">Nome do Material</label>
-                          <select name="nome_material[]" class="form-control" onchange="buscarPreco(this.value, 1)" required>
-                            <option value="">Selecione um Material</option>
-                            <?php
-                            $query_materiais = "SELECT * FROM materiais WHERE ativo = TRUE";
-                            $result_materiais = mysqli_query($conexao, $query_materiais);
-                            while ($row_material = mysqli_fetch_assoc($result_materiais)) {
-                              echo "<option value='".$row_material['id_material']."'>".$row_material['nome_material']."</option>";
-                            }
-                            ?>
-                          </select>
-                        </div>
-                        <div class="col-md-2">
-                          <label for="quantidade">Quantidade</label>
-                          <input type="number" name="quantidade[]" class="form-control" min="0" step="1" onchange="atualizarTotal(1)" required>
-                        </div>
-                        <div class="col-md-2">
-                          <label for="preco">Preço Unitário</label>
-                          <input type="number" name="preco[]" id="preco-material-1" class="form-control" step="0.01" onchange="atualizarTotal(1)" min="0" required>
-                        </div>
-                        <div class="col-md-3">
-                          <label for="total">Valor Total</label>
-                          <input type="number" name="total[]" id="total-material-1" class="form-control" readonly>
-                        </div>
-                        <div class="col-md-1 d-flex justify-content-end align-items-center mt-4">
-                          <button type="button" class="btn btn-danger" onclick="confirmarRemoverMaterial('material-item-1')">
-                            <span class="bi-trash3-fill"></span>
-                          </button>
-                        </div>
+                      <h4>Itens do Orçamento</h4>
+                      <div class="btn-group-actions">
+                        <button type="button" class="btn btn-success" onclick="adicionarItem()">
+                          <span class="bi-plus"></span>
+                        </button>
+                        <button type="button" class="btn btn-danger" onclick="removerTodosItens()">
+                          <span class="bi-trash3-fill"></span>
+                        </button>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Serviços -->
-              <div class="container mt-4">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <h5>Serviços</h5>
-                      <button type="button" class="btn btn-success" onclick="adicionarServico()">
-                        <span class="bi-plus"></span>
-                      </button>
-                    </div>
-                    <div id="servicos-container">
-                      <div class="row mb-3" id="servico-item-1">
-                        <div class="col-md-4">
-                          <label for="nome_servico">Nome do Serviço</label>
-                          <select name="nome_servico[]" class="form-control" onchange="buscarPrecoServico(this.value, 1)" required>
-                            <option value="">Selecione um Serviço</option>
-                            <?php
-                            $query_servicos = "SELECT * FROM servicos WHERE ativo = TRUE";
-                            $result_servicos = mysqli_query($conexao, $query_servicos);
-                            while ($row_servico = mysqli_fetch_assoc($result_servicos)) {
-                              echo "<option value='".$row_servico['id_servico']."'>".$row_servico['nome_servico']."</option>";
-                            }
-                            ?>
-                          </select>
-                        </div>
-                        <div class="col-md-2">
-                          <label for="quantidade">Quantidade</label>
-                          <input type="number" name="quantidade_servico[]" class="form-control" min="0" step="1" onchange="atualizarTotalServico(1)" required>
-                        </div>
-                        <div class="col-md-2">
-                          <label for="preco">Preço Unitário</label>
-                          <input type="number" name="preco_servico[]" id="preco-servico-1" class="form-control" step="0.01" onchange="atualizarTotalServico(1)" min="0" required>
-                        </div>
-                        <div class="col-md-3">
-                          <label for="total">Valor Total</label>
-                          <input type="number" name="total_servico[]" id="total-servico-1" class="form-control" readonly>
-                        </div>
-                        <div class="col-md-1 d-flex justify-content-end align-items-center mt-4">
-                          <button type="button" class="btn btn-danger" onclick="confirmarRemoverServico('servico-item-1')">
-                            <span class="bi-trash3-fill"></span>
-                          </button>
-                        </div>
-                      </div>
+                    <hr>
+                    <div id="itens-container">
+                      <!-- Os itens serão gerados dinamicamente aqui -->
                     </div>
                   </div>
                 </div>
@@ -201,16 +158,86 @@ require('Application/models/servico_dao.php');
   </script>
 
   <script>
+    let contadorItens = 1;
     let contadorMateriais = 1;
     let contadorServicos = 1;
 
-    function adicionarMaterial() {
+    function adicionarItem() {
+      const idNovoItem = 'item-' + contadorItens;
+      contadorItens++;
+      
+      const novoItem = `
+        <div class="container mt-4" id="${idNovoItem}">
+          <div class="input-group">
+            <span class="input-group-text item-number">${contadorItens - 1}º</span>
+            <input type="text" name="nome_item[]" class="form-control input-group-item-name" placeholder="Nome do Item" required>
+            <div class="btn-group-actions ms-2">
+              <button type="button" class="btn btn-success" onclick="adicionarItem()">
+                <span class="bi-plus"></span>
+              </button>
+              <button type="button" class="btn btn-danger" onclick="removerElemento('${idNovoItem}')">
+                <span class="bi-trash3-fill"></span>
+              </button>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-md-12">
+              <textarea name="descricao_item[]" class="form-control" placeholder="Descrição do Item" required></textarea>
+            </div>
+          </div>
+
+          <!-- Seção de Materiais e Serviços -->
+          <div class="row mt-3">
+            <div class="col-md-12 d-flex justify-content-between align-items-center">
+              <h4>Materiais</h4>
+              <button type="button" class="btn btn-success" onclick="adicionarMaterialAoItem('${idNovoItem}')">
+                <span class="bi-plus"></span>
+              </button>
+            </div>
+            <div id="materiais-${idNovoItem}" class="mt-2"></div>
+          </div>
+          <hr>
+          <div class="row mt-3">
+            <div class="col-md-12 d-flex justify-content-between align-items-center">
+              <h4>Serviços</h4>
+              <button type="button" class="btn btn-success" onclick="adicionarServicoAoItem('${idNovoItem}')">
+                <span class="bi-plus"></span>
+              </button>
+            </div>
+            <div id="servicos-${idNovoItem}" class="mt-2"></div>
+          </div>
+
+          <div class="row mt-3">
+            <div class="col-md-4 ms-auto">
+              <label for="valor_total_item">Valor Total do Item</label>
+              <input type="number" name="valor_total_item[]" id="valor-total-item-${idNovoItem}" class="form-control" step="0.01" oninput="atualizarValorManual('${idNovoItem}')">
+            </div>
+          </div>
+          <hr>
+        </div>`;
+      document.getElementById('itens-container').insertAdjacentHTML('beforeend', novoItem);
+      recontarItens();
+    }
+
+    function recontarItens() {
+      const itens = document.querySelectorAll('#itens-container > .container');
+      itens.forEach((item, index) => {
+        const numeroElemento = item.querySelector('.item-number');
+        if (numeroElemento) {
+          numeroElemento.textContent = `${index + 1}º`;
+        }
+      });
+    }
+
+    function adicionarMaterialAoItem(idItem) {
+      const idNovoMaterial = `material-${idItem}-${contadorMateriais}`;
       contadorMateriais++;
+      
       const novoMaterial = `
-        <div class="row mb-3" id="material-item-${contadorMateriais}">
-          <div class="col-md-4">
+        <div class="row mb-3" id="${idNovoMaterial}">
+          <div class="col-md-5">
             <label for="nome_material">Nome do Material</label>
-            <select name="nome_material[]" class="form-control" onchange="buscarPreco(this.value, ${contadorMateriais})" required>
+            <select name="materiais-${idItem}[]" class="form-control" onchange="buscarPreco(this.value, '${idNovoMaterial}')" required>
               <option value="">Selecione um Material</option>
               <?php
               $query_materiais = "SELECT * FROM materiais WHERE ativo = TRUE";
@@ -221,34 +248,36 @@ require('Application/models/servico_dao.php');
               ?>
             </select>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-1">
             <label for="quantidade">Quantidade</label>
-            <input type="number" name="quantidade[]" class="form-control" min="1" step="1" onchange="atualizarTotal(${contadorMateriais})" required>
+            <input type="number" name="quantidade-${idItem}[]" class="form-control" min="1" step="1" onchange="atualizarTotal('${idNovoMaterial}', '${idItem}')" required>
           </div>
           <div class="col-md-2">
             <label for="preco">Preço Unitário</label>
-            <input type="number" name="preco[]" id="preco-material-${contadorMateriais}" class="form-control" step="0.01" onchange="atualizarTotal(${contadorMateriais})" required>
+            <input type="number" name="preco-${idItem}[]" id="preco-${idNovoMaterial}" class="form-control" step="0.01" onchange="atualizarTotal('${idNovoMaterial}', '${idItem}')" required>
           </div>
           <div class="col-md-3">
             <label for="total">Valor Total</label>
-            <input type="number" name="total[]" id="total-material-${contadorMateriais}" class="form-control" readonly>
+            <input type="number" name="total-${idItem}[]" id="total-${idNovoMaterial}" class="form-control" readonly>
           </div>
           <div class="col-md-1 d-flex justify-content-end align-items-center mt-4">
-            <button type="button" class="btn btn-danger" onclick="confirmarRemoverMaterial('material-item-${contadorMateriais}')">
+            <button type="button" class="btn btn-danger" onclick="removerElemento('${idNovoMaterial}')">
               <span class="bi-trash3-fill"></span>
             </button>
           </div>
         </div>`;
-      document.getElementById('materiais-container').insertAdjacentHTML('beforeend', novoMaterial);
+      document.getElementById(`materiais-${idItem}`).insertAdjacentHTML('beforeend', novoMaterial);
     }
 
-    function adicionarServico() {
+    function adicionarServicoAoItem(idItem) {
+      const idNovoServico = `servico-${idItem}-${contadorServicos}`;
       contadorServicos++;
+      
       const novoServico = `
-        <div class="row mb-3" id="servico-item-${contadorServicos}">
-          <div class="col-md-4">
+        <div class="row mb-3" id="${idNovoServico}">
+          <div class="col-md-5">
             <label for="nome_servico">Nome do Serviço</label>
-            <select name="nome_servico[]" class="form-control" onchange="buscarPrecoServico(this.value, ${contadorServicos})" required>
+            <select name="servicos-${idItem}[]" class="form-control" onchange="buscarPrecoServico(this.value, '${idNovoServico}')" required>
               <option value="">Selecione um Serviço</option>
               <?php
               $query_servicos = "SELECT * FROM servicos WHERE ativo = TRUE";
@@ -259,57 +288,36 @@ require('Application/models/servico_dao.php');
               ?>
             </select>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-1">
             <label for="quantidade">Quantidade</label>
-            <input type="number" name="quantidade_servico[]" class="form-control" min="1" step="1" onchange="atualizarTotalServico(${contadorServicos})" required>
+            <input type="number" name="quantidade_servico-${idItem}[]" class="form-control" min="1" step="1" onchange="atualizarTotalServico('${idNovoServico}', '${idItem}')" required>
           </div>
           <div class="col-md-2">
             <label for="preco">Preço Unitário</label>
-            <input type="number" name="preco_servico[]" id="preco-servico-${contadorServicos}" class="form-control" step="0.01" onchange="atualizarTotalServico(${contadorServicos})" required>
+            <input type="number" name="preco_servico-${idItem}[]" id="preco-${idNovoServico}" class="form-control" step="0.01" onchange="atualizarTotalServico('${idNovoServico}', '${idItem}')" required>
           </div>
           <div class="col-md-3">
             <label for="total">Valor Total</label>
-            <input type="number" name="total_servico[]" id="total-servico-${contadorServicos}" class="form-control" readonly>
+            <input type="number" name="total_servico-${idItem}[]" id="total-${idNovoServico}" class="form-control" readonly>
           </div>
           <div class="col-md-1 d-flex justify-content-end align-items-center mt-4">
-            <button type="button" class="btn btn-danger" onclick="confirmarRemoverServico('servico-item-${contadorServicos}')">
+            <button type="button" class="btn btn-danger" onclick="removerElemento('${idNovoServico}')">
               <span class="bi-trash3-fill"></span>
             </button>
           </div>
         </div>`;
-      document.getElementById('servicos-container').insertAdjacentHTML('beforeend', novoServico);
+      document.getElementById(`servicos-${idItem}`).insertAdjacentHTML('beforeend', novoServico);
     }
 
-    function atualizarTotal(id) {
-      const quantidade = document.querySelector(`#material-item-${id} input[name="quantidade[]"]`).value;
-      const preco = document.querySelector(`#material-item-${id} input[name="preco[]"]`).value;
-      document.getElementById(`total-material-${id}`).value = (quantidade * preco).toFixed(2);
-    }
-
-    function atualizarTotalServico(id) {
-      const quantidade = document.querySelector(`#servico-item-${id} input[name="quantidade_servico[]"]`).value;
-      const preco = document.querySelector(`#servico-item-${id} input[name="preco_servico[]"]`).value;
-      document.getElementById(`total-servico-${id}`).value = (quantidade * preco).toFixed(2);
-    }
-
-    function confirmarRemoverMaterial(id) {
-      if (confirm('Tem certeza que deseja excluir o material?')) {
-        removerMaterial(id);
-      }
-    }
-
-    function confirmarRemoverServico(id) {
-      if (confirm('Tem certeza que deseja excluir o serviço?')) {
-        removerServico(id);
-      }
-    }
-
-    function removerMaterial(id) {
+    function removerElemento(id) {
       document.getElementById(id).remove();
+      recontarItens();
+      atualizarValorTotalDoItem(id.split('-')[1]);
     }
 
-    function removerServico(id) {
-      document.getElementById(id).remove();
+    function removerTodosItens() {
+      document.getElementById('itens-container').innerHTML = '';
+      contadorItens = 1;
     }
 
     function buscarPreco(materialId, contador) {
@@ -320,7 +328,7 @@ require('Application/models/servico_dao.php');
           data: { id_material: materialId },
           success: function(response) {
             var result = JSON.parse(response);
-            document.getElementById('preco-material-' + contador).value = result.preco;
+            document.getElementById('preco-' + contador).value = result.preco;
             atualizarTotal(contador);
           },
           error: function() {
@@ -338,7 +346,7 @@ require('Application/models/servico_dao.php');
           data: { id_servico: servicoId },
           success: function(response) {
             var result = JSON.parse(response);
-            document.getElementById('preco-servico-' + contador).value = result.preco;
+            document.getElementById('preco-' + contador).value = result.preco;
             atualizarTotalServico(contador);
           },
           error: function() {
@@ -346,6 +354,41 @@ require('Application/models/servico_dao.php');
           }
         });
       }
+    }
+
+    function atualizarTotal(id, idItem) {
+      const quantidade = parseFloat(document.querySelector(`#${id} input[name^="quantidade"]`).value) || 0;
+      const preco = parseFloat(document.querySelector(`#${id} input[name^="preco"]`).value) || 0;
+      const total = (quantidade * preco).toFixed(2);
+      document.getElementById(`total-${id}`).value = total;
+      atualizarValorTotalDoItem(idItem);
+    }
+
+    function atualizarTotalServico(id, idItem) {
+      const quantidade = parseFloat(document.querySelector(`#${id} input[name^="quantidade_servico"]`).value) || 0;
+      const preco = parseFloat(document.querySelector(`#${id} input[name^="preco_servico"]`).value) || 0;
+      const total = (quantidade * preco).toFixed(2);
+      document.getElementById(`total-${id}`).value = total;
+      atualizarValorTotalDoItem(idItem);
+    }
+
+    function atualizarValorTotalDoItem(idItem) {
+      const totaisMateriais = document.querySelectorAll(`#materiais-${idItem} input[id^="total-"]`);
+      const totaisServicos = document.querySelectorAll(`#servicos-${idItem} input[id^="total-"]`);
+
+      let totalItem = 0;
+      totaisMateriais.forEach(input => totalItem += parseFloat(input.value) || 0);
+      totaisServicos.forEach(input => totalItem += parseFloat(input.value) || 0);
+
+      const valorTotalInput = document.getElementById(`valor-total-item-${idItem}`);
+      if (valorTotalInput) {
+        valorTotalInput.value = totalItem.toFixed(2);
+      }
+    }
+
+    function atualizarValorManual(idItem) {
+      const valorTotalInput = document.getElementById(`valor-total-item-${idItem}`);
+      valorTotalInput.setAttribute('data-editado-manualmente', 'true');
     }
   </script>
 
