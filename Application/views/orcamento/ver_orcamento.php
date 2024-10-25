@@ -1,6 +1,8 @@
 <?php
 session_start();
 require('Application/models/conexao.php');
+require('Application/models/orcamento_dao.php');
+require('Application/models/itens_orcamento_dao.php');
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -11,6 +13,21 @@ require('Application/models/conexao.php');
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .item-number {
+            background-color: #495057;
+            color: #fff;
+            border: none;
+            border-radius: .25rem;
+            padding: 0.375rem 0.75rem;
+            text-align: center;
+            font-weight: bold;
+            min-width: 50px;
+        }
+        .input-group .form-control {
+            border-left: 0;
+        }
+    </style>
 </head>
 
 <body data-bs-theme="dark">
@@ -30,38 +47,28 @@ require('Application/models/conexao.php');
                         <?php
                         if (isset($_GET['id'])) {
                             $orcamento_id = mysqli_real_escape_string($conexao, $_GET['id']);
-                            $sql = "SELECT orcamentos.*, clientes.nome_cliente 
-                                    FROM orcamentos 
-                                    INNER JOIN clientes ON orcamentos.fk_clientes_id_cliente = clientes.id_cliente
-                                    WHERE orcamentos.ativo = TRUE AND orcamentos.id_orcamento = {$orcamento_id}";
-                            $query = mysqli_query($conexao, $sql);
-                            if (mysqli_num_rows($query) > 0) {
-                                $orcamento = mysqli_fetch_array($query);
+                            $orcamento = OrcamentoDAO::buscarOrcamentoPorId($orcamento_id);
+
+                            if ($orcamento) {
                                 ?>
                                 <!-- Informações do orçamento em 3 colunas -->
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="nome_orcamento">Nome do Orçamento</label>
-                                            <p class="form-control" style="min-height: 38px;">
-                                                <?= $orcamento['nome_orcamento']; ?>
-                                            </p>
+                                            <p class="form-control"><?= $orcamento['nome_orcamento']; ?></p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="cliente">Cliente</label>
-                                            <p class="form-control" style="min-height: 38px;">
-                                                <?= $orcamento['nome_cliente']; ?>
-                                            </p>
+                                            <p class="form-control"><?= $orcamento['nome_cliente']; ?></p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="data_orcamento">Data do Orçamento</label>
-                                            <p class="form-control" style="min-height: 38px;">
-                                                <?= date('d/m/Y', strtotime($orcamento['data_orcamento'])); ?>
-                                            </p>
+                                            <p class="form-control"><?= date('d/m/Y', strtotime($orcamento['data_orcamento'])); ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -69,24 +76,19 @@ require('Application/models/conexao.php');
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="validade">Validade</label>
-                                            <p class="form-control" style="min-height: 38px;">
-                                                <?= date('d/m/Y', strtotime($orcamento['validade'])); ?>
-                                            </p>
+                                            <p class="form-control"><?= date('d/m/Y', strtotime($orcamento['validade'])); ?></p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="status">Status</label>
-                                            <p class="form-control" style="min-height: 38px;">
-                                                <?= $orcamento['status']; ?>
-                                            </p>
+                                            <p class="form-control"><?= $orcamento['status']; ?></p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <!-- Campo de anexo ajustado para seguir o mesmo estilo dos outros campos -->
                                         <div class="mb-3">
                                             <label for="anexo">Anexo</label>
-                                            <p class="form-control" style="min-height: 38px;">
+                                            <p class="form-control">
                                                 <?php if (!empty($orcamento['caminho_arquivo'])): ?>
                                                     <a href="<?= '/planel/upload?file=' . urlencode(basename($orcamento['caminho_arquivo'])); ?>" 
                                                     class="text-decoration-none" target="_blank">
@@ -99,103 +101,123 @@ require('Application/models/conexao.php');
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Observação ocupando a linha inteira -->
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="observacao">Observação</label>
-                                            <p class="form-control" style="min-height: 75px;">
-                                                <?= $orcamento['observacao']; ?>
-                                            </p>
+                                            <p class="form-control"><?= $orcamento['observacao']; ?></p>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Materiais relacionados ao orçamento -->
-                                <?php
-                                $sql_materiais = "SELECT om.*, m.nome_material 
-                                                  FROM orcamento_material om
-                                                  LEFT JOIN materiais m ON om.fk_materiais_id_material = m.id_material
-                                                  WHERE om.fk_orcamentos_id_orcamento = {$orcamento_id}";
-                                $query_materiais = mysqli_query($conexao, $sql_materiais);
-
-                                if (mysqli_num_rows($query_materiais) > 0) {
-                                    ?>
-                                    <div class="mt-4">
-                                        <h4>Materiais</h4>
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nome do Material</th>
-                                                    <th>Quantidade</th>
-                                                    <th>Preço Unitário</th>
-                                                    <th>Valor Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                while ($material = mysqli_fetch_assoc($query_materiais)) {
-                                                    $valor_total = $material['quantidade_material'] * $material['valor_unitario'];
-                                                    ?>
-                                                    <tr>
-                                                        <td><?= $material['nome_material']; ?></td>
-                                                        <td><?= $material['quantidade_material']; ?></td>
-                                                        <td>R$ <?= number_format($material['valor_unitario'], 2, ',', '.'); ?></td>
-                                                        <td>R$ <?= number_format($valor_total, 2, ',', '.'); ?></td>
-                                                    </tr>
-                                                    <?php
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <?php
-                                }
-                                ?>
+                                <h4 class="mt-4">Itens do Orçamento</h4>
                                 <hr>
-                                <!-- Serviços relacionados ao orçamento -->
-                                <?php
-                                $sql_servicos = "SELECT os.*, s.nome_servico 
-                                                 FROM orcamento_servico os
-                                                 LEFT JOIN servicos s ON os.fk_servicos_id_servico = s.id_servico
-                                                 WHERE os.fk_orcamentos_id_orcamento = {$orcamento_id}";
-                                $query_servicos = mysqli_query($conexao, $sql_servicos);
 
-                                if (mysqli_num_rows($query_servicos) > 0) {
-                                    ?>
-                                    <div class="mt-4">
-                                        <h4>Serviços</h4>
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nome do Serviço</th>
-                                                    <th>Quantidade</th>
-                                                    <th>Preço Unitário</th>
-                                                    <th>Valor Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                while ($servico = mysqli_fetch_assoc($query_servicos)) {
-                                                    $valor_total_servico = $servico['quantidade_servico'] * $servico['valor_unitario'];
-                                                    ?>
-                                                    <tr>
-                                                        <td><?= $servico['nome_servico']; ?></td>
-                                                        <td><?= $servico['quantidade_servico']; ?></td>
-                                                        <td>R$ <?= number_format($servico['valor_unitario'], 2, ',', '.'); ?></td>
-                                                        <td>R$ <?= number_format($valor_total_servico, 2, ',', '.'); ?></td>
-                                                    </tr>
-                                                    <?php
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <?php
+                                <?php
+                                $itens = ItensOrcamentoDAO::listarItensPorOrcamento($orcamento_id);
+                                if (!empty($itens)) {
+                                    $contadorItens = 1; 
+                                    foreach ($itens as $item) {
+                                        ?>
+                                        <div class="input-group mt-3">
+                                            <span class="item-number"><?= $contadorItens++; ?>º</span>
+                                            <div class="form-control">
+                                                <strong><?= $item['nome_item']; ?></strong>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="mt-4" for="descricao_item">Descrição</label>
+                                                <p class="form-control"><?= $item['descricao_item']; ?></p>
+                                            </div>
+                                        </div>
+                                        <?php
+                                        $materiais = ItensOrcamentoDAO::listarMateriaisPorItem($item['id_item_orcamento']);
+                                        if (!empty($materiais)) {
+                                            ?>
+                                            <div class="mt-4">
+                                                <h4>Materiais</h4>
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nome do Material</th>
+                                                            <th>Quantidade</th>
+                                                            <th>Preço Unitário</th>
+                                                            <th>Valor Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+                                                        foreach ($materiais as $material) {
+                                                            $valor_total = $material['quantidade_material'] * $material['valor_unitario'];
+                                                            ?>
+                                                            <tr>
+                                                                <td><?= $material['nome_material']; ?></td>
+                                                                <td><?= $material['quantidade_material']; ?></td>
+                                                                <td>R$ <?= number_format($material['valor_unitario'], 2, ',', '.'); ?></td>
+                                                                <td>R$ <?= number_format($valor_total, 2, ',', '.'); ?></td>
+                                                            </tr>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <?php
+                                        }
+                                        ?>
+
+                                        <?php
+                                        $servicos = ItensOrcamentoDAO::listarServicosPorItem($item['id_item_orcamento']);
+                                        if (!empty($servicos)) {
+                                            ?>
+                                            <div class="mt-4">
+                                                <h4>Serviços</h4>
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nome do Serviço</th>
+                                                            <th>Quantidade</th>
+                                                            <th>Preço Unitário</th>
+                                                            <th>Valor Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+                                                        foreach ($servicos as $servico) {
+                                                            $valor_total_servico = $servico['quantidade_servico'] * $servico['valor_unitario'];
+                                                            ?>
+                                                            <tr>
+                                                                <td><?= $servico['nome_servico']; ?></td>
+                                                                <td><?= $servico['quantidade_servico']; ?></td>
+                                                                <td>R$ <?= number_format($servico['valor_unitario'], 2, ',', '.'); ?></td>
+                                                                <td>R$ <?= number_format($valor_total_servico, 2, ',', '.'); ?></td>
+                                                            </tr>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <?php
+                                        }
+                                        ?>
+
+                                        <div class="row mt-3">
+                                            <div class="col-md-4 ms-auto">
+                                                <label for="valor_total_item">Valor Total do Item</label>
+                                                <p class="form-control">
+                                                    R$ <?= number_format($item['valor_total_item'], 2, ',', '.'); ?>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <?php
+                                    }
+                                } else {
+                                    echo "<h5>Nenhum item encontrado para este orçamento.</h5>";
                                 }
                                 ?>
-
                                 <?php
                             } else {
                                 echo "<h5>Orçamento não encontrado</h5>";

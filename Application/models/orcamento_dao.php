@@ -55,5 +55,21 @@ class OrcamentoDAO {
         $orcamentos = mysqli_query($conexao, $sql);
         return $orcamentos;
     }
+
+    public static function buscarOrcamentoPorId($id_orcamento) {
+        global $conexao;
+        $id_orcamento = mysqli_real_escape_string($conexao, $id_orcamento);
+
+        $sql = "SELECT orcamentos.*, clientes.nome_cliente 
+                FROM orcamentos 
+                INNER JOIN clientes ON orcamentos.fk_clientes_id_cliente = clientes.id_cliente
+                WHERE orcamentos.ativo = TRUE AND orcamentos.id_orcamento = '$id_orcamento'";
+        
+        $result = mysqli_query($conexao, $sql);
+        if (mysqli_num_rows($result) > 0) {
+            return mysqli_fetch_assoc($result);
+        }
+        return null;
+    }
 }
 ?>
