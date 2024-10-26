@@ -45,6 +45,16 @@ require('Application/models/itens_orcamento_dao.php');
                             <a href="/planel/orcamentos" class="btn btn-danger float-end">
                                 <span class="bi-arrow-left"></span>&nbsp;Voltar
                             </a>
+                            <?php
+                            if (isset($_GET['id'])) {
+                                $orcamento_id = mysqli_real_escape_string($conexao, $_GET['id']);
+                                ?>
+                                <a href="/planel/?url=orcamento/gerar-pdf&id=<?= $orcamento_id ?>" class="btn btn-primary float-end me-2">
+                                    <span class="bi-printer"></span>&nbsp;Imprimir PDF
+                                </a>
+                                <?php
+                            }
+                            ?>
                         </h4>
                     </div>
                     <div class="card-body">
@@ -60,13 +70,13 @@ require('Application/models/itens_orcamento_dao.php');
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="nome_orcamento">Nome do Orçamento</label>
-                                            <p class="form-control"><?= $orcamento['nome_orcamento']; ?></p>
+                                            <p class="form-control"><?= htmlspecialchars($orcamento['nome_orcamento'], ENT_QUOTES, 'UTF-8'); ?></p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="cliente">Cliente</label>
-                                            <p class="form-control"><?= $orcamento['nome_cliente']; ?></p>
+                                            <p class="form-control"><?= htmlspecialchars($orcamento['nome_cliente'], ENT_QUOTES, 'UTF-8'); ?></p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -86,7 +96,7 @@ require('Application/models/itens_orcamento_dao.php');
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="status">Status</label>
-                                            <p class="form-control"><?= $orcamento['status']; ?></p>
+                                            <p class="form-control"><?= htmlspecialchars($orcamento['status'], ENT_QUOTES, 'UTF-8'); ?></p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -95,7 +105,7 @@ require('Application/models/itens_orcamento_dao.php');
                                             <p class="form-control">
                                                 <?php if (!empty($orcamento['caminho_arquivo'])): ?>
                                                     <a href="<?= '/planel/upload?file=' . urlencode(basename($orcamento['caminho_arquivo'])); ?>" 
-                                                    class="text-decoration-none" target="_blank">
+                                                       class="text-decoration-none" target="_blank">
                                                         <span class="bi-file-earmark-pdf-fill"></span>&nbsp;<?= basename($orcamento['caminho_arquivo']); ?>
                                                     </a>
                                                 <?php else: ?>
@@ -109,7 +119,7 @@ require('Application/models/itens_orcamento_dao.php');
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="observacao">Observação</label>
-                                            <p class="form-control"><?= $orcamento['observacao']; ?></p>
+                                            <p class="form-control"><?= htmlspecialchars($orcamento['observacao'], ENT_QUOTES, 'UTF-8'); ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -120,19 +130,19 @@ require('Application/models/itens_orcamento_dao.php');
                                 <?php
                                 $itens = ItensOrcamentoDAO::listarItensPorOrcamento($orcamento_id);
                                 if (!empty($itens)) {
-                                    $contadorItens = 1; 
+                                    $contadorItens = 1;
                                     foreach ($itens as $item) {
                                         ?>
                                         <div class="input-group mt-3">
                                             <span class="item-number"><?= $contadorItens++; ?>º</span>
                                             <div class="form-control">
-                                                <strong><?= $item['nome_item']; ?></strong>
+                                                <strong><?= htmlspecialchars($item['nome_item'], ENT_QUOTES, 'UTF-8'); ?></strong>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <label class="mt-4" for="descricao_item">Descrição</label>
-                                                <p class="form-control"><?= $item['descricao_item']; ?></p>
+                                                <p class="form-control"><?= htmlspecialchars($item['descricao_item'], ENT_QUOTES, 'UTF-8'); ?></p>
                                             </div>
                                         </div>
                                         <?php
@@ -156,7 +166,7 @@ require('Application/models/itens_orcamento_dao.php');
                                                             $valor_total = $material['quantidade_material'] * $material['valor_unitario'];
                                                             ?>
                                                             <tr>
-                                                                <td><?= $material['nome_material']; ?></td>
+                                                                <td><?= htmlspecialchars($material['nome_material'], ENT_QUOTES, 'UTF-8'); ?></td>
                                                                 <td><?= $material['quantidade_material']; ?></td>
                                                                 <td>R$ <?= number_format($material['valor_unitario'], 2, ',', '.'); ?></td>
                                                                 <td>R$ <?= number_format($valor_total, 2, ',', '.'); ?></td>
@@ -192,7 +202,7 @@ require('Application/models/itens_orcamento_dao.php');
                                                             $valor_total_servico = $servico['quantidade_servico'] * $servico['valor_unitario'];
                                                             ?>
                                                             <tr>
-                                                                <td><?= $servico['nome_servico']; ?></td>
+                                                                <td><?= htmlspecialchars($servico['nome_servico'], ENT_QUOTES, 'UTF-8'); ?></td>
                                                                 <td><?= $servico['quantidade_servico']; ?></td>
                                                                 <td>R$ <?= number_format($servico['valor_unitario'], 2, ',', '.'); ?></td>
                                                                 <td>R$ <?= number_format($valor_total_servico, 2, ',', '.'); ?></td>
@@ -235,6 +245,8 @@ require('Application/models/itens_orcamento_dao.php');
                             } else {
                                 echo "<h5>Orçamento não encontrado</h5>";
                             }
+                        } else {
+                            echo "<h5>ID do orçamento não fornecido.</h5>";
                         }
                         ?>
                     </div>

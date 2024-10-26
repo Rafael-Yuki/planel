@@ -40,6 +40,7 @@ $routes = [
     'orcamento/cadastro' => 'Application/views/orcamento/criar_orcamento.php',
     'orcamento/editar' => 'Application/views/orcamento/editar_orcamento.php',
     'orcamento/visualizar' => 'Application/views/orcamento/ver_orcamento.php',
+    'orcamento/gerar-pdf' => 'Application/views/orcamento/gerar_pdf_orcamento.php',
     'upload' => 'Application/controllers/upload_controller.php',
 
     'contas-a-receber' => 'Application/views/contas_receber/contas_receber.php',
