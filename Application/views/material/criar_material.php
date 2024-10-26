@@ -27,61 +27,87 @@ require('Application/models/conexao.php');
           </div>
           <div class="card-body">
             <form id="formMaterial" action="/planel/material/atualizar" method="POST">
-              <div class="mb-3">
-                <label for="nome_material">Nome do Material</label>
-                <input type="text" id="nome_material" name="nome_material" class="form-control" required>
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="mb-3">
+                    <label for="nome_material">Nome do Material</label>
+                    <input type="text" id="nome_material" name="nome_material" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label for="ncm">NCM</label>
+                    <input type="text" id="ncm" name="ncm" class="form-control" required>
+                  </div>
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="ncm">NCM</label>
-                <input type="text" id="ncm" name="ncm" class="form-control" required>
+              
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="mb-3">
+                    <label for="quantidade">Quantidade</label>
+                    <input type="number" id="quantidade" name="quantidade" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="mb-3">
+                    <label for="unidade_medida">Unidade de Medida</label>
+                    <input type="text" id="unidade_medida" name="unidade_medida" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="mb-3">
+                    <label for="valor_compra">Valor de Compra</label>
+                    <input type="text" id="valor_compra" name="valor_compra" class="form-control valor-mask" required>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="mb-3">
+                    <label for="valor_venda">Valor de Venda</label>
+                    <input type="text" id="valor_venda" name="valor_venda" class="form-control valor-mask" required>
+                  </div>
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="quantidade">Quantidade</label>
-                <input type="number" id="quantidade" name="quantidade" class="form-control" required>
+
+              <div class="row">
+                <div class="col-md-2">
+                  <div class="mb-3">
+                    <label for="data_compra">Data da Compra</label>
+                    <input type="date" id="data_compra" name="data_compra" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="mb-3">
+                    <label for="fornecedor">Fornecedor (Opcional)</label>
+                    <select id="fornecedor" name="fornecedor" class="form-control">
+                        <option value="">Selecione um Fornecedor</option>
+                        <?php
+                        $query_fornecedores = "SELECT * FROM fornecedores WHERE ativo = TRUE";
+                        $result_fornecedores = mysqli_query($conexao, $query_fornecedores);
+                        while($row_fornecedor = mysqli_fetch_assoc($result_fornecedores)) {
+                            echo "<option value='".$row_fornecedor['id_fornecedor']."'>".$row_fornecedor['nome_fornecedor']."</option>";
+                        }
+                        ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="mb-3">
+                    <label for="nota_fiscal">Nota Fiscal (Opcional)</label>
+                    <select id="nota_fiscal" name="nota_fiscal" class="form-control">
+                        <option value="">Nenhuma Nota Fiscal</option>
+                        <?php
+                        $query_notas = "SELECT * FROM notas_fiscais WHERE ativo = TRUE";
+                        $result_notas = mysqli_query($conexao, $query_notas);
+                        while($row_nota = mysqli_fetch_assoc($result_notas)) {
+                            echo "<option value='".$row_nota['id_nota_fiscal']."'>".$row_nota['numero']."</option>";
+                        }
+                        ?>
+                    </select>
+                  </div>
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="unidade_medida">Unidade de Medida</label>
-                <input type="text" id="unidade_medida" name="unidade_medida" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label for="valor_compra">Valor de Compra</label>
-                <input type="text" id="valor_compra" name="valor_compra" class="form-control valor-mask" required>
-              </div>
-              <div class="mb-3">
-                <label for="valor_venda">Valor de Venda</label>
-                <input type="text" id="valor_venda" name="valor_venda" class="form-control valor-mask" required>
-              </div>
-              <div class="mb-3">
-                <label for="data_compra">Data da Compra</label>
-                <input type="date" id="data_compra" name="data_compra" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label for="fornecedor">Fornecedor (Opcional)</label>
-                <select id="fornecedor" name="fornecedor" class="form-control">
-                    <option value="">Selecione um Fornecedor</option>
-                    <?php
-                    $query_fornecedores = "SELECT * FROM fornecedores WHERE ativo = TRUE";
-                    $result_fornecedores = mysqli_query($conexao, $query_fornecedores);
-                    while($row_fornecedor = mysqli_fetch_assoc($result_fornecedores)) {
-                        echo "<option value='".$row_fornecedor['id_fornecedor']."'>".$row_fornecedor['nome_fornecedor']."</option>";
-                    }
-                    ?>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="nota_fiscal">Nota Fiscal (Opcional)</label>
-                <select id="nota_fiscal" name="nota_fiscal" class="form-control">
-                    <option value="">Nenhuma Nota Fiscal</option>
-                    <?php
-                    $query_notas = "SELECT * FROM notas_fiscais WHERE ativo = TRUE";
-                    $result_notas = mysqli_query($conexao, $query_notas);
-                    while($row_nota = mysqli_fetch_assoc($result_notas)) {
-                        echo "<option value='".$row_nota['id_nota_fiscal']."'>".$row_nota['numero']."</option>";
-                    }
-                    ?>
-                </select>
-            </div>
-              <div class="mb-3">
+              <div class="mb-3 mt-4">
                 <button type="submit" name="criar_material" class="btn btn-primary">
                   Salvar<span class="bi-save ms-2"></span>
                 </button>

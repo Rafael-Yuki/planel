@@ -13,3 +13,13 @@
 .nav-link:hover, .nav-link.active {
     text-decoration: underline;
 }
+
+/* Estilização Tabelas */
+.table th, .table td {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.table-responsive {
+    overflow-x: hidden;
+}

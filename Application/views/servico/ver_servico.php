@@ -35,9 +35,8 @@ require('Application/models/conexao.php');
                             if (mysqli_num_rows($query) > 0) {
                                 $servico = mysqli_fetch_array($query);
                                 ?>
-                                <!-- Informações do serviço -->
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         <div class="mb-3">
                                             <label for="nome_servico">Nome do Serviço</label>
                                             <p class="form-control" style="min-height: 38px;">
@@ -45,7 +44,7 @@ require('Application/models/conexao.php');
                                             </p>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="valor_servico">Valor do Serviço</label>
                                             <p class="form-control" style="min-height: 38px;">

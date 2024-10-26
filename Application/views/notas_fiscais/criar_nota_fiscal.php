@@ -28,38 +28,59 @@ require('Application/models/fornecedor_dao.php');
           </div>
           <div class="card-body">
             <form id="formNotaFiscal" action="/planel/nota-fiscal/atualizar" method="POST" enctype="multipart/form-data">
-              <div class="mb-3">
-                <label for="numero" class="form-label">Número da Nota Fiscal</label>
-                <input type="text" id="numero" name="numero" class="form-control" required>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="mb-3">
+                    <label for="numero" class="form-label">Número da Nota Fiscal</label>
+                    <input type="text" id="numero" name="numero" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-md-9">
+                  <div class="mb-3">
+                    <label for="fornecedor" class="form-label">Fornecedor</label>
+                    <select id="fornecedor" name="fornecedor" class="form-control" required>
+                      <option value="">Selecione um Fornecedor</option>
+                      <?php
+                      $fornecedores = FornecedorDAO::listarFornecedores();
+                      while ($fornecedor = mysqli_fetch_assoc($fornecedores)) {
+                          echo "<option value='" . $fornecedor['id_fornecedor'] . "'>" . $fornecedor['nome_fornecedor'] . "</option>";
+                      }
+                      ?>
+                    </select>
+                  </div>
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="fornecedor" class="form-label">Fornecedor</label>
-                <select id="fornecedor" name="fornecedor" class="form-control" required>
-                  <option value="">Selecione um Fornecedor</option>
-                  <?php
-                  $fornecedores = FornecedorDAO::listarFornecedores();
-                  while ($fornecedor = mysqli_fetch_assoc($fornecedores)) {
-                      echo "<option value='" . $fornecedor['id_fornecedor'] . "'>" . $fornecedor['nome_fornecedor'] . "</option>";
-                  }
-                  ?>
-                </select>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label for="data_emissao" class="form-label">Data de Emissão</label>
+                    <input type="date" id="data_emissao" name="data_emissao" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label for="parcelas" class="form-label">Número de Parcelas</label>
+                    <input type="number" id="parcelas" name="parcelas" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label for="valor_total" class="form-label">Valor Total</label>
+                    <input type="text" id="valor_total" name="valor_total" class="form-control valor-mask" required>
+                  </div>
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="data_emissao" class="form-label">Data de Emissão</label>
-                <input type="date" id="data_emissao" name="data_emissao" class="form-control" required>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="mb-3">
+                    <label for="arquivo_xml" class="form-label">Arquivo XML (opcional)</label>
+                    <input type="file" id="arquivo_xml" name="arquivo_xml" class="form-control">
+                  </div>
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="valor_total" class="form-label">Valor Total</label>
-                <input type="text" id="valor_total" name="valor_total" class="form-control valor-mask" required>
-              </div>
-              <div class="mb-3">
-                <label for="parcelas" class="form-label">Número de Parcelas</label>
-                <input type="number" id="parcelas" name="parcelas" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label for="arquivo_xml" class="form-label">Arquivo XML (opcional)</label>
-                <input type="file" id="arquivo_xml" name="arquivo_xml" class="form-control">
-              </div>
+
               <div class="mb-3">
                 <button type="submit" name="criar_nota_fiscal" class="btn btn-primary">
                   Salvar<span class="bi-save ms-2"></span>

@@ -17,7 +17,7 @@ require('Application/models/conexao.php');
     <?php include(__DIR__ . '/../navbar.php');?>
     <div class="container mt-5">
         <div class="row">
-            <div class="col">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Visualizar Material
@@ -29,7 +29,6 @@ require('Application/models/conexao.php');
                         <?php
                         if (isset($_GET['id'])) {
                             $material_id = mysqli_real_escape_string($conexao, $_GET['id']);
-                            // Atualizando a consulta para permitir valores nulos de fornecedor e nota fiscal
                             $sql = "SELECT materiais.*, fornecedores.nome_fornecedor, notas_fiscais.numero AS numero_nota_fiscal
                                     FROM materiais
                                     LEFT JOIN fornecedores ON materiais.fk_fornecedores_id_fornecedor = fornecedores.id_fornecedor
@@ -40,59 +39,85 @@ require('Application/models/conexao.php');
                             if (mysqli_num_rows($query) > 0) {
                                 $material = mysqli_fetch_array($query);
                                 ?>
-                                <div class="mb-3">
-                                    <label for="nome_material">Nome do Material</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= $material['nome_material']; ?>
-                                    </p>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label for="nome_material">Nome do Material</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= $material['nome_material']; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="ncm">NCM</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= $material['ncm']; ?>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="ncm">NCM</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= $material['ncm']; ?>
-                                    </p>
+                                
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="quantidade">Quantidade</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= $material['quantidade']; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="unidade_medida">Unidade de Medida</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= $material['unidade_medida']; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="valor_compra">Valor de Compra</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                R$ <?= number_format($material['valor_compra'], 2, ',', '.'); ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="valor_venda">Valor de Venda</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                R$ <?= number_format($material['valor_venda'], 2, ',', '.'); ?>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="quantidade">Quantidade</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= $material['quantidade']; ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="unidade_medida">Unidade de Medida</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= $material['unidade_medida']; ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="valor_compra">Valor de Compra</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        R$ <?= number_format($material['valor_compra'], 2, ',', '.'); ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="valor_venda">Valor de Venda</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        R$ <?= number_format($material['valor_venda'], 2, ',', '.'); ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="data_compra">Data da Compra</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= date('d/m/Y', strtotime($material['data_compra'])); ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="fornecedor">Fornecedor</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= $material['nome_fornecedor'] ?? 'Sem Fornecedor'; ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="nota_fiscal">Nota Fiscal</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= $material['numero_nota_fiscal'] ?? 'Sem Nota Fiscal'; ?>
-                                    </p>
+
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="mb-3">
+                                            <label for="data_compra">Data da Compra</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= date('d/m/Y', strtotime($material['data_compra'])); ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label for="fornecedor">Fornecedor</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= $material['nome_fornecedor'] ?? 'Sem Fornecedor'; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="mb-3">
+                                            <label for="nota_fiscal">Nota Fiscal</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= $material['numero_nota_fiscal'] ?? 'Sem Nota Fiscal'; ?>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                                 <?php
                             } else {

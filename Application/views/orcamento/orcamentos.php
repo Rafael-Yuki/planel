@@ -11,21 +11,22 @@ require('Application/models/orcamento_dao.php');
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="public/css/main.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="planel/public/css/main.css">
 </head>
 
 <body data-bs-theme="dark">
     <?php include(__DIR__ . '/../navbar.php'); ?>
     <div class="container-fluid mt-4">
         <?php include(__DIR__ . '/../mensagem.php'); ?>
-        <div class="row">
-            <div class="col">
+        <div class="row mb-3">
+            <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h4> Orçamentos
-                            <a href="orcamento/cadastro" class="btn btn-primary float-end">
-                            <span class="bi-file-earmark-text me-2"></span>Adicionar Orçamento</a>
-                        </h4>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0"> Orçamentos</h4>
+                        <a href="orcamento/cadastro" class="btn btn-primary">
+                            <span class="bi-file-earmark-text me-2"></span>Adicionar Orçamento
+                        </a>
                     </div>
                     <div class="card-body">
                         <?php
@@ -34,7 +35,7 @@ require('Application/models/orcamento_dao.php');
                         if (mysqli_num_rows($orcamentos) > 0) {
                             ?>
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped">
+                                <table id="orcamentosTable" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
                                         <th>Nome do Orçamento</th>
@@ -52,12 +53,12 @@ require('Application/models/orcamento_dao.php');
                                     while ($orcamento = mysqli_fetch_assoc($orcamentos)) {
                                         ?>
                                         <tr>
-                                            <td><?= $orcamento['nome_orcamento'] ?></td>
-                                            <td><?= $orcamento['nome_cliente'] ?></td>
+                                            <td><?= htmlspecialchars($orcamento['nome_orcamento'], ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td><?= htmlspecialchars($orcamento['nome_cliente'], ENT_QUOTES, 'UTF-8') ?></td>
                                             <td><?= date('d/m/Y', strtotime($orcamento['data_orcamento'])) ?></td>
                                             <td><?= date('d/m/Y', strtotime($orcamento['validade'])) ?></td>
                                             <td>R$ <?= number_format($orcamento['valor_total_orcamento'], 2, ',', '.') ?></td>
-                                            <td><?= $orcamento['status'] ?></td>
+                                            <td><?= htmlspecialchars($orcamento['status'], ENT_QUOTES, 'UTF-8') ?></td>
                                             <td>
                                                 <?php if (!empty($orcamento['caminho_arquivo'])): ?>
                                                     <a href="<?= '/planel/upload?file=' . urlencode(basename($orcamento['caminho_arquivo'])); ?>" 
@@ -98,7 +99,26 @@ require('Application/models/orcamento_dao.php');
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const table = $('#orcamentosTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": [7] }
+                ],
+                "order": [[0, "asc"]],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json"
+                }
+            });
+        });
+    </script>
 </body>
 </html>

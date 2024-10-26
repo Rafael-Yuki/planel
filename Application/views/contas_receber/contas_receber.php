@@ -15,21 +15,22 @@ function formatarMoeda($valor) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="public/css/main.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="planel/public/css/main.css">
 </head>
 
 <body data-bs-theme="dark">
     <?php include(__DIR__ . '/../navbar.php'); ?>
     <div class="container-fluid mt-4">
         <?php include(__DIR__ . '/../mensagem.php'); ?>
-        <div class="row">
-            <div class="col">
+        <div class="row mb-3">
+            <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h4> Contas a Receber
-                            <a href="conta-a-receber/cadastro" class="btn btn-primary float-end">
-                            <span class="bi bi-wallet2 me-2"></span>Adicionar Conta</a>
-                        </h4>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0"> Contas a Receber</h4>
+                        <a href="conta-a-receber/cadastro" class="btn btn-primary">
+                            <span class="bi bi-wallet2 me-2"></span>Adicionar Conta
+                        </a>
                     </div>
                     <div class="card-body">
                         <?php
@@ -38,7 +39,7 @@ function formatarMoeda($valor) {
                         if (mysqli_num_rows($contas_receber) > 0) {
                             ?>
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped">
+                                <table id="contasReceberTable" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
                                         <th>Orçamento</th>
@@ -91,7 +92,27 @@ function formatarMoeda($valor) {
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const table = $('#contasReceberTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": [6] },
+                    { "type": "currency", "targets": [2] },
+                    { "type": "date-uk", "targets": [3] }
+                ],
+                "order": [[3, "asc"]],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json"
+                }
+            });
+        });
+    </script>
 </body>
 </html>

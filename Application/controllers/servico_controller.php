@@ -5,7 +5,9 @@ require('Application/models/conexao.php');
 
 if (isset($_POST['criar_servico'])) {
     $nome_servico = mysqli_real_escape_string($conexao, $_POST['nome_servico']);
-    $valor_servico = mysqli_real_escape_string($conexao, str_replace(',', '.', str_replace('.', '', $_POST['valor_servico'])));
+    $valor_servico = str_replace(['.', ','], ['', '.'], $_POST['valor_servico']);
+    $valor_servico = number_format((float)$valor_servico, 2, '.', '');
+
     $descricao_servico = mysqli_real_escape_string($conexao, $_POST['descricao_servico']);
 
     if (empty($nome_servico)) {
@@ -30,7 +32,9 @@ if (isset($_POST['criar_servico'])) {
 if (isset($_POST['editar_servico'])) {
     $id = mysqli_real_escape_string($conexao, $_POST['servico_id']);
     $nome_servico = mysqli_real_escape_string($conexao, $_POST['nome_servico']);
-    $valor_servico = mysqli_real_escape_string($conexao, str_replace(',', '.', str_replace('.', '', $_POST['valor_servico'])));
+    $valor_servico = str_replace(['.', ','], ['', '.'], $_POST['valor_servico']); 
+    $valor_servico = number_format((float)$valor_servico, 2, '.', ''); 
+
     $descricao_servico = mysqli_real_escape_string($conexao, $_POST['descricao_servico']);
 
     if (empty($nome_servico)) {

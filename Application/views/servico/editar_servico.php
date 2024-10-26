@@ -49,8 +49,9 @@ mysqli_set_charset($conexao, "utf8");
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="valor_servico">Valor do Serviço</label>
-                                                <input type="number" name="valor_servico" value="<?= $servico['valor_servico'] ?>"
-                                                    class="form-control" step="0.01" min="0" required>
+                                                <input type="text" name="valor_servico" id="valor_servico" 
+                                                    value="<?= number_format($servico['valor_servico'], 2, ',', '.') ?>"
+                                                    class="form-control" required>
                                             </div>
                                         </div>
                                     </div>
@@ -80,5 +81,12 @@ mysqli_set_charset($conexao, "utf8");
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        document.getElementById('valor_servico').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = (value / 100).toFixed(2).replace('.', ',');
+            e.target.value = value;
+        });
+    </script>
 </body>
 </html>

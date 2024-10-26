@@ -33,13 +33,13 @@ require('Application/models/conexao.php');
           <div class="card-body">
             <form id="formServico" action="/planel/servico/atualizar" method="POST" enctype="multipart/form-data">
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
                   <div class="mb-3">
                     <label for="nome_servico">Nome do Serviço</label>
                     <input type="text" id="nome_servico" name="nome_servico" class="form-control" required>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <div class="mb-3">
                     <label for="valor_servico">Valor do Serviço</label>
                     <input type="number" id="valor_servico" name="valor_servico" class="form-control" step="0.01" min="0" required>

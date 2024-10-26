@@ -38,35 +38,63 @@ require('Application/models/conexao.php');
                             if (mysqli_num_rows($query) > 0) {
                                 $cliente = mysqli_fetch_array($query);
                                 ?>
-                                <div class="mb-3">
-                                    <label for="nome">Nome</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= $cliente['nome_cliente']; ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="cnpj">CNPJ</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= $cliente['cnpj']; ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="telefone">Telefone</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= $cliente['telefone']; ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email">E-mail</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= $cliente['email']; ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="endereco">Endereço</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                    <?=$cliente['endereco'].', '. $cliente['nome_cidade'].' - '. $cliente['sigla_estado']?>
-                                    </p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="nome">Nome</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= $cliente['nome_cliente']; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="cnpj">CNPJ</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= $cliente['cnpj']; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="telefone">Telefone</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= $cliente['telefone']; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="email">E-mail</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= $cliente['email']; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="estado">Estado</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= $cliente['sigla_estado']; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="cidade">Cidade</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= $cliente['nome_cidade']; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="endereco">Endereço</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                            <?=$cliente['endereco']?>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                                 <?php
                             } else {

@@ -32,51 +32,67 @@ require('Application/models/conexao.php');
           </div>
           <div class="card-body">
             <form id="formcliente" action="/planel/cliente/atualizar" method="POST">
-              <div class="mb-3">
-                <label for="nome">Nome</label>
-                <input type="text" id="nome" name="nome" class="form-control" required>
-                <div id="nomeError" class="invalid-feedback">Nome inválido. Use apenas letras e espaços.</div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" class="form-control" required>
+                    <div id="nomeError" class="invalid-feedback">Nome inválido. Use apenas letras e espaços.</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="cnpj">CNPJ</label>
+                    <input type="text" id="cnpj" name="cnpj" class="form-control cnpj-mask" required>
+                    <div id="cnpjError" class="invalid-feedback">CNPJ inválido</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" id="telefone" name="telefone" class="form-control phone-mask">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                    <div id="emailError" class="invalid-feedback">E-mail inválido</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="estado">Estado</label>
+                    <select id="estado" name="estado" class="form-control" required>
+                      <option value="">Selecione um Estado</option>
+                      <?php
+                      $query_estados = "SELECT * FROM estados";
+                      $result_estados = mysqli_query($conexao, $query_estados);
+                      while($row_estado = mysqli_fetch_assoc($result_estados)) {
+                          echo "<option value='".$row_estado['id_estado']."'>". $row_estado['nome_estado']."</option>";
+                      }
+                      ?>
+                    </select>
+                    <div id="estadoError" class="invalid-feedback">Selecione um estado.</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3 hidden" id="cidade-container">
+                    <label for="cidade">Cidade</label>
+                    <select id="cidade" name="cidade" class="form-control" required disabled>
+                      <option value="">Selecione um Estado</option>
+                    </select>
+                    <div id="cidadeError" class="invalid-feedback">Selecione uma cidade.</div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="mb-3">
+                    <label for="endereco">Endereço</label>
+                    <input type="text" id="endereco" name="endereco" class="form-control">
+                  </div>
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="cnpj">CNPJ</label>
-                <input type="text" id="cnpj" name="cnpj" class="form-control cnpj-mask" required>
-                <div id="cnpjError" class="invalid-feedback">CNPJ inválido</div>
-              </div>
-              <div class="mb-3">
-                <label for="telefone">Telefone</label>
-                <input type="tel" id="telefone" name="telefone" class="form-control phone-mask">
-              </div>
-              <div class="mb-3">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" class="form-control" required>
-                <div id="emailError" class="invalid-feedback">E-mail inválido</div>
-              </div>
-              <div class="mb-3">
-                <label for="endereco">Endereço</label>
-                <input type="text" id="endereco" name="endereco" class="form-control">
-              </div>
-              <div class="mb-3">
-                <label for="estado">Estado</label>
-                <select id="estado" name="estado" class="form-control" required>
-                  <option value="">Selecione um Estado</option>
-                  <?php
-                  $query_estados = "SELECT * FROM estados";
-                  $result_estados = mysqli_query($conexao, $query_estados);
-                  while($row_estado = mysqli_fetch_assoc($result_estados)) {
-                      echo "<option value='".$row_estado['id_estado']."'>". $row_estado['nome_estado']."</option>";
-                  }
-                  ?>
-                </select>
-                <div id="estadoError" class="invalid-feedback">Selecione um estado.</div>
-              </div>
-              <div id="cidade-container" class="mb-3 hidden">
-                <label for="cidade">Cidade</label>
-                <select id="cidade" name="cidade" class="form-control" required disabled>
-                  <option value="">Selecione um Estado</option>
-                </select>
-                <div id="cidadeError" class="invalid-feedback">Selecione uma cidade.</div>
-              </div>
-              <div class="mb-3">
+              <div class="mb-3 mt-4">
                 <button type="submit" name="criar_cliente" class="btn btn-primary">
                   Salvar<span class="bi-save ms-2"></span>
                 </button>

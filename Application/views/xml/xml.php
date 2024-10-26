@@ -8,9 +8,11 @@ require('Application/models/nota_fiscal_dao.php');
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Importar XML</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="planel/public/css/main.css">
 </head>
 <body data-bs-theme="dark">
     <?php include(__DIR__ . '/../navbar.php'); ?>
@@ -20,7 +22,7 @@ require('Application/models/nota_fiscal_dao.php');
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h4 class="mb-0">XMLs Importados</h4>
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importarXmlModal">
-                    <i class="bi bi-upload me-2"></i> Adicionar XML
+                    <i class="bi bi-upload me-2"></i>Adicionar XML
                 </button>
             </div>
             <div class="card-body">
@@ -30,7 +32,7 @@ require('Application/models/nota_fiscal_dao.php');
                 if (mysqli_num_rows($xml_importados) > 0) {
                     ?>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
+                        <table id="xmlTable" class="table table-bordered table-striped">
                             <thead>
                             <tr>
                                 <th>Número</th>
@@ -47,12 +49,12 @@ require('Application/models/nota_fiscal_dao.php');
                             while ($xml = mysqli_fetch_assoc($xml_importados)) {
                                 ?>
                                 <tr>
-                                    <td><?= $xml['numero'] ?></td>
-                                    <td><?= $xml['nome_fornecedor'] ?></td>
+                                    <td><?= htmlspecialchars($xml['numero'], ENT_QUOTES, 'UTF-8') ?></td>
+                                    <td><?= htmlspecialchars($xml['nome_fornecedor'], ENT_QUOTES, 'UTF-8') ?></td>
                                     <td><?= date('d/m/Y', strtotime($xml['data_emissao'])) ?></td>
                                     <td>R$ <?= number_format($xml['valor_total'], 2, ',', '.') ?></td>
-                                    <td><?= $xml['parcela_atual'] ?></td>
-                                    <td><?= $xml['total_parcelas'] ?></td>
+                                    <td><?= htmlspecialchars($xml['parcela_atual'], ENT_QUOTES, 'UTF-8') ?></td>
+                                    <td><?= htmlspecialchars($xml['total_parcelas'], ENT_QUOTES, 'UTF-8') ?></td>
                                     <td class="text-center text-nowrap">
                                         <?php if (!empty($xml['caminho_xml'])): ?>
                                             <a href="<?= '/planel/upload?file=' . urlencode(basename($xml['caminho_xml'])); ?>" 
@@ -112,7 +114,25 @@ require('Application/models/nota_fiscal_dao.php');
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const table = $('#xmlTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": [6] }
+                ],
+                "order": [[0, "asc"]],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json"
+                }
+            });
+        });
+    </script>
 </body>
 </html>

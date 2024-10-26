@@ -17,7 +17,7 @@ require('Application/models/conexao.php');
     <?php include(__DIR__ . '/../navbar.php');?>
     <div class="container mt-5">
         <div class="row">
-            <div class="col">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Visualizar Nota Fiscal
@@ -36,47 +36,66 @@ require('Application/models/conexao.php');
                             if (mysqli_num_rows($query) > 0) {
                                 $nota_fiscal = mysqli_fetch_array($query);
                                 ?>
-                                <div class="mb-3">
-                                    <label for="numero">Número da Nota Fiscal</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= $nota_fiscal['numero']; ?>
-                                    </p>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="numero">Número da Nota Fiscal</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= htmlspecialchars($nota_fiscal['numero'], ENT_QUOTES, 'UTF-8'); ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-3">
+                                            <label for="fornecedor">Fornecedor</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= htmlspecialchars($nota_fiscal['nome_fornecedor'], ENT_QUOTES, 'UTF-8'); ?>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="fornecedor">Fornecedor</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= $nota_fiscal['nome_fornecedor']; ?>
-                                    </p>
+                                
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="data_emissao">Data de Emissão</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= date('d/m/Y', strtotime($nota_fiscal['data_emissao'])); ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="parcelas">Número de Parcelas</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                <?= htmlspecialchars($nota_fiscal['parcelas'], ENT_QUOTES, 'UTF-8'); ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="valor_total">Valor Total</label>
+                                            <p class="form-control" style="min-height: 38px;">
+                                                R$ <?= number_format($nota_fiscal['valor_total'], 2, ',', '.'); ?>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="data_emissao">Data de Emissão</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= date('d/m/Y', strtotime($nota_fiscal['data_emissao'])); ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="valor_total">Valor Total</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= number_format($nota_fiscal['valor_total'], 2, ',', '.'); ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="parcelas">Parcelas</label>
-                                    <p class="form-control" style="min-height: 38px;">
-                                        <?= $nota_fiscal['parcelas']; ?>
-                                    </p>
-                                </div>
-                                <div class="mb-3">
-                                    <h4>Visualizar XML</h4>
 
-                                    <?php if (!empty($nota_fiscal['caminho_xml'])): ?>
-                                        <a href="<?= '/planel/upload?file=' . urlencode(basename($nota_fiscal['caminho_xml'])); ?>" 
-                                        class="btn btn-primary mt-2" target="_blank">
-                                        <span class="bi-file-earmark-text-fill"></span>&nbsp;<?= basename($nota_fiscal['caminho_xml']); ?>
-                                        </a>
-                                    <?php else: ?>
-                                        <span class="text-muted">Nenhum XML</span>
-                                    <?php endif; ?>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <h4>Visualizar XML</h4>
+                                            <?php if (!empty($nota_fiscal['caminho_xml'])): ?>
+                                                <a href="<?= '/planel/upload?file=' . urlencode(basename($nota_fiscal['caminho_xml'])); ?>" 
+                                                class="btn btn-primary mt-2" target="_blank">
+                                                <span class="bi-file-earmark-text-fill"></span>&nbsp;<?= basename($nota_fiscal['caminho_xml']); ?>
+                                                </a>
+                                            <?php else: ?>
+                                                <span class="text-muted">Nenhum XML</span>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
                                 </div>
                                 <?php
                             } else {
