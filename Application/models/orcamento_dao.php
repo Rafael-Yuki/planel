@@ -13,29 +13,27 @@ class OrcamentoDAO {
         return -1;
     }
 
-    public static function editarOrcamento($id_orcamento, $nome_orcamento, $data_orcamento, $validade, $status, $observacao, $fk_clientes_id_cliente, $caminho_arquivo = null) {
+    public static function editarOrcamento($id_orcamento, $nome_orcamento, $data_orcamento, $validade, $status, $observacao, $fk_cliente_id, $caminho_arquivo, $valor_total_orcamento) {
         global $conexao;
-        $id_orcamento = mysqli_real_escape_string($conexao, $id_orcamento);
-        $nome_orcamento = mysqli_real_escape_string($conexao, trim($nome_orcamento));
-        $data_orcamento = mysqli_real_escape_string($conexao, trim($data_orcamento));
-        $validade = mysqli_real_escape_string($conexao, trim($validade));
-        $status = mysqli_real_escape_string($conexao, trim($status));
-        $observacao = mysqli_real_escape_string($conexao, trim($observacao));
-        $fk_clientes_id_cliente = (int)$fk_clientes_id_cliente;
-        $caminho_arquivo = mysqli_real_escape_string($conexao, $caminho_arquivo);
-
-        $sql = "UPDATE orcamentos SET nome_orcamento = '$nome_orcamento', data_orcamento = '$data_orcamento', validade = '$validade', 
-                status = '$status', observacao = '$observacao', fk_clientes_id_cliente = $fk_clientes_id_cliente";
-
+    
+        $sql = "UPDATE orcamentos 
+                SET nome_orcamento = '$nome_orcamento', 
+                    data_orcamento = '$data_orcamento', 
+                    validade = '$validade', 
+                    status = '$status', 
+                    observacao = '$observacao', 
+                    fk_clientes_id_cliente = '$fk_cliente_id', 
+                    valor_total_orcamento = '$valor_total_orcamento'";
+                    
         if (!empty($caminho_arquivo)) {
-            $sql .= ", caminho_arquivo = '$caminho_arquivo'";
+            $sql .= ", arquivo_pdf = '$caminho_arquivo'";
         }
-
-        $sql .= " WHERE id_orcamento = '$id_orcamento'";
         
+        $sql .= " WHERE id_orcamento = '$id_orcamento'";
+    
         mysqli_query($conexao, $sql);
         return mysqli_affected_rows($conexao);
-    }
+    }    
 
     public static function excluirOrcamento($id_orcamento) {
         global $conexao;

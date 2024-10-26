@@ -171,18 +171,22 @@ if (isset($_GET['id'])) {
     </script>
 
     <script>
-        let contadorItens = <?= count($itens) ?>;
         let contadorMateriais = 1;
         let contadorServicos = 1;
 
         function adicionarItem(idItem = '', nomeItem = '', descricaoItem = '', valorTotal = '') {
-            const novoIdItem = idItem || `item-${contadorItens}`;
-            contadorItens++;
-            
+            // Contar o número atual de itens na interface
+            const numeroDeItens = document.querySelectorAll('#itens-container > .container').length;
+            const novoIdItem = idItem || `item-${numeroDeItens + 1}`;
+
+            // Reiniciar contadores de materiais e serviços para o novo item
+            contadorMateriais = 1;
+            contadorServicos = 1;
+
             const novoItem = `
                 <div class="container mt-4" id="${novoIdItem}">
                     <div class="input-group">
-                        <span class="input-group-text item-number">${contadorItens - 1}º</span>
+                        <span class="input-group-text item-number">${numeroDeItens + 1}º</span>
                         <input type="text" name="nome_item[]" class="form-control input-group-item-name" placeholder="Nome do Item" value="${nomeItem}" required>
                         <div class="btn-group-actions ms-2">
                             <button type="button" class="btn btn-success" onclick="adicionarItem()">
@@ -374,6 +378,9 @@ if (isset($_GET['id'])) {
             form.appendChild(materiaisInput);
             form.appendChild(servicosInput);
 
+            console.log('Materiais Capturados:', JSON.stringify(materiais));
+            console.log('Serviços Capturados:', JSON.stringify(servicos));
+
             return true;
         }
 
@@ -488,37 +495,46 @@ if (isset($_GET['id'])) {
           document.getElementById("observacao").value = orcamento.observacao;
           document.getElementById("valor_total_orcamento").value = orcamento.valor_total_orcamento;
 
+          // Ajustar o contador de itens para o número de itens existentes
+          contadorItens = itens.length;
+
           // Iterar sobre os itens e carregá-los
           itens.forEach((item, index) => {
               const idItem = `item-${index + 1}`;
               adicionarItem(idItem, item.nome_item, item.descricao_item, item.valor_total_item);
 
+              // Reinicializar os contadores de materiais e serviços para cada item
+              let contadorMateriais = 1;
+              let contadorServicos = 1;
+
               // Iterar sobre os materiais deste item e carregá-los
               if (Array.isArray(item.materiais)) {
-                item.materiais.forEach((material, materialIndex) => {
-                    const idMaterial = `material-${idItem}-${materialIndex + 1}`;
-                    adicionarMaterialAoItem(idItem, material.material_id, material.quantidade, material.preco_unitario);
+                  item.materiais.forEach((material, materialIndex) => {
+                      const idMaterial = `material-${idItem}-${contadorMateriais}`;
+                      contadorMateriais++;
+                      adicionarMaterialAoItem(idItem, material.material_id, material.quantidade, material.preco_unitario);
 
-                    // Definir o valor dos campos de material
-                    document.querySelector(`#${idMaterial} select[name^='materiais-']`).value = material.fk_materiais_id_material;
-                    document.querySelector(`#${idMaterial} input[name^='quantidade-']`).value = material.quantidade;
-                    document.getElementById(`preco-${idMaterial}`).value = material.preco_unitario;
-                    document.getElementById(`total-${idMaterial}`).value = (material.quantidade * material.preco_unitario).toFixed(2);
-                });
+                      // Definir o valor dos campos de material
+                      document.querySelector(`#${idMaterial} select[name^='materiais-']`).value = material.fk_materiais_id_material;
+                      document.querySelector(`#${idMaterial} input[name^='quantidade-']`).value = material.quantidade;
+                      document.getElementById(`preco-${idMaterial}`).value = material.preco_unitario;
+                      document.getElementById(`total-${idMaterial}`).value = (material.quantidade * material.preco_unitario).toFixed(2);
+                  });
               }
 
               // Iterar sobre os serviços deste item e carregá-los
               if (Array.isArray(item.servicos)) {
-                item.servicos.forEach((servico, servicoIndex) => {
-                    const idServico = `servico-${idItem}-${servicoIndex + 1}`;
-                    adicionarServicoAoItem(idItem, servico.servico_id, servico.quantidade, servico.preco_unitario);
+                  item.servicos.forEach((servico, servicoIndex) => {
+                      const idServico = `servico-${idItem}-${contadorServicos}`;
+                      contadorServicos++;
+                      adicionarServicoAoItem(idItem, servico.servico_id, servico.quantidade, servico.preco_unitario);
 
-                    // Definir o valor dos campos de serviço
-                    document.querySelector(`#${idServico} select[name^='servicos-']`).value = servico.fk_servicos_id_servico;
-                    document.querySelector(`#${idServico} input[name^='quantidade_servico-']`).value = servico.quantidade;
-                    document.getElementById(`preco-${idServico}`).value = servico.preco_unitario;
-                    document.getElementById(`total-${idServico}`).value = (servico.quantidade * servico.preco_unitario).toFixed(2);
-                });
+                      // Definir o valor dos campos de serviço
+                      document.querySelector(`#${idServico} select[name^='servicos-']`).value = servico.fk_servicos_id_servico;
+                      document.querySelector(`#${idServico} input[name^='quantidade_servico-']`).value = servico.quantidade;
+                      document.getElementById(`preco-${idServico}`).value = servico.preco_unitario;
+                      document.getElementById(`total-${idServico}`).value = (servico.quantidade * servico.preco_unitario).toFixed(2);
+                  });
               }
           });
         }

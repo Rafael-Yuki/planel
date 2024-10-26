@@ -126,25 +126,29 @@ class MaterialDAO {
         }
     }
 
-    public static function editarMaterialOrcamento($id_orcamento_material, $id_material, $quantidade, $preco) {
+    public static function editarMaterialOrcamento($id_orcamento_material, $id_material, $quantidade, $preco_unitario) {
         global $conexao;
     
+        $id_orcamento_material = mysqli_real_escape_string($conexao, $id_orcamento_material);
+        $id_material = mysqli_real_escape_string($conexao, $id_material);
+        $quantidade = (float) mysqli_real_escape_string($conexao, $quantidade);
+        $preco_unitario = (float) mysqli_real_escape_string($conexao, $preco_unitario);
+    
         $sql = "UPDATE orcamento_material 
-                SET fk_materiais_id_material = '$id_material', quantidade_material = '$quantidade', valor_unitario = '$preco' 
+                SET fk_materiais_id_material = '$id_material', quantidade_material = '$quantidade', valor_unitario = '$preco_unitario' 
                 WHERE id_orcamento_material = '$id_orcamento_material'";
-        
+    
         mysqli_query($conexao, $sql);
         return mysqli_affected_rows($conexao);
     }    
 
-    public static function excluirMaterialOrcamento($id_orcamento_material) {
+    public static function removerMateriaisDoItem($itemId) {
         global $conexao;
-        
-        $id_orcamento_material = mysqli_real_escape_string($conexao, $id_orcamento_material);
-        $sql = "DELETE FROM orcamento_material WHERE id_orcamento_material = '$id_orcamento_material'";
-        
+        $itemId = mysqli_real_escape_string($conexao, $itemId);
+    
+        $sql = "DELETE FROM orcamento_material WHERE fk_itens_orcamento_id_item_orcamento = '$itemId'";
         mysqli_query($conexao, $sql);
         return mysqli_affected_rows($conexao);
-    }
+    }    
 }
 ?>

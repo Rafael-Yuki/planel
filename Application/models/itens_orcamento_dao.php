@@ -81,5 +81,32 @@ class ItensOrcamentoDAO {
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }    
     
+    public static function excluirItensPorOrcamento($orcamento_id) {
+        global $conexao;
+        $orcamento_id = mysqli_real_escape_string($conexao, $orcamento_id);
+
+        // Primeiro, remover todos os materiais e serviços relacionados aos itens deste orçamento
+        $sqlMateriais = "DELETE FROM orcamento_material 
+                         WHERE fk_itens_orcamento_id_item_orcamento IN (
+                            SELECT id_item_orcamento 
+                            FROM itens_orcamento 
+                            WHERE fk_orcamentos_id_orcamento = '$orcamento_id'
+                         )";
+        mysqli_query($conexao, $sqlMateriais);
+
+        $sqlServicos = "DELETE FROM orcamento_servico 
+                        WHERE fk_itens_orcamento_id_item_orcamento IN (
+                            SELECT id_item_orcamento 
+                            FROM itens_orcamento 
+                            WHERE fk_orcamentos_id_orcamento = '$orcamento_id'
+                        )";
+        mysqli_query($conexao, $sqlServicos);
+
+        // Em seguida, remover os itens de orçamento
+        $sqlItens = "DELETE FROM itens_orcamento WHERE fk_orcamentos_id_orcamento = '$orcamento_id'";
+        mysqli_query($conexao, $sqlItens);
+
+        return mysqli_affected_rows($conexao);
+    }  
 }
 ?>
