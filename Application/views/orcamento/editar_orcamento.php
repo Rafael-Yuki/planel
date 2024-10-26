@@ -466,6 +466,7 @@ if (isset($_GET['id'])) {
         function atualizarValorManual(idItem) {
             const valorTotalInput = document.getElementById(`valor-total-item-${idItem}`);
             valorTotalInput.setAttribute('data-editado-manualmente', 'true');
+            atualizarValorTotalOrcamento();
         }
 
         function atualizarValorTotalOrcamento() {

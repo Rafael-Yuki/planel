@@ -101,7 +101,7 @@ require('Application/models/fornecedor_dao.php');
                 ],
                 "order": [[0, "asc"]],
                 "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json"
+                    "url": "/planel/public/js/pt-BR.json"
                 }
             });
 

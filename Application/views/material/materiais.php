@@ -111,7 +111,7 @@ require('Application/models/material_dao.php');
                 ],
                 "order": [[6, "asc"]],
                 "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json"
+                    "url": "/planel/public/js/pt-BR.json"
                 }
             });
         });

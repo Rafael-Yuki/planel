@@ -453,6 +453,9 @@ require('Application/models/servico_dao.php');
 
       const valorTotalInput = document.getElementById(`valor-total-item-${idItem}`);
       if (valorTotalInput) {
+        if (totaisMateriais.length === 0 && totaisServicos.length === 0) {
+          totalItem = parseFloat(valorTotalInput.value) || 0;
+        }
         valorTotalInput.value = totalItem.toFixed(2);
       }
       atualizarValorTotalOrcamento();
@@ -461,17 +464,20 @@ require('Application/models/servico_dao.php');
     function atualizarValorManual(idItem) {
       const valorTotalInput = document.getElementById(`valor-total-item-${idItem}`);
       valorTotalInput.setAttribute('data-editado-manualmente', 'true');
+      atualizarValorTotalOrcamento();
     }
 
     function atualizarValorTotalOrcamento() {
       let valorTotalOrcamento = 0;
       const totaisItens = document.querySelectorAll('[id^="valor-total-item-"]');
+      
       totaisItens.forEach(item => {
-        valorTotalOrcamento += parseFloat(item.value) || 0;
+        const valorItem = parseFloat(item.value) || 0;
+        valorTotalOrcamento += valorItem;
       });
 
       const valorTotalOrcamentoInput = document.getElementById('valor_total_orcamento');
-      if (valorTotalOrcamentoInput && valorTotalOrcamentoInput.getAttribute('data-editado-manualmente') !== 'true') {
+      if (valorTotalOrcamentoInput) {
         valorTotalOrcamentoInput.value = valorTotalOrcamento.toFixed(2);
       }
     }
