@@ -79,7 +79,8 @@ $routes = [
     'conta-a-pagar/visualizar' => 'Application/views/contas_pagar/ver_conta_pagar.php',
 
     'parcelas-pagar/atualizar' => 'Application/controllers/parcelas_pagar_controller.php',
-    
+
+    'multiplicador-lucro' => 'Application/controllers/multiplicador_controller.php',
 ];
 
 // Verificar se a rota existe

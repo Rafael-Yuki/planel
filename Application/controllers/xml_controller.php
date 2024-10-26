@@ -6,6 +6,7 @@ require_once 'Application/models/nota_fiscal_dao.php';
 require_once 'Application/models/contas_pagar_dao.php';
 require_once 'Application/models/parcelas_pagar_dao.php';
 require_once 'Application/models/conexao.php';
+require_once 'Application/controllers/multiplicador_controller.php';
 
 function normalizarNome($nome) {
     $nome = utf8_decode($nome); 
@@ -150,9 +151,10 @@ if (isset($_POST['importar_xml'])) {
                     $valor_unitario = mysqli_real_escape_string($conexao, (float)$item->prod->vUnTrib);
                     
                     // Atribuir valores para compra e venda
+                    $multiplicadorLucro = obterMultiplicador();
                     $valor_compra = $valor_unitario;
-                    $valor_venda = $valor_compra * 1.4;  // Aplicar margem de 40% no valor de venda
-                    
+                    $valor_venda = $valor_compra * $multiplicadorLucro;            
+
                     // Definir data de compra como a data atual
                     $data_compra = date('Y-m-d');
                     
