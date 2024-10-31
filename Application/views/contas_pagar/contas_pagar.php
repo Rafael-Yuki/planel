@@ -29,7 +29,7 @@ function formatarMoeda($valor) {
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="mb-0"> Contas a Pagar</h4>
                         <a href="conta-a-pagar/cadastro" class="btn btn-primary">
-                            <span class="bi bi-cash-stack me-2"></span>Adicionar Conta
+                            <span class="bi bi-currency-dollar me-2"></span>Adicionar Conta
                         </a>
                     </div>
                     <div class="card-body">

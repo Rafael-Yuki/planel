@@ -23,29 +23,25 @@ class DashboardController
         $novoConteudo = '<?php return ' . var_export($config, true) . ';';
         file_put_contents($configFile, $novoConteudo);
     }
-    public static function obterContasAPagar()
+
+    public static function contarFornecedores()
     {
-        return DashboardDAO::obterContasAPagar();
+        return DashboardDAO::contarFornecedores();
     }
 
-    public static function obterNotasFiscais()
+    public static function contarClientes()
     {
-        return DashboardDAO::obterNotasFiscais();
-    }
-
-    public static function obterOrcamentos()
-    {
-        return DashboardDAO::obterOrcamentos();
-    }
-
-    public static function obterXmlImportados()
-    {
-        return DashboardDAO::obterXmlImportados();
+        return DashboardDAO::contarClientes();
     }
 
     public static function contarContasAPagar()
     {
         return DashboardDAO::contarContasAPagar();
+    }
+
+    public static function contarContasAReceber()
+    {
+        return DashboardDAO::contarContasAReceber();
     }
 
     public static function contarNotasFiscais()
@@ -58,11 +54,15 @@ class DashboardController
         return DashboardDAO::contarOrcamentos();
     }
 
-    public static function contarXmlImportados()
+    public static function contarMateriais()
     {
-        return DashboardDAO::contarXmlImportados();
+        return DashboardDAO::contarMateriais();
     }
-    
+
+    public static function contarServicos()
+    {
+        return DashboardDAO::contarServicos();
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['novo_multiplicador'])) {
