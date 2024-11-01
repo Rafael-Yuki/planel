@@ -37,48 +37,50 @@ mysqli_set_charset($conexao, "utf8");
                                 ?>
                                 <form action="/planel/nota-fiscal/atualizar" method="POST" enctype="multipart/form-data">
                                     <input type="hidden" name="nota_fiscal_id" required value="<?= $nota_fiscal['id_nota_fiscal'] ?>">
-                                    <div class="mb-3">
-                                        <label for="numero">Número da Nota Fiscal</label>
-                                        <input type="text" name="numero" value="<?= $nota_fiscal['numero'] ?>"
-                                            class="form-control" required>
+                                    <div class="row">
+                                        <div class="col-md-3 mb-3">
+                                            <label for="numero">Número da Nota Fiscal</label>
+                                            <input type="text" name="numero" value="<?= $nota_fiscal['numero'] ?>" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-9 mb-3">
+                                            <label for="fornecedor">Fornecedor</label>
+                                            <select id="fornecedor" name="fornecedor" class="form-control" required>
+                                                <option value="">Selecione um Fornecedor</option>
+                                                <?php
+                                                $query_fornecedores = "SELECT * FROM fornecedores WHERE ativo = TRUE";
+                                                $result_fornecedores = mysqli_query($conexao, $query_fornecedores);
+                                                while($row_fornecedor = mysqli_fetch_assoc($result_fornecedores)) {
+                                                    $selected = ($row_fornecedor['id_fornecedor'] == $nota_fiscal['fk_fornecedores_id_fornecedor']) ? 'selected' : '';
+                                                    echo "<option value='".$row_fornecedor['id_fornecedor']."' $selected>".$row_fornecedor['nome_fornecedor']."</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="fornecedor">Fornecedor</label>
-                                        <select id="fornecedor" name="fornecedor" class="form-control" required>
-                                            <option value="">Selecione um Fornecedor</option>
-                                            <?php
-                                            $query_fornecedores = "SELECT * FROM fornecedores WHERE ativo = TRUE";
-                                            $result_fornecedores = mysqli_query($conexao, $query_fornecedores);
-                                            while($row_fornecedor = mysqli_fetch_assoc($result_fornecedores)) {
-                                                $selected = ($row_fornecedor['id_fornecedor'] == $nota_fiscal['fk_fornecedores_id_fornecedor']) ? 'selected' : '';
-                                                echo "<option value='".$row_fornecedor['id_fornecedor']."' $selected>".$row_fornecedor['nome_fornecedor']."</option>";
-                                            }
-                                            ?>
-                                        </select>
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="data_emissao">Data de Emissão</label>
+                                            <input type="date" name="data_emissao" value="<?= $nota_fiscal['data_emissao'] ?>" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="parcelas">Número de Parcelas</label>
+                                            <input type="number" name="parcelas" value="<?= $nota_fiscal['parcelas'] ?>" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="valor_total">Valor Total</label>
+                                            <input type="text" name="valor_total" value="<?= $nota_fiscal['valor_total'] ?>" class="form-control valor-mask" required>
+                                        </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="data_emissao">Data de Emissão</label>
-                                        <input type="date" name="data_emissao" value="<?= $nota_fiscal['data_emissao'] ?>"
-                                            class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="valor_total">Valor Total</label>
-                                        <input type="text" name="valor_total" value="<?= $nota_fiscal['valor_total'] ?>"
-                                            class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="parcelas">Parcelas</label>
-                                        <input type="text" name="parcelas" value="<?= $nota_fiscal['parcelas'] ?>"
-                                            class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="caminho_xml">Arquivo XML</label>
-                                        <input type="file" id="caminho_xml" name="caminho_xml" class="form-control">
-                                        <?php if (!empty($nota_fiscal['caminho_xml'])): ?>
-                                            <small class="form-text text-muted">
-                                                Arquivo atual: <a href="<?= '/ver_xml?file=' . urlencode(basename($nota_fiscal['caminho_xml'])); ?>" target="_blank"><?= basename($nota_fiscal['caminho_xml']); ?></a>
-                                            </small>
-                                        <?php endif; ?>
+                                    <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                            <label for="arquivo_xml">Arquivo XML (opcional)</label>
+                                            <input type="file" id="arquivo_xml" name="arquivo_xml" class="form-control">
+                                            <?php if (!empty($nota_fiscal['caminho_xml'])): ?>
+                                                <small class="form-text text-muted">
+                                                    Arquivo atual: <a href="<?= '/ver_xml?file=' . urlencode(basename($nota_fiscal['caminho_xml'])); ?>" target="_blank"><?= basename($nota_fiscal['caminho_xml']); ?></a>
+                                                </small>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <button type="submit" name="editar_nota_fiscal" class="btn btn-primary">

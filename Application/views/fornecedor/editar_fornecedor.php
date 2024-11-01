@@ -39,63 +39,60 @@ mysqli_set_charset($conexao, "utf8");
                                 ?>
                                 <form action="/planel/fornecedor/atualizar" method="POST">
                                     <input type="hidden" name="fornecedor_id" required value="<?= $fornecedor['id_fornecedor'] ?>">
-                                    <div class="mb-3">
-                                        <label for="nome">Nome</label>
-                                        <input type="text" name="nome" value="<?= $fornecedor['nome_fornecedor'] ?>"
-                                            class="form-control">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="cnpj">CNPJ</label>
-                                        <input type="text" name="cnpj" value="<?= $fornecedor['cnpj'] ?>"
-                                            class="form-control">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="telefone">Telefone</label>
-                                        <input type="tel" name="telefone" value="<?= $fornecedor['telefone'] ?>"
-                                            class="form-control">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="email">E-mail</label>
-                                        <input type="email" name="email" value="<?= $fornecedor['email'] ?>"
-                                            class="form-control">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="endereco">Endereço</label>
-                                        <input type="text" name="endereco" value="<?= $fornecedor['endereco'] ?>"
-                                            class="form-control">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="estado">Estado</label>
-                                        <select id="estado" name="estado" class="form-control">
-                                        <option value="">Selecione um estado</option>
-                                        <?php
-                                        $query_estados = "SELECT * FROM estados";
-                                        $result_estados = mysqli_query($conexao, $query_estados);
-                                        while($row_estado = mysqli_fetch_assoc($result_estados)) {
-                                            $selected = ($row_estado['id_estado'] == $estado_id) ? 'selected' : '';
-                                            echo "<option value='".$row_estado['id_estado']."' $selected>". $row_estado['nome_estado']."</option>";
-                                        }
-                                        ?>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="cidade">Cidade</label>
-                                        <select id="cidade" name="cidade" class="form-control">
-                                        <option value="">Selecione uma cidade</option>
-                                        <?php
-                                        $query_cidades = "SELECT * FROM cidades WHERE fk_estados_id_estado = '$estado_id'";
-                                        $result_cidades = mysqli_query($conexao, $query_cidades);
-                                        while($row_cidade = mysqli_fetch_assoc($result_cidades)) {
-                                            $selected = ($row_cidade['id_cidade'] == $cidade_id) ? 'selected' : '';
-                                            echo "<option value='".$row_cidade['id_cidade']."' $selected>". $row_cidade['nome_cidade']."</option>";
-                                        }
-                                        ?>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <button type="submit" name="editar_fornecedor" class="btn btn-primary">
-                                            Salvar<span class="bi-save ms-2"></span>
-                                        </button>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="nome">Nome</label>
+                                            <input type="text" name="nome" value="<?= $fornecedor['nome_fornecedor'] ?>" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="cnpj">CNPJ</label>
+                                            <input type="text" name="cnpj" value="<?= $fornecedor['cnpj'] ?>" class="form-control cnpj-mask" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="telefone">Telefone</label>
+                                            <input type="tel" name="telefone" value="<?= $fornecedor['telefone'] ?>" class="form-control phone-mask">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="email">E-mail</label>
+                                            <input type="email" name="email" value="<?= $fornecedor['email'] ?>" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="estado">Estado</label>
+                                            <select id="estado" name="estado" class="form-control" required>
+                                                <option value="">Selecione um estado</option>
+                                                <?php
+                                                $query_estados = "SELECT * FROM estados";
+                                                $result_estados = mysqli_query($conexao, $query_estados);
+                                                while($row_estado = mysqli_fetch_assoc($result_estados)) {
+                                                    $selected = ($row_estado['id_estado'] == $estado_id) ? 'selected' : '';
+                                                    echo "<option value='".$row_estado['id_estado']."' $selected>". $row_estado['nome_estado']."</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="cidade">Cidade</label>
+                                            <select id="cidade" name="cidade" class="form-control" required>
+                                                <option value="">Selecione uma cidade</option>
+                                                <?php
+                                                $query_cidades = "SELECT * FROM cidades WHERE fk_estados_id_estado = '$estado_id'";
+                                                $result_cidades = mysqli_query($conexao, $query_cidades);
+                                                while($row_cidade = mysqli_fetch_assoc($result_cidades)) {
+                                                    $selected = ($row_cidade['id_cidade'] == $cidade_id) ? 'selected' : '';
+                                                    echo "<option value='".$row_cidade['id_cidade']."' $selected>". $row_cidade['nome_cidade']."</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                            <label for="endereco">Endereço</label>
+                                            <input type="text" name="endereco" value="<?= $fornecedor['endereco'] ?>" class="form-control">
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                            <button type="submit" name="editar_fornecedor" class="btn btn-primary">
+                                                Salvar<span class="bi-save ms-2"></span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </form>
                                 <script>
